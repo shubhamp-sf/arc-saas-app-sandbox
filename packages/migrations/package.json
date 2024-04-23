@@ -1,0 +1,30 @@
+{
+    "name": "migrations",
+    "version": "1.0.0",
+    "description": "Package to handle Db migrations for all microservices DBs",
+    "main": "lib/migrations.js",
+    "scripts": {
+        "db:migrate": "run-s db:migrate:*",
+        "db:migrate-down": "run-s db:migrate-down:*",
+        "db:migrate-reset": "run-s db:migrate-reset:*",
+        "db:migrate:tnt-mngmt": "db-migrate up --config 'tnt-mngmt/database.json' -m 'tnt-mngmt/migrations'",
+        "db:migrate-down:tnt-mngmt": "db-migrate down --config 'tnt-mngmt/database.json' -m 'tnt-mngmt/migrations'",
+        "db:migrate-reset:tnt-mngmt": "db-migrate reset --config 'tnt-mngmt/database.json' -m 'tnt-mngmt/migrations'",
+        "db:migrate:subscription-service": "db-migrate up --config 'subscription-service/database.json' -m 'subscription-service/migrations'",
+        "db:migrate-down:subscription-service": "db-migrate down --config 'subscription-service/database.json' -m 'subscription-service/migrations'",
+        "db:migrate-reset:subscription-service": "db-migrate reset --config 'subscription-service/database.json' -m 'subscription-service/migrations'"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "db-migrate": "^1.0.0-beta.21",
+        "dotenv": "^16.0.3",
+        "dotenv-extended": "^2.9.0",
+        "kindof": "^2.0.0",
+        "db-migrate-pg": "^1.3.0"
+    },
+    "devDependencies": {
+        "@types/dotenv": "^8.2.0",
+        "npm-run-all": "^4.1.5"
+    }
+}
