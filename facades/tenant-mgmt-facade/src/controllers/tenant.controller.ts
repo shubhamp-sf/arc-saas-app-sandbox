@@ -1,6 +1,6 @@
 import {authorize} from 'loopback4-authorization';
-import {STRATEGY, authenticate} from 'loopback4-authentication';
-import {getModelSchemaRef, post, requestBody} from '@loopback/openapi-v3';
+import {AuthenticationBindings, STRATEGY, authenticate} from 'loopback4-authentication';
+import {get, getModelSchemaRef, post, requestBody} from '@loopback/openapi-v3';
 import {
   CONTENT_TYPE,
   OPERATION_SECURITY_SPEC,
@@ -8,8 +8,10 @@ import {
 } from '@sourceloop/core';
 import {PermissionKey} from '../permissions';
 import {CreateTenantWithPlanDTO, Tenant} from '../models';
-import {service} from '@loopback/core';
+import {inject, service} from '@loopback/core';
 import {TenantHelperService} from '../services';
+import { LeadUser } from 'tenant-management-service';
+import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
 
 export class TenantController {
   constructor(
@@ -49,5 +51,37 @@ export class TenantController {
     dto: CreateTenantWithPlanDTO,
   ): Promise<Tenant> {
     return this.tenantHelper.createTenant(dto);
+  }
+
+
+  @authorize({
+    permissions: [PermissionKey.ViewSubscription,PermissionKey.ViewTenant],
+  })
+  @authenticate(STRATEGY.BEARER, {
+    passReqToCallback: true,
+  })
+  @get('tenant/Bills', {
+    description:
+      'This api verifies token sent to a lead to verify his identity',
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      [STATUS_CODE.OK]: {
+        description: 'Array of Lead model instances',
+        content: {
+          [CONTENT_TYPE.JSON]: {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(SubscriptionBillDTO, {includeRelations: true}),
+            },
+          },
+        },
+      },
+    },
+  })
+  async findBill(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: LeadUser,
+  ):Promise<SubscriptionBillDTO[]>{
+    return this.tenantHelper.getTenantBills(currentUser.id);
   }
 }

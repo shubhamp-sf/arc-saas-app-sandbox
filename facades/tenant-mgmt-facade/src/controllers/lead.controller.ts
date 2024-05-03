@@ -154,9 +154,9 @@ export class LeadController {
       },
     })
     lead: Omit<CreateLeadDTO, 'id' | 'isValidated' | 'addressId'>,
-  ): Promise<Lead> {
+  ): Promise<{id:string,key:string}> {
     const leadDTO=await this.tenantMgmtProxyService.createLead(lead);
-    await this.notificationService.send("","ADD LEAD",leadDTO);
+    await this.notificationService.send("","ADD LEAD",`${process.env.APP_VALIDATE_URL}/${leadDTO.id}?code=${leadDTO.key}`);
     return leadDTO;
   }
 

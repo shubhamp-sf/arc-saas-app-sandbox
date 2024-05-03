@@ -12,7 +12,10 @@
         "db:migrate-reset:tnt-mngmt": "db-migrate reset --config 'tnt-mngmt/database.json' -m 'tnt-mngmt/migrations'",
         "db:migrate:subscription-service": "db-migrate up --config 'subscription-service/database.json' -m 'subscription-service/migrations'",
         "db:migrate-down:subscription-service": "db-migrate down --config 'subscription-service/database.json' -m 'subscription-service/migrations'",
-        "db:migrate-reset:subscription-service": "db-migrate reset --config 'subscription-service/database.json' -m 'subscription-service/migrations'"
+        "db:migrate-reset:subscription-service": "db-migrate reset --config 'subscription-service/database.json' -m 'subscription-service/migrations'",
+        "db:migrate:notification-service": "db-migrate up --config 'notification-service/database.json' -m 'notification-service/migrations'",
+        "db:migrate-down:notification-service": "db-migrate down --config 'notification-service/database.json' -m 'notification-service/migrations'",
+        "db:migrate-reset:notification-service": "db-migrate reset --config 'notification-service/database.json' -m 'notification-service/migrations'"
     },
     "author": "",
     "license": "ISC",

@@ -1067,6 +1067,44 @@
         "operationId": "PlanController.count"
       }
     },
+    "/plans/{id}/subscriptions": {
+      "get": {
+        "x-controller-name": "PlanSubscriptionController",
+        "x-operation-name": "find",
+        "tags": [
+          "PlanSubscriptionController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plan model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| 7008   |\n| 7004   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PlanSubscriptionController.find"
+      }
+    },
     "/plans/{id}": {
       "put": {
         "x-controller-name": "PlanController",

@@ -25,6 +25,7 @@ module.exports = {
   ],
 
   scopes: [
+{name: 'notification-service-service'}, 
 {name: 'my-facade-facade'}, 
 {name: 'subscription-service-service'}, 
 {name: 'tnt-mngmt-service'}, 

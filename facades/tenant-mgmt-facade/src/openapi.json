@@ -218,6 +218,37 @@
         "operationId": "SubscriptionController.checkBillingSubscriptions"
       }
     },
+    "/tenant/Bills": {
+      "get": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "findBill",
+        "tags": [
+          "TenantController"
+        ],
+        "description": "This api verifies token sent to a lead to verify his identity\n\n| Permissions |\n| ------- |\n| 7004   |\n| 10207   |\n",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Lead model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionBillDTOWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.findBill"
+      }
+    },
     "/tenants": {
       "post": {
         "x-controller-name": "TenantController",
@@ -649,6 +680,39 @@
           "name",
           "key",
           "domains"
+        ],
+        "additionalProperties": false
+      },
+      "SubscriptionBillDTOWithRelations": {
+        "title": "SubscriptionBillDTOWithRelations",
+        "type": "object",
+        "description": "subscription bill (tsType: SubscriptionBillDTOWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "description": "tenant name"
+          },
+          "planName": {
+            "type": "string",
+            "description": "plan name"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "status": {
+            "type": "number"
+          },
+          "userName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "companyName",
+          "planName",
+          "userName"
         ],
         "additionalProperties": false
       },

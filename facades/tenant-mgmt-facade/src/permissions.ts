@@ -30,3 +30,5 @@ export const PermissionKey = {
   UpdateNotificationTemplate: '8002',
   DeleteNotificationTemplate: '8003',
 };
+
+

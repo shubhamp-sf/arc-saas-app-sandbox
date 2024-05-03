@@ -19,6 +19,7 @@ import {CheckBillingSubscriptionsDTO, SubscriptionDTO} from '../models/dtos';
 import { NotificationService } from './notification.service';
 import { json } from 'stream/consumers';
 import { ISubscription } from '../types';
+import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
@@ -76,12 +77,70 @@ const sdto:ISubscription={
   planId: subscription.planId,
   plan: subscription.plan,
 }
-    await this.tenantMgmtProxyService.provisionTenant(
-      token,
-      tenant.id,
-     sdto
-    );
+    // await this.tenantMgmtProxyService.provisionTenant(
+    //   token,
+    //   tenant.id,
+    //  sdto
+    // );
     return tenant;
+  }
+
+
+   async getTenantBills(userId:string): Promise<SubscriptionBillDTO[]>{
+    const token = this.cryptoHelperService.generateTempToken({
+      id: userId,
+      userTenantId: userId,
+      permissions: [
+        PermissionKey.CreateLead
+        ,PermissionKey.UpdateLead
+        ,PermissionKey.DeleteLead
+        ,PermissionKey.ViewLead
+        ,PermissionKey.CreateTenant
+        ,PermissionKey.ProvisionTenant
+        ,PermissionKey.UpdateTenant
+        ,PermissionKey.DeleteTenant
+        ,PermissionKey.ViewTenant
+        ,PermissionKey.CreateContact
+        ,PermissionKey.UpdateContact
+        ,PermissionKey.DeleteContact
+        ,PermissionKey.ViewContact
+        ,PermissionKey.CreateInvoice
+        ,PermissionKey.UpdateInvoice
+        ,PermissionKey.DeleteInvoice
+        ,PermissionKey.ViewInvoice
+        ,PermissionKey.CreateNotification
+        ,PermissionKey.CreateSubscription
+        ,PermissionKey.UpdateSubscription
+        ,PermissionKey.ViewSubscription
+        ,PermissionKey.ViewPlan
+        ,PermissionKey.ViewNotificationTemplate
+        ,PermissionKey.CreateNotificationTemplate
+        ,PermissionKey.UpdateNotificationTemplate
+        ,PermissionKey.DeleteNotificationTemplate
+      ],
+    });
+
+    // const token = this.request.headers.authorization?? "";
+    let subscriptionBills:SubscriptionBillDTO[]=[];
+
+    const subscriptions=await this.subscriptionProxyService.find(token,{
+      include:['plan']
+    });
+    for(const subscription of subscriptions){
+      const tenant=await this.tenantMgmtProxyService.getTenants(`Bearer ${token}`,{
+        where:{id:subscription.subscriberId},
+        include:['lead','contacts']
+      });
+      subscriptionBills.push(new SubscriptionBillDTO({
+        companyName:tenant[0].lead?.companyName,
+        userName:tenant[0].lead?.firstName+' '+tenant[0].lead?.lastName,
+        status:subscription.status,
+        startDate:subscription.startDate,
+        endDate:subscription.endDate,
+        planName:subscription.plan?.name
+      }))
+    }
+    return subscriptionBills;
   }
 
 

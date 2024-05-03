@@ -15,14 +15,19 @@ import {Tenant, CheckBillingSubscriptionsDTO} from '../models';
 import {LeadUser} from '../types';
 import {service} from '@loopback/core';
 import {TenantHelperService} from '../services';
+import { get } from 'http';
+import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
+import { RestBindings,Request } from '@loopback/rest';
+import { PermissionKey } from '../permissions';
 
 const basePath = '/subscriptions';
 
 export class SubscriptionController {
   constructor(
     @service(TenantHelperService)
-    private readonly tenantHelper: TenantHelperService,
+    private readonly tenantHelper: TenantHelperService
   ) {}
+
 
   @authorize({
     permissions: ['*'],
@@ -61,4 +66,8 @@ export class SubscriptionController {
         console.error(err); //NOSONAR
       });
   }
+
+
+ 
+
 }
