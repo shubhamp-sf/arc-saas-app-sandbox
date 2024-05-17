@@ -86,7 +86,7 @@
         "loopback4-ratelimiter": "^7.0.0",
         "swagger-stats": "^0.99.5",
         "symlink-resolver": "0.2.1",
-        "tenant-management-service": "file:../../../arc-saas/services/tenant-management-service/tenant-management-service-0.0.1.tgz",
+        "tenant-management-service": "file:tenant-management-service-0.0.1.tgz",
         "tslib": "^2.4.1"
     },
     "devDependencies": {

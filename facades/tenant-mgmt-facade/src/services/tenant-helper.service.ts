@@ -16,10 +16,11 @@ import {
 import {PermissionKey} from '../permissions';
 import {InvoiceStatus, NotificationType, SubscriptionStatus} from '../enum';
 import {CheckBillingSubscriptionsDTO, SubscriptionDTO} from '../models/dtos';
-import { NotificationService } from './notification.service';
+// import { NotificationService } from './notification.service';
 import { json } from 'stream/consumers';
 import { ISubscription } from '../types';
 import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
+import { NotificationService } from './notifications/notification.service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
@@ -77,11 +78,11 @@ const sdto:ISubscription={
   planId: subscription.planId,
   plan: subscription.plan,
 }
-    // await this.tenantMgmtProxyService.provisionTenant(
-    //   token,
-    //   tenant.id,
-    //  sdto
-    // );
+    await this.tenantMgmtProxyService.provisionTenant(
+      token,
+      tenant.id,
+     sdto
+    );
     return tenant;
   }
 
@@ -310,33 +311,67 @@ const sdto:ISubscription={
     }
 
     for (const expiredSubscription of expiredSubscriptionsArray) {
+      // notificationPromises.push(
+      //   this.notificationService
+      //     .send(            subscriberIdTenantContactMap[expiredSubscription.subscriberId].email,
+      //     NotificationType.SubscriptionExpired,JSON.stringify(          {
+      //       name: process.env.APP_NAME,
+      //       user: subscriberIdTenantContactMap[
+      //         expiredSubscription.subscriberId
+      //       ].name,
+      //       link: process.env.APP_NAME,
+      //     }))
+      //     .catch(e => this.logger.error(e)),
+      // );
       notificationPromises.push(
         this.notificationService
-          .send(            subscriberIdTenantContactMap[expiredSubscription.subscriberId].email,
-          NotificationType.SubscriptionExpired,JSON.stringify(          {
-            name: process.env.APP_NAME,
-            user: subscriberIdTenantContactMap[
-              expiredSubscription.subscriberId
-            ].name,
-            link: process.env.APP_NAME,
-          }))
+          .send(
+            subscriberIdTenantContactMap[expiredSubscription.subscriberId]
+              .email,
+            NotificationType.SubscriptionExpired,
+            {
+              name: process.env.APP_NAME,
+              user: subscriberIdTenantContactMap[
+                expiredSubscription.subscriberId
+              ].name,
+              link: process.env.APP_NAME,
+            },
+            token,
+          )
           .catch(e => this.logger.error(e)),
       );
     }
 
     for (const expiringSoonSubscription of expiringSoonSubscriptionObj) {
+      // notificationPromises.push(
+      //   this.notificationService
+      //     .send(
+      //       subscriberIdTenantContactMap[expiringSoonSubscription.subscriberId].email,
+      //       NotificationType.SubscriptionEndingSoon,JSON.stringify(
+      //         {
+      //           name: process.env.APP_NAME,
+      //           user: subscriberIdTenantContactMap[
+      //             expiringSoonSubscription.subscriberId
+      //           ].name,
+      //           remainingDays: expiringSoonSubscription.daysRemainingToExpiry,
+      //         })
+      //     )
+      //     .catch(e => this.logger.error(e)),
+      // );
       notificationPromises.push(
         this.notificationService
           .send(
-            subscriberIdTenantContactMap[expiringSoonSubscription.subscriberId].email,
-            NotificationType.SubscriptionEndingSoon,JSON.stringify(
-              {
-                name: process.env.APP_NAME,
-                user: subscriberIdTenantContactMap[
-                  expiringSoonSubscription.subscriberId
-                ].name,
-                remainingDays: expiringSoonSubscription.daysRemainingToExpiry,
-              })
+            subscriberIdTenantContactMap[expiringSoonSubscription.subscriberId]
+              .email,
+            NotificationType.SubscriptionEndingSoon,
+            {
+              name: process.env.APP_NAME,
+              user: subscriberIdTenantContactMap[
+                expiringSoonSubscription.subscriberId
+              ].name,
+              remainingDays: expiringSoonSubscription.daysRemainingToExpiry,
+            },
+            token,
           )
           .catch(e => this.logger.error(e)),
       );
