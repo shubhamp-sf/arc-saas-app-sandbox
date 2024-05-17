@@ -37,7 +37,7 @@ COPY --chown=node package*.json ./
 #  The `--chown=node` flag ensures that the ownership of the copied files/directories is set to the `node` user.
 #  This is important because the subsequent commands in the Dockerfile are executed with the `node` user,
 #  and it needs the appropriate permissions to access and modify the copied files/directories.
-COPY --chown=node packages ./packages
+# COPY --chown=node packages ./packages
 
 COPY --chown=node $FROM_FOLDER/$SERVICE_NAME ./$FROM_FOLDER/$SERVICE_NAME
 
@@ -73,7 +73,7 @@ WORKDIR /home/node/app
 COPY --from=BASE --chown=node /home/node/app/node_modules ./node_modules
 COPY --from=BASE --chown=node /home/node/app/package.json ./
 COPY --from=BASE --chown=node /home/node/app/package-lock.json ./
-COPY --from=BASE --chown=node /home/node/app/packages ./packages
+# COPY --from=BASE --chown=node /home/node/app/packages ./packages
 COPY --from=BASE --chown=node /home/node/app/$FROM_FOLDER/$SERVICE_NAME ./$FROM_FOLDER/$SERVICE_NAME
 
 # Set the working directory to `/home/node/app/services/auth-service`

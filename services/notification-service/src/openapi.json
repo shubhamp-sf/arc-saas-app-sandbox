@@ -3,8 +3,11 @@
   "info": {
     "title": "notification-service",
     "version": "1.0.0",
-    "description": "Sourceloop based notification-service",
-    "contact": {}
+    "description": "notification-service",
+    "contact": {
+      "name": "Tyagi-Sunny",
+      "email": "sunny.tyagi@sourcefuse.com"
+    }
   },
   "paths": {
     "/notification-templates/{event_name}/{notification_type}": {

@@ -32,8 +32,8 @@ import path from 'path';
 import * as openapi from './openapi.json';
 import {LEAD_TOKEN_VERIFIER} from './keys';
 import { LeadTokenVerifierProvider} from './services';
-import { NotificationService } from './services/notification.service';
 import { WebhookTenantManagementServiceComponent } from 'tenant-management-service';
+import { NotificationService } from './services/notifications';
 
 export {ApplicationConfig};
 
