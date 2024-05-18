@@ -25,6 +25,9 @@ module.exports = {
   ],
 
   scopes: [
+{name: 'user-tenant-service-service'}, 
+{name: 'audit-service-service'}, 
+{name: 'authentication-service-service'}, 
 {name: 'notification-service-service'}, 
 {name: 'my-facade-facade'}, 
 {name: 'subscription-service-service'}, 
