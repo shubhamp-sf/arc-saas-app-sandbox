@@ -1,6 +1,5 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
-import {AuditSourceName} from '@sourceloop/audit-service'
 
 const DEFAULT_MAX_CONNECTIONS = 25;
 const DEFAULT_DB_IDLE_TIMEOUT_MILLIS = 60000;
