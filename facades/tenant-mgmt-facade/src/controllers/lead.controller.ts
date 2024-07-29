@@ -33,8 +33,8 @@ import {TenantMgmtProxyService} from '../services/proxies';
 import {ratelimit} from 'loopback4-ratelimiter';
 import {LEAD_TOKEN_VERIFIER} from '../keys';
 import {Filter} from '@loopback/repository';
-import { NotificationService } from '../services/notifications';
-import { NotificationType } from '../enum';
+import {NotificationService} from '../services/notifications';
+import {NotificationType} from '../enum';
 
 export class LeadController {
   constructor(
@@ -45,9 +45,9 @@ export class LeadController {
     @inject(RestBindings.Http.REQUEST)
     private readonly request: Request,
     @service(NotificationService)
-    private readonly notificationService:NotificationService,
+    private readonly notificationService: NotificationService,
     @service(CryptoHelperServiceSunnyt)
-    private readonly cryptoHelperServiceSunnyt:CryptoHelperServiceSunnyt,
+    private readonly cryptoHelperServiceSunnyt: CryptoHelperServiceSunnyt,
     @inject(LOGGER.LOGGER_INJECT)
     private logger: ILogger,
   ) {}
@@ -161,10 +161,10 @@ export class LeadController {
       },
     })
     lead: Omit<CreateLeadDTO, 'id' | 'isValidated' | 'addressId'>,
-  ): Promise<{id:string,key:string}> {
-    const leadDTO=await this.tenantMgmtProxyService.createLead(lead);
+  ): Promise<{id: string; key: string}> {
+    const leadDTO = await this.tenantMgmtProxyService.createLead(lead);
     // await this.notificationService.send("","ADD LEAD",`${process.env.APP_VALIDATE_URL}/${leadDTO.id}?code=${leadDTO.key}`);
-    
+
     this.notificationService
       .send(
         lead.email,
@@ -173,16 +173,13 @@ export class LeadController {
           appName: process.env.APP_NAME,
           link: `${process.env.APP_VALIDATE_URL}/${leadDTO.id}?code=${leadDTO.key}`,
         },
-        this.cryptoHelperServiceSunnyt.generateTempToken(
-          {
-            ...lead,
-            permissions:[
-              PermissionKey.CreateNotification,
-              PermissionKey.ViewNotificationTemplate,
-            ]
-          }
-        )
-        ,
+        this.cryptoHelperServiceSunnyt.generateTempToken({
+          ...lead,
+          permissions: [
+            PermissionKey.CreateNotification,
+            PermissionKey.ViewNotificationTemplate,
+          ],
+        }),
       )
       .catch(e => this.logger.error(e));
     return leadDTO;

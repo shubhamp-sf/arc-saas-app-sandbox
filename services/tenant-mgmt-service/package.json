@@ -55,6 +55,7 @@
         "!*/__tests__"
     ],
     "dependencies": {
+        "@aws-sdk/client-eventbridge": "^3.600.0",
         "@loopback/boot": "^7.0.0",
         "@loopback/context": "^7.0.0",
         "@loopback/core": "^6.0.0",
@@ -72,6 +73,7 @@
         "@opentelemetry/sdk-trace-base": "^1.15.0",
         "@opentelemetry/sdk-trace-node": "^1.15.0",
         "@sourceloop/core": "^13.1.0",
+        "@sourceloop/ctrl-plane-tenant-management-service": "file:sourceloop-ctrl-plane-tenant-management-service-0.1.0.tgz",
         "dotenv": "^16.0.3",
         "dotenv-extended": "^2.9.0",
         "loopback-connector-postgresql": "^7.0.4",
@@ -79,7 +81,6 @@
         "loopback4-authorization": "^7.0.0",
         "swagger-stats": "^0.99.5",
         "symlink-resolver": "0.2.1",
-        "tenant-management-service": "file:tenant-management-service-0.0.1.tgz",
         "tslib": "^2.6.2"
     },
     "devDependencies": {

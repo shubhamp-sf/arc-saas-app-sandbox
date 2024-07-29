@@ -25,7 +25,7 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
-import { SubscriptionServiceComponent } from 'subscription-service';
+import {SubscriptionServiceComponent} from 'subscription-service';
 
 export {ApplicationConfig};
 
@@ -60,15 +60,14 @@ export class SubscriptionServiceApplication extends BootMixin(
     // To check if authorization is enabled for swagger stats or not
     const authentication =
       process.env.SWAGGER_USER && process.env.SWAGGER_PASSWORD ? true : false;
-      const obj={
-        enableObf,
-        obfPath: process.env.OBF_PATH ?? '/obf',
-        openapiSpec: openapi,
-        authentication: authentication,
-        swaggerUsername: process.env.SWAGGER_USER,
-        swaggerPassword: process.env.SWAGGER_PASSWORD,
-        
-      }
+    const obj = {
+      enableObf,
+      obfPath: process.env.OBF_PATH ?? '/obf',
+      openapiSpec: openapi,
+      authentication: authentication,
+      swaggerUsername: process.env.SWAGGER_USER,
+      swaggerPassword: process.env.SWAGGER_PASSWORD,
+    };
     this.bind(SFCoreBindings.config).to(obj);
 
     // Set up the custom sequence
@@ -76,7 +75,7 @@ export class SubscriptionServiceApplication extends BootMixin(
 
     // Add authentication component
     this.component(AuthenticationComponent);
-  this.component(SubscriptionServiceComponent);
+    this.component(SubscriptionServiceComponent);
 
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
@@ -98,7 +97,6 @@ export class SubscriptionServiceApplication extends BootMixin(
     });
 
     this.component(RestExplorerComponent);
-
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

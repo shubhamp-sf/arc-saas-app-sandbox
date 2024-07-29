@@ -25,7 +25,11 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
-import { PIPELINES, PlanTier, TenantManagementServiceComponent } from 'tenant-management-service';
+import {
+  EventConnectorBinding,
+  TenantManagementServiceComponent,
+} from '@sourceloop/ctrl-plane-tenant-management-service';
+import {EventConnector} from './services/event.service';
 
 export {ApplicationConfig};
 
@@ -60,15 +64,14 @@ export class TntMngmtApplication extends BootMixin(
     // To check if authorization is enabled for swagger stats or not
     const authentication =
       process.env.SWAGGER_USER && process.env.SWAGGER_PASSWORD ? true : false;
-      const obj={
-        enableObf,
-        obfPath: process.env.OBF_PATH ?? '/obf',
-        openapiSpec: openapi,
-        authentication: authentication,
-        swaggerUsername: process.env.SWAGGER_USER,
-        swaggerPassword: process.env.SWAGGER_PASSWORD,
-        
-      }
+    const obj = {
+      enableObf,
+      obfPath: process.env.OBF_PATH ?? '/obf',
+      openapiSpec: openapi,
+      authentication: authentication,
+      swaggerUsername: process.env.SWAGGER_USER,
+      swaggerPassword: process.env.SWAGGER_PASSWORD,
+    };
     this.bind(SFCoreBindings.config).to(obj);
 
     // Set up the custom sequence
@@ -76,7 +79,8 @@ export class TntMngmtApplication extends BootMixin(
 
     // Add authentication component
     this.component(AuthenticationComponent);
-  this.component(TenantManagementServiceComponent);
+    this.bind(EventConnectorBinding).toClass(EventConnector);
+    this.component(TenantManagementServiceComponent);
 
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
@@ -84,11 +88,6 @@ export class TntMngmtApplication extends BootMixin(
     } as BearerVerifierConfig);
     this.component(BearerVerifierComponent);
 
-
-    this.bind(PIPELINES).to({
-      [PlanTier.SILO]: process.env.SILOED_PIPELINE!,
-      [PlanTier.POOLED]: process.env.POOLED_PIPELINE!,
-    });
     // Add authorization component
     this.bind(AuthorizationBindings.CONFIG).to({
       allowAlwaysPaths: ['/explorer', '/openapi.json'],
@@ -104,7 +103,6 @@ export class TntMngmtApplication extends BootMixin(
     });
 
     this.component(RestExplorerComponent);
-
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

@@ -404,15 +404,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Invoice model instance",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Invoice"
-                }
-              }
-            }
+          "204": {
+            "description": "Invoice download success"
           }
         },
         "description": "\n\n| Permissions |\n| ------- |\n| 10212   |\n",
@@ -528,7 +521,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Invoice model instance",
+            "description": "Invoice model instance success",
             "content": {
               "application/json": {
                 "schema": {
@@ -606,7 +599,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Invoice model instance",
+            "description": "Invoice model instance POST success",
             "content": {
               "application/json": {
                 "schema": {

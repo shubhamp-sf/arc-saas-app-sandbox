@@ -5,8 +5,8 @@
   "scripts": {
     "prepare": "husky install",
     "test": "lerna run test",
-     "migrate": "npm run db:migrate --workspaces --if-present",
-     "build": "npm run build --workspaces --if-present"
+    "migrate": "npm run db:migrate --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
@@ -19,10 +19,14 @@
     "lerna": "^7.3.0",
     "run-s": "^0.0.0"
   },
-  "workspaces":["packages/*", "services/*", "facades/*"],
-  "overrides":{
-    "@commitlint/config-lerna-scopes":{
-      "lerna":"^7.3.0"
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "facades/*"
+  ],
+  "overrides": {
+    "@commitlint/config-lerna-scopes": {
+      "lerna": "^7.3.0"
     }
   },
   "config": {

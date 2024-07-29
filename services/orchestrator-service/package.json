@@ -1,0 +1,77 @@
+{
+  "name": "orchestrator-service",
+  "version": "0.0.1",
+  "description": "ARC SaaS Orchestrator Service",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": "18 || 20 || 22"
+  },
+  "scripts": {
+    "build": "lb-tsc",
+    "build:watch": "lb-tsc --watch",
+    "lint": "npm run eslint && npm run prettier:check",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
+    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
+    "prettier:check": "npm run prettier:cli -- -l",
+    "prettier:fix": "npm run prettier:cli -- --write",
+    "eslint": "lb-eslint --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
+    "pretest": "npm run rebuild",
+    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "posttest": "npm run lint",
+    "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
+    "docker:build": "docker build -t orchestrator-service .",
+    "docker:run": "docker run -p 3000:3000 -d orchestrator-service",
+    "premigrate": "npm run build",
+    "migrate": "node ./dist/migrate",
+    "preopenapi-spec": "npm run build",
+    "openapi-spec": "node ./dist/openapi-spec",
+    "prestart": "npm run rebuild",
+    "start": "node -r source-map-support/register .",
+    "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
+    "rebuild": "npm run clean && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Shubham P <shubham.prajapat@sourcefuse.com>",
+  "license": "",
+  "files": [
+    "README.md",
+    "dist",
+    "src",
+    "!*/__tests__"
+  ],
+  "dependencies": {
+    "@arc-saas/orchestrator-service": "file:arc-saas-orchestrator-service-0.0.1.tgz",
+    "@aws-sdk/client-codebuild": "^3.616.0",
+    "@aws-sdk/client-dynamodb": "^3.616.0",
+    "@aws-sdk/util-dynamodb": "^3.616.0",
+    "@loopback/boot": "^7.0.4",
+    "@loopback/core": "^6.1.1",
+    "@loopback/logging": "^0.12.4",
+    "@loopback/repository": "^7.0.4",
+    "@loopback/rest": "^14.0.4",
+    "@loopback/rest-explorer": "^7.0.4",
+    "@loopback/service-proxy": "^7.0.4",
+    "@vendia/serverless-express": "^4.12.6",
+    "aws-lambda": "^1.0.7",
+    "tslib": "^2.6.3"
+  },
+  "devDependencies": {
+    "@loopback/build": "^11.0.4",
+    "@loopback/eslint-config": "^15.0.3",
+    "@loopback/testlab": "^7.0.4",
+    "@types/aws-lambda": "^8.10.141",
+    "@types/node": "^20.14.12",
+    "eslint": "^8.57.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "~5.5.4"
+  }
+}
