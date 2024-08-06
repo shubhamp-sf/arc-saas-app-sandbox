@@ -17,10 +17,10 @@ import {PermissionKey} from '../permissions';
 import {InvoiceStatus, NotificationType, SubscriptionStatus} from '../enum';
 import {CheckBillingSubscriptionsDTO, SubscriptionDTO} from '../models/dtos';
 // import { NotificationService } from './notification.service';
-import { json } from 'stream/consumers';
-import { ISubscription } from '../types';
-import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
-import { NotificationService } from './notifications/notification.service';
+import {json} from 'stream/consumers';
+import {ISubscription} from '../types';
+import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
+import {NotificationService} from './notifications/notification.service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
@@ -50,11 +50,16 @@ export class TenantHelperService {
       new TenantOnboardDTO(dto),
     );
     const subscription = await this._createSubscription(dto.planId, tenant.id);
-    await this.tenantMgmtProxyService.provisionTenant(
-      token,
-      tenant.id,
-      subscription,
-    );
+    const sdto: ISubscription = {
+      id: subscription.id,
+      subscriberId: subscription.subscriberId,
+      startDate: subscription.startDate,
+      endDate: subscription.endDate,
+      status: subscription.status,
+      planId: subscription.planId,
+      plan: subscription.plan,
+    };
+    await this.tenantMgmtProxyService.provisionTenant(token, tenant.id, sdto);
     return tenant;
   }
   async createTenantFromLead(
@@ -69,83 +74,80 @@ export class TenantHelperService {
     );
 
     const subscription = await this._createSubscription(dto.planId, tenant.id);
-const sdto:ISubscription={
-  id: subscription.id,
-  subscriberId: subscription.subscriberId,
-  startDate: subscription.startDate,
-  endDate: subscription.endDate,
-  status: subscription.status,
-  planId: subscription.planId,
-  plan: subscription.plan,
-}
-    await this.tenantMgmtProxyService.provisionTenant(
-      token,
-      tenant.id,
-     sdto
-    );
+    const sdto: ISubscription = {
+      id: subscription.id,
+      subscriberId: subscription.subscriberId,
+      startDate: subscription.startDate,
+      endDate: subscription.endDate,
+      status: subscription.status,
+      planId: subscription.planId,
+      plan: subscription.plan,
+    };
+    await this.tenantMgmtProxyService.provisionTenant(token, tenant.id, sdto);
     return tenant;
   }
 
-
-   async getTenantBills(userId:string): Promise<SubscriptionBillDTO[]>{
+  async getTenantBills(userId: string): Promise<SubscriptionBillDTO[]> {
     const token = this.cryptoHelperService.generateTempToken({
       id: userId,
       userTenantId: userId,
       permissions: [
-        PermissionKey.CreateLead
-        ,PermissionKey.UpdateLead
-        ,PermissionKey.DeleteLead
-        ,PermissionKey.ViewLead
-        ,PermissionKey.CreateTenant
-        ,PermissionKey.ProvisionTenant
-        ,PermissionKey.UpdateTenant
-        ,PermissionKey.DeleteTenant
-        ,PermissionKey.ViewTenant
-        ,PermissionKey.CreateContact
-        ,PermissionKey.UpdateContact
-        ,PermissionKey.DeleteContact
-        ,PermissionKey.ViewContact
-        ,PermissionKey.CreateInvoice
-        ,PermissionKey.UpdateInvoice
-        ,PermissionKey.DeleteInvoice
-        ,PermissionKey.ViewInvoice
-        ,PermissionKey.CreateNotification
-        ,PermissionKey.CreateSubscription
-        ,PermissionKey.UpdateSubscription
-        ,PermissionKey.ViewSubscription
-        ,PermissionKey.ViewPlan
-        ,PermissionKey.ViewNotificationTemplate
-        ,PermissionKey.CreateNotificationTemplate
-        ,PermissionKey.UpdateNotificationTemplate
-        ,PermissionKey.DeleteNotificationTemplate
+        PermissionKey.CreateLead,
+        PermissionKey.UpdateLead,
+        PermissionKey.DeleteLead,
+        PermissionKey.ViewLead,
+        PermissionKey.CreateTenant,
+        PermissionKey.ProvisionTenant,
+        PermissionKey.UpdateTenant,
+        PermissionKey.DeleteTenant,
+        PermissionKey.ViewTenant,
+        PermissionKey.CreateContact,
+        PermissionKey.UpdateContact,
+        PermissionKey.DeleteContact,
+        PermissionKey.ViewContact,
+        PermissionKey.CreateInvoice,
+        PermissionKey.UpdateInvoice,
+        PermissionKey.DeleteInvoice,
+        PermissionKey.ViewInvoice,
+        PermissionKey.CreateNotification,
+        PermissionKey.CreateSubscription,
+        PermissionKey.UpdateSubscription,
+        PermissionKey.ViewSubscription,
+        PermissionKey.ViewPlan,
+        PermissionKey.ViewNotificationTemplate,
+        PermissionKey.CreateNotificationTemplate,
+        PermissionKey.UpdateNotificationTemplate,
+        PermissionKey.DeleteNotificationTemplate,
       ],
     });
 
     // const token = this.request.headers.authorization?? "";
-    let subscriptionBills:SubscriptionBillDTO[]=[];
+    let subscriptionBills: SubscriptionBillDTO[] = [];
 
-    const subscriptions=await this.subscriptionProxyService.find(token,{
-      include:['plan']
+    const subscriptions = await this.subscriptionProxyService.find(token, {
+      include: ['plan'],
     });
-    for(const subscription of subscriptions){
-      const tenant=await this.tenantMgmtProxyService.getTenants(`Bearer ${token}`,{
-        where:{id:subscription.subscriberId},
-        include:['lead','contacts']
-      });
-      subscriptionBills.push(new SubscriptionBillDTO({
-        companyName:tenant[0].lead?.companyName,
-        userName:tenant[0].lead?.firstName+' '+tenant[0].lead?.lastName,
-        status:subscription.status,
-        startDate:subscription.startDate,
-        endDate:subscription.endDate,
-        planName:subscription.plan?.name
-      }))
+    for (const subscription of subscriptions) {
+      const tenant = await this.tenantMgmtProxyService.getTenants(
+        `Bearer ${token}`,
+        {
+          where: {id: subscription.subscriberId},
+          include: ['lead', 'contacts'],
+        },
+      );
+      subscriptionBills.push(
+        new SubscriptionBillDTO({
+          companyName: tenant[0].lead?.companyName,
+          userName: tenant[0].lead?.firstName + ' ' + tenant[0].lead?.lastName,
+          status: subscription.status,
+          startDate: subscription.startDate,
+          endDate: subscription.endDate,
+          planName: subscription.plan?.name,
+        }),
+      );
     }
     return subscriptionBills;
   }
-
-
-
 
   private async _createSubscription(planId: string, userId: string) {
     const token = this.cryptoHelperService.generateTempToken({
@@ -195,13 +197,18 @@ const sdto:ISubscription={
       dueDate: endDate,
     });
 
-    const createdSubscription=await this.subscriptionProxyService.create(token, {
-      planId,
-      subscriberId: userId,
-      status: SubscriptionStatus.ACTIVE,
-    });
+    const createdSubscription = await this.subscriptionProxyService.create(
+      token,
+      {
+        planId,
+        subscriberId: userId,
+        status: SubscriptionStatus.ACTIVE,
+      },
+    );
 
-    return this.subscriptionProxyService.findById(token,createdSubscription.id,
+    return this.subscriptionProxyService.findById(
+      token,
+      createdSubscription.id,
       JSON.stringify({
         include: [
           {
@@ -214,7 +221,6 @@ const sdto:ISubscription={
       }),
     );
   }
-
 
   async checkBillingSubscriptions(
     userId: string,
@@ -252,7 +258,7 @@ const sdto:ISubscription={
     const markSubscriptionsAsExpiredPromises = [];
     for (const subscription of subscriptions) {
       // check for if subscription is expired
-      if (moment(subscription.endDate).isBefore(moment()) ) {
+      if (moment(subscription.endDate).isBefore(moment())) {
         expiredSubscriptionsArray.push({
           subscriptionId: subscription.id,
           subscriberId: subscription.subscriberId,
