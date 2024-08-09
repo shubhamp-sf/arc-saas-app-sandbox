@@ -25,7 +25,7 @@ import {RestApplication} from '@loopback/rest';
 import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
-import {SubscriptionServiceComponent} from 'subscription-service';
+import {SubscriptionServiceComponent} from '@sourceloop/ctrl-plane-subscription-service';
 
 export {ApplicationConfig};
 

@@ -1,13 +1,12 @@
 import {injectable, BindingScope} from '@loopback/core';
 import {
   EventTypes,
-  PlanTier,
   SubscriptionDTO,
   TenantWithRelations,
 } from '@sourceloop/ctrl-plane-tenant-management-service';
 import {EventBridgeClient, PutEventsCommand} from '@aws-sdk/client-eventbridge';
 import {AnyObject} from '@loopback/repository';
-import {IEventConnector} from '@sourceloop/ctrl-plane-tenant-management-service/dist/types/i-event-connector.interface';
+import {IEventConnector} from '@sourceloop/ctrl-plane-tenant-management-service';
 
 export enum Builder {
   CODE_BUILD = 'CODE_BUILD',
@@ -33,26 +32,18 @@ export class EventConnector implements IEventConnector<EventBodyType> {
     console.log('Secret', secret);
     console.log('Context', context);
 
-    // tier identifier remapping the remapped named are stored in dynamodb
-    // that's why they need to be remaped, if you prefer to stored in the numeric values
-    // this remapping won't be needed, but doing it here for better readability
-    if (data.subscription.plan && 'tier' in data.subscription.plan) {
-      if (data.subscription.plan.tier === PlanTier.POOLED) {
-        data.subscription.plan.tier = 'STANDARD' as unknown as PlanTier;
-      } else if (data.subscription.plan.tier === PlanTier.SILO) {
-        data.subscription.plan.tier = 'PREMIUM' as unknown as PlanTier;
-      }
-    }
-
     // Configure the AWS SDK with your credentials and region
     const eventBridgeClient = new EventBridgeClient({
       region: process.env.EVENT_BUS_REGION,
     });
 
-    const extraPlanConfig: Record<string, string | number | boolean> = {};
-    data.subscription.plan?.planItems?.forEach(item => {
-      extraPlanConfig[item.value.name] = item.value.value;
-    });
+    const extraPlanConfig: AnyObject = {};
+
+    if (data.subscription.plan?.sizeConfig) {
+      for (const key in data.subscription.plan?.sizeConfig) {
+        extraPlanConfig[key] = data.subscription.plan?.sizeConfig[key];
+      }
+    }
 
     // Define the event payload
     const eventPayload = {
@@ -69,6 +60,7 @@ export class EventConnector implements IEventConnector<EventBodyType> {
               config: {
                 environmentOverride: {
                   ...extraPlanConfig,
+                  plan: JSON.stringify(data.subscription.plan),
                   tenant: JSON.stringify(data.tenant),
                   secret: secret,
                   context: context,

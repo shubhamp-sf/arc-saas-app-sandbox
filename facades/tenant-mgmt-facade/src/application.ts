@@ -31,9 +31,9 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
 import {LEAD_TOKEN_VERIFIER} from './keys';
-import { LeadTokenVerifierProvider} from './services';
-import { WebhookTenantManagementServiceComponent } from 'tenant-management-service';
-import { NotificationService } from './services/notifications';
+import {LeadTokenVerifierProvider} from './services';
+import {WebhookTenantManagementServiceComponent} from '@sourceloop/ctrl-plane-tenant-management-service';
+import {NotificationService} from './services/notifications';
 
 export {ApplicationConfig};
 
@@ -78,8 +78,6 @@ export class TenantMgmtFacadeApplication extends BootMixin(
       swaggerPassword: process.env.SWAGGER_PASSWORD,
     });
 
-
-
     this.component(CoreComponent);
 
     this.component(WebhookTenantManagementServiceComponent);
@@ -110,7 +108,6 @@ export class TenantMgmtFacadeApplication extends BootMixin(
       keyGenerator: rateLimitKeyGen,
     });
 
-
     // Add authentication component
     this.component(AuthenticationComponent);
 
@@ -135,7 +132,7 @@ export class TenantMgmtFacadeApplication extends BootMixin(
 
     this.component(RestExplorerComponent);
     this.bind(LEAD_TOKEN_VERIFIER).toProvider(LeadTokenVerifierProvider);
-    this.bind('services.NotificationService').toClass(NotificationService)
+    this.bind('services.NotificationService').toClass(NotificationService);
     // this.service(CryptoHelperService);
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

@@ -6,7 +6,7 @@ import {
   SubscriptionUpdationType,
 } from './types';
 import {getService} from '@loopback/service-proxy';
-import {Filter} from '@loopback/repository';
+import {AnyObject, Filter} from '@loopback/repository';
 import {SubscriptionServiceDataSource} from '../../datasources';
 
 export interface SubscriptionProxyService {
@@ -30,19 +30,25 @@ export interface SubscriptionProxyService {
     token: string,
     filter?: Filter<ISubscription> | string,
   ): Promise<ISubscription[]>;
-  findById(
-    token:string,
-    id: string,
-    filter?: Filter<ISubscription> | string,
-  ):Promise<ISubscription>;
   expireSoonSubscription(
     token: string,
-    filter?: Filter<ISubscription> | string,):Promise<{ id: string, daysRemainingToExpiry: number, subscriberId: string }[]>;
+    filter?: Filter<ISubscription> | string,
+  ): Promise<
+    {id: string; daysRemainingToExpiry: number; subscriberId: string}[]
+  >;
   expiredSubscription(
     token: string,
-    days:number,
+    days: number,
     filter?: Filter<ISubscription> | string,
-  ) :Promise<{ subscriptionId: string; subscriberId: string; }[]>
+  ): Promise<{subscriptionId: string; subscriberId: string}[]>;
+  getPlanSizeConfig(
+    token: string,
+    filter?: Filter<{size: string}> | string,
+  ): Promise<{size: string; config: object}[]>;
+  getPlanFeatures(
+    token: string,
+    planId: string,
+  ): Promise<{features: AnyObject[]}>;
 }
 
 export class SubscriptionProxyServiceProvider

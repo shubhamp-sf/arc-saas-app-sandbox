@@ -31,7 +31,7 @@ WORKDIR /home/node/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY --chown=node tenant-management-service-0.0.1.tgz ./
+COPY --chown=node sourceloop-ctrl-plane-tenant-management-service-0.2.0.tgz ./
 COPY --chown=node package*.json ./
 
 # The following two commands is used to copy the `packages`,`service` directory from the local file system to the Docker image.

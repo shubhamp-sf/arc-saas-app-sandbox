@@ -31,7 +31,7 @@ WORKDIR /home/node/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY --chown=node sourceloop-ctrl-plane-tenant-management-service-0.1.0.tgz ./
+COPY --chown=node sourceloop-ctrl-plane-tenant-management-service-0.2.0.tgz ./
 COPY --chown=node package*.json ./
 
 

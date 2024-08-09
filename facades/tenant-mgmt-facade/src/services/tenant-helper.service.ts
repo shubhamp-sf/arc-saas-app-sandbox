@@ -8,16 +8,11 @@ import {
   SubscriptionProxyService,
   TenantMgmtProxyService,
 } from './proxies';
-import {
-  CreateTenantWithPlanDTO,
-  ProvisioningDTO,
-  TenantOnboardDTO,
-} from '../models';
+import {CreateTenantWithPlanDTO, TenantOnboardDTO} from '../models';
 import {PermissionKey} from '../permissions';
 import {InvoiceStatus, NotificationType, SubscriptionStatus} from '../enum';
-import {CheckBillingSubscriptionsDTO, SubscriptionDTO} from '../models/dtos';
 // import { NotificationService } from './notification.service';
-import {json} from 'stream/consumers';
+import {CheckBillingSubscriptionsDTO} from '../models/dtos';
 import {ISubscription} from '../types';
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {NotificationService} from './notifications/notification.service';
@@ -122,7 +117,7 @@ export class TenantHelperService {
     });
 
     // const token = this.request.headers.authorization?? "";
-    let subscriptionBills: SubscriptionBillDTO[] = [];
+    const subscriptionBills: SubscriptionBillDTO[] = [];
 
     const subscriptions = await this.subscriptionProxyService.find(token, {
       include: ['plan'],
@@ -158,6 +153,8 @@ export class TenantHelperService {
         PermissionKey.ViewPlan,
         PermissionKey.CreateSubscription,
         PermissionKey.CreateInvoice,
+        '7029', // view plan sizes
+        '7033', // view plan features
       ],
     });
 
@@ -206,20 +203,62 @@ export class TenantHelperService {
       },
     );
 
-    return this.subscriptionProxyService.findById(
+    const subscriptionWithPlan = await this.subscriptionProxyService.findById(
       token,
       createdSubscription.id,
       JSON.stringify({
         include: [
           {
             relation: 'plan',
-            scope: {
-              include: [{relation: 'planItems'}],
-            },
           },
         ],
       }),
     );
+
+    if (subscriptionWithPlan.plan?.size) {
+      try {
+        console.log('token for plan size config', token);
+
+        const filter = {
+          where: {size: subscriptionWithPlan.plan.size},
+        };
+
+        console.log('filter', filter);
+
+        const planSizeConfig =
+          await this.subscriptionProxyService.getPlanSizeConfig(
+            `Bearer ${token}`,
+            filter,
+          );
+        if (
+          planSizeConfig &&
+          Array.isArray(planSizeConfig) &&
+          planSizeConfig.length > 0
+        ) {
+          subscriptionWithPlan.plan.sizeConfig = planSizeConfig[0].config;
+        }
+        console.log('planSizeConfig', planSizeConfig);
+      } catch (err) {
+        console.log('Failed to get the plan size config', err);
+      }
+    }
+
+    if (subscriptionWithPlan.plan) {
+      try {
+        const planFeatures =
+          await this.subscriptionProxyService.getPlanFeatures(
+            `Bearer ${token}`,
+            subscriptionWithPlan.plan?.id,
+          );
+
+        console.log('planFeatures', planFeatures);
+        subscriptionWithPlan.plan.features = planFeatures.features;
+      } catch (err) {
+        console.log('Failed to get the plan features:', err);
+      }
+    }
+
+    return subscriptionWithPlan;
   }
 
   async checkBillingSubscriptions(

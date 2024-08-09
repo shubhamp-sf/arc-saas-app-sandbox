@@ -12,9 +12,6 @@ export type LeadUserWithToken = {
 } & LeadUser;
 
 import {IServiceConfig} from '@sourceloop/core';
-import { PlanTier } from './enum';
-
-
 
 export interface ISubscription {
   deleted?: boolean;
@@ -103,11 +100,13 @@ export interface IPlan {
   price: number;
   currencyId: string;
   metaData: IMetaData;
-  tier: PlanTier;
+  tier: string;
+  size?: string;
   billingCycleId: string;
-  planItems?: IPlanItem[];
   billingCycle?: IBillingCycle;
   currency?: ICurrency;
+  sizeConfig?: object;
+  features?: object;
 }
 
 export interface IMetaData {
@@ -133,4 +132,3 @@ export interface IValue {
   name: string;
   value: number | string | boolean;
 }
-

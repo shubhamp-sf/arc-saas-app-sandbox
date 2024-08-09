@@ -70,11 +70,11 @@ const config = {
         },
         query: {
           filter: '{filter}',
-          days:'{days}'
+          days: '{days}',
         },
       },
       functions: {
-        expiredSubscription: ['token', 'days' , 'filter'],
+        expiredSubscription: ['token', 'days', 'filter'],
       },
     },
     {
@@ -107,6 +107,33 @@ const config = {
     },
     {
       template: {
+        method: 'GET',
+        url: '/plan-sizes',
+        headers: {
+          Authorization: `{token}`,
+        },
+        query: {
+          filter: '{filter}',
+        },
+      },
+      functions: {
+        getPlanSizeConfig: ['token', 'filter'],
+      },
+    },
+    {
+      template: {
+        method: 'GET',
+        url: '/plans/{planId}/features',
+        headers: {
+          Authorization: `{token}`,
+        },
+      },
+      functions: {
+        getPlanFeatures: ['token', 'planId'],
+      },
+    },
+    {
+      template: {
         method: 'POST',
         url: '/subscriptions',
         headers: {
@@ -117,7 +144,7 @@ const config = {
       functions: {
         create: ['token', 'body'],
       },
-    }
+    },
   ],
 };
 

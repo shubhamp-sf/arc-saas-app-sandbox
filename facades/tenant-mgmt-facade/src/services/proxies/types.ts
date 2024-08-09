@@ -1,7 +1,9 @@
 // import { TenantStatus } from "tenant-management-service";
-import { PlanTier, TenantStatus } from "../../enum";
-import { Address, Contact, Lead, Resource } from "../../models";
+import {TenantStatus} from '../../enum';
+import {Address, Contact, Lead, Resource} from '../../models';
+import {IPlan} from '../../types';
 
+export {IPlan} from './../../types';
 export interface ISubscription {
   deleted?: boolean;
   deletedOn?: Date;
@@ -19,7 +21,7 @@ export interface ISubscription {
   plan?: IPlan;
 }
 
-export interface ITenant{
+export interface ITenant {
   deleted?: boolean;
   deletedOn?: Date;
   deletedBy?: string;
@@ -28,19 +30,18 @@ export interface ITenant{
   createdBy?: string;
   modifiedBy?: string;
   id: string;
-  name:string;
-  status:TenantStatus;
-  key:string;
-  spocUserId?:string;
+  name: string;
+  status: TenantStatus;
+  key: string;
+  spocUserId?: string;
   domains: string[];
   contacts: Contact[];
   resources: Resource[];
   leadId?: string;
   addressId: string;
-  lead?:Lead;
-  address?:Address;
+  lead?: Lead;
+  address?: Address;
 }
-
 
 export type SubscriptionCreationType = Omit<
   ISubscription,
@@ -110,46 +111,6 @@ export interface ICurrency {
   country: string;
 }
 
-export interface IPlan {
-  deleted?: boolean;
-  deletedOn?: Date;
-  deletedBy?: string;
-  createdOn?: Date;
-  modifiedOn?: Date;
-  createdBy?: string;
-  modifiedBy?: string;
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  currencyId: string;
-  metaData: IMetaData;
-  tier: PlanTier;
-  billingCycleId: string;
-  planItems?: IPlanItem[];
-  billingCycle?: IBillingCycle;
-  currency?: ICurrency;
-}
-
 export interface IMetaData {
   pipelineName: string;
-}
-
-export interface IPlanItem {
-  deleted?: boolean;
-  deletedOn?: string;
-  deletedBy?: string;
-  createdOn?: string;
-  modifiedOn?: string;
-  createdBy?: string;
-  modifiedBy?: string;
-  id: string;
-  name: string;
-  planItemType: string;
-  value: IValue;
-  planId?: string;
-}
-export interface IValue {
-  name: string;
-  value: number | string | boolean;
 }

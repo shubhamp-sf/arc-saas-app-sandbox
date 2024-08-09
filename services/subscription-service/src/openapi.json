@@ -670,6 +670,666 @@
         "operationId": "CurrencyController.find"
       }
     },
+    "/feature-values/count": {
+      "get": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "count",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FeatureValues model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeatureValues   |\n| 9   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "feature_values.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<FeatureValues>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureValuesController.count"
+      }
+    },
+    "/feature-values/{id}": {
+      "put": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "FeatureValues PUT success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeatureValues   |\n| 11   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureValues"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeatureValuesController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "FeatureValues PATCH success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeatureValues   |\n| 11   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureValuesPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeatureValuesController.updateById"
+      },
+      "get": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "findById",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FeatureValues model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureValuesWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeatureValues   |\n| 9   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/feature_values.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureValuesController.findById"
+      },
+      "delete": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "FeatureValues DELETE success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| DeleteFeatureValues   |\n| 12   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "FeatureValuesController.deleteById"
+      }
+    },
+    "/feature-values": {
+      "post": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "create",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FeatureValues model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureValues"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| CreateFeatureValues   |\n| 10   |\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewFeatureValues"
+              }
+            }
+          }
+        },
+        "operationId": "FeatureValuesController.create"
+      },
+      "patch": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "FeatureValues PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeatureValues   |\n| 11   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "feature_values.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<FeatureValues>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureValuesPartial"
+              }
+            }
+          }
+        },
+        "operationId": "FeatureValuesController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "FeatureValuesController",
+        "x-operation-name": "find",
+        "tags": [
+          "FeatureValuesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of FeatureValues model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureValuesWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeatureValues   |\n| 9   |\n",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/feature_values.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureValuesController.find"
+      }
+    },
+    "/features/count": {
+      "get": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "count",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feature model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeature   |\n| 1   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "features.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Feature>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureController.count"
+      }
+    },
+    "/features/{id}": {
+      "put": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Feature PUT success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeature   |\n| 3   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Feature"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeatureController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Feature PATCH success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeature   |\n| 3   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturePartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FeatureController.updateById"
+      },
+      "get": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "findById",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feature model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeature   |\n| 1   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/features.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureController.findById"
+      },
+      "delete": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Feature DELETE success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| DeleteFeature   |\n| 4   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "FeatureController.deleteById"
+      }
+    },
+    "/features": {
+      "post": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "create",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feature model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| CreateFeature   |\n| 2   |\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewFeature"
+              }
+            }
+          }
+        },
+        "operationId": "FeatureController.create"
+      },
+      "patch": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feature PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateFeature   |\n| 3   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "features.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Feature>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeaturePartial"
+              }
+            }
+          }
+        },
+        "operationId": "FeatureController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "FeatureController",
+        "x-operation-name": "find",
+        "tags": [
+          "FeatureController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Feature model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewFeature   |\n| 1   |\n",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/features.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FeatureController.find"
+      }
+    },
     "/ping": {
       "get": {
         "x-controller-name": "PingController",
@@ -693,12 +1353,12 @@
         "operationId": "PingController.ping"
       }
     },
-    "/plan-items/count": {
+    "/plan-sizes/count": {
       "get": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "count",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -707,7 +1367,7 @@
         ],
         "responses": {
           "200": {
-            "description": "PlanItem model count",
+            "description": "PlanSizes model count",
             "content": {
               "application/json": {
                 "schema": {
@@ -717,7 +1377,7 @@
             }
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7012   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7029   |\n",
         "parameters": [
           {
             "name": "where",
@@ -726,23 +1386,23 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "title": "plan_items.WhereFilter",
+                  "title": "plan_sizes.WhereFilter",
                   "additionalProperties": true,
-                  "x-typescript-type": "@loopback/repository#Where<PlanItem>"
+                  "x-typescript-type": "@loopback/repository#Where<PlanSizes>"
                 }
               }
             }
           }
         ],
-        "operationId": "PlanItemController.count"
+        "operationId": "PlanSizesController.count"
       }
     },
-    "/plan-items/{id}": {
+    "/plan-sizes/{id}": {
       "put": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "replaceById",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -751,10 +1411,10 @@
         ],
         "responses": {
           "204": {
-            "description": "PlanItem PUT success"
+            "description": "PlanSizes PUT success"
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7010   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7031   |\n",
         "parameters": [
           {
             "name": "id",
@@ -769,19 +1429,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlanItem"
+                "$ref": "#/components/schemas/PlanSizes"
               }
             }
           },
           "x-parameter-index": 1
         },
-        "operationId": "PlanItemController.replaceById"
+        "operationId": "PlanSizesController.replaceById"
       },
       "patch": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "updateById",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -790,10 +1450,10 @@
         ],
         "responses": {
           "204": {
-            "description": "PlanItem PATCH success"
+            "description": "PlanSizes PATCH success"
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7010   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7031   |\n",
         "parameters": [
           {
             "name": "id",
@@ -808,19 +1468,19 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlanItemPartial"
+                "$ref": "#/components/schemas/PlanSizesPartial"
               }
             }
           },
           "x-parameter-index": 1
         },
-        "operationId": "PlanItemController.updateById"
+        "operationId": "PlanSizesController.updateById"
       },
       "get": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "findById",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -829,17 +1489,17 @@
         ],
         "responses": {
           "200": {
-            "description": "PlanItem  model instance",
+            "description": "PlanSizes model instance",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlanItemWithRelations"
+                  "$ref": "#/components/schemas/PlanSizesWithRelations"
                 }
               }
             }
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7012   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7029   |\n",
         "parameters": [
           {
             "name": "id",
@@ -855,19 +1515,19 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/plan_items.Filter"
+                  "$ref": "#/components/schemas/plan_sizes.Filter"
                 }
               }
             }
           }
         ],
-        "operationId": "PlanItemController.findById"
+        "operationId": "PlanSizesController.findById"
       },
       "delete": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "deleteById",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -876,10 +1536,10 @@
         ],
         "responses": {
           "204": {
-            "description": "PlanItem DELETE success"
+            "description": "PlanSizes DELETE success"
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7011   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7032   |\n",
         "parameters": [
           {
             "name": "id",
@@ -890,15 +1550,15 @@
             "required": true
           }
         ],
-        "operationId": "PlanItemController.deleteById"
+        "operationId": "PlanSizesController.deleteById"
       }
     },
-    "/plan-items": {
+    "/plan-sizes": {
       "post": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "create",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -907,33 +1567,33 @@
         ],
         "responses": {
           "200": {
-            "description": "PlanItem  model instance",
+            "description": "PlanSizes model instance",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlanItem"
+                  "$ref": "#/components/schemas/PlanSizes"
                 }
               }
             }
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7009   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7030   |\n",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlanItem"
+                "$ref": "#/components/schemas/NewPlanSizes"
               }
             }
           }
         },
-        "operationId": "PlanItemController.create"
+        "operationId": "PlanSizesController.create"
       },
       "patch": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "updateAll",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -942,7 +1602,7 @@
         ],
         "responses": {
           "200": {
-            "description": "PlanItem PATCH success count",
+            "description": "PlanSizes PATCH success count",
             "content": {
               "application/json": {
                 "schema": {
@@ -952,7 +1612,7 @@
             }
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7010   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7031   |\n",
         "parameters": [
           {
             "name": "where",
@@ -961,9 +1621,9 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "title": "plan_items.WhereFilter",
+                  "title": "plan_sizes.WhereFilter",
                   "additionalProperties": true,
-                  "x-typescript-type": "@loopback/repository#Where<PlanItem>"
+                  "x-typescript-type": "@loopback/repository#Where<PlanSizes>"
                 }
               }
             }
@@ -973,18 +1633,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PlanItemPartial"
+                "$ref": "#/components/schemas/PlanSizesPartial"
               }
             }
           }
         },
-        "operationId": "PlanItemController.updateAll"
+        "operationId": "PlanSizesController.updateAll"
       },
       "get": {
-        "x-controller-name": "PlanItemController",
+        "x-controller-name": "PlanSizesController",
         "x-operation-name": "find",
         "tags": [
-          "PlanItemController"
+          "PlanSizesController"
         ],
         "security": [
           {
@@ -993,20 +1653,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Array of PlanItem model instances",
+            "description": "Array of PlanSizes model instances",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PlanItemWithRelations"
+                    "$ref": "#/components/schemas/PlanSizesWithRelations"
                   }
                 }
               }
             }
           }
         },
-        "description": "\n\n| Permissions |\n| ------- |\n| 7012   |\n",
+        "description": "\n\n| Permissions |\n| ------- |\n| 7029   |\n",
         "parameters": [
           {
             "name": "filter",
@@ -1014,13 +1674,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/plan_items.Filter1"
+                  "$ref": "#/components/schemas/plan_sizes.Filter1"
                 }
               }
             }
           }
         ],
-        "operationId": "PlanItemController.find"
+        "operationId": "PlanSizesController.find"
       }
     },
     "/plans/count": {
@@ -1065,6 +1725,90 @@
           }
         ],
         "operationId": "PlanController.count"
+      }
+    },
+    "/plans/{id}/features": {
+      "post": {
+        "x-controller-name": "PlanFeaturesController",
+        "x-operation-name": "setPlanFeatures",
+        "tags": [
+          "PlanFeaturesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plan Features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureValues"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| 7034   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "PlanFeaturesController.setPlanFeatures"
+      },
+      "get": {
+        "x-controller-name": "PlanFeaturesController",
+        "x-operation-name": "getPlanFeatures",
+        "tags": [
+          "PlanFeaturesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plan Features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureValues"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| 7033   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "PlanFeaturesController.getPlanFeatures"
       }
     },
     "/plans/{id}/subscriptions": {
@@ -2051,6 +2795,336 @@
         "operationId": "ServiceController.find"
       }
     },
+    "/strategies/count": {
+      "get": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "count",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewStrategy   |\n| 5   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "strategies.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Strategy>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "StrategyController.count"
+      }
+    },
+    "/strategies/{id}": {
+      "put": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Strategy PUT success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateStrategy   |\n| 7   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Strategy"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "StrategyController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Strategy PATCH success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateStrategy   |\n| 7   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StrategyPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "StrategyController.updateById"
+      },
+      "get": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "findById",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StrategyWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewStrategy   |\n| 5   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/strategies.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "StrategyController.findById"
+      },
+      "delete": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Strategy DELETE success"
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| DeleteStrategy   |\n| 8   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "StrategyController.deleteById"
+      }
+    },
+    "/strategies": {
+      "post": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "create",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Strategy"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| CreateStrategy   |\n| 6   |\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewStrategy"
+              }
+            }
+          }
+        },
+        "operationId": "StrategyController.create"
+      },
+      "patch": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Strategy PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| UpdateStrategy   |\n| 7   |\n",
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "strategies.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Strategy>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StrategyPartial"
+              }
+            }
+          }
+        },
+        "operationId": "StrategyController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "StrategyController",
+        "x-operation-name": "find",
+        "tags": [
+          "StrategyController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Strategy model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StrategyWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| ViewStrategy   |\n| 5   |\n",
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/strategies.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "StrategyController.find"
+      }
+    },
     "/subscriptions/count": {
       "get": {
         "x-controller-name": "SubscriptionController",
@@ -2509,6 +3583,642 @@
       }
     },
     "schemas": {
+      "Feature": {
+        "title": "Feature",
+        "type": "object",
+        "description": "The features table",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "defaultValue": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "NewFeature": {
+        "title": "NewFeature",
+        "type": "object",
+        "description": "The features table (tsType: Feature, schemaOptions: { title: 'NewFeature' })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "defaultValue": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "FeatureWithRelations": {
+        "title": "FeatureWithRelations",
+        "type": "object",
+        "description": "The features table (tsType: FeatureWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "defaultValue": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "FeaturePartial": {
+        "title": "FeaturePartial",
+        "type": "object",
+        "description": "The features table (tsType: Partial<Feature>, schemaOptions: { partial: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "defaultValue": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeatureValues": {
+        "title": "FeatureValues",
+        "type": "object",
+        "description": "The feature-values table",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "featureKey": {
+            "type": "string"
+          },
+          "strategyKey": {
+            "type": "string"
+          },
+          "strategyEntityId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "NewFeatureValues": {
+        "title": "NewFeatureValues",
+        "type": "object",
+        "description": "The feature-values table (tsType: FeatureValues, schemaOptions: { title: 'NewFeatureValues' })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "featureKey": {
+            "type": "string"
+          },
+          "strategyKey": {
+            "type": "string"
+          },
+          "strategyEntityId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeatureValuesWithRelations": {
+        "title": "FeatureValuesWithRelations",
+        "type": "object",
+        "description": "The feature-values table (tsType: FeatureValuesWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "featureKey": {
+            "type": "string"
+          },
+          "strategyKey": {
+            "type": "string"
+          },
+          "strategyEntityId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeatureValuesPartial": {
+        "title": "FeatureValuesPartial",
+        "type": "object",
+        "description": "The feature-values table (tsType: Partial<FeatureValues>, schemaOptions: { partial: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "featureKey": {
+            "type": "string"
+          },
+          "strategyKey": {
+            "type": "string"
+          },
+          "strategyEntityId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Strategy": {
+        "title": "Strategy",
+        "type": "object",
+        "description": "The strategies table",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "NewStrategy": {
+        "title": "NewStrategy",
+        "type": "object",
+        "description": "The strategies table (tsType: Strategy, schemaOptions: { title: 'NewStrategy' })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "StrategyWithRelations": {
+        "title": "StrategyWithRelations",
+        "type": "object",
+        "description": "The strategies table (tsType: StrategyWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "key"
+        ],
+        "additionalProperties": false
+      },
+      "StrategyPartial": {
+        "title": "StrategyPartial",
+        "type": "object",
+        "description": "The strategies table (tsType: Partial<Strategy>, schemaOptions: { partial: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": false
+      },
       "BillingCycle": {
         "title": "BillingCycle",
         "type": "object",
@@ -2822,236 +4532,6 @@
         "additionalProperties": false,
         "x-typescript-type": "Partial<Currency>"
       },
-      "PlanItem": {
-        "title": "PlanItem",
-        "type": "object",
-        "properties": {
-          "deleted": {
-            "type": "boolean"
-          },
-          "deletedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "deletedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the plan item"
-          },
-          "planItemType": {
-            "type": "string",
-            "description": "type of the plan item"
-          },
-          "value": {
-            "type": "object",
-            "description": "value of the plan item"
-          },
-          "planId": {
-            "type": "string",
-            "description": "plan id of the plan item"
-          }
-        },
-        "required": [
-          "name",
-          "planItemType",
-          "value"
-        ],
-        "additionalProperties": false
-      },
-      "NewPlanItem": {
-        "title": "NewPlanItem",
-        "type": "object",
-        "description": "(tsType: Omit<PlanItem, 'id'>, schemaOptions: { title: 'NewPlanItem', exclude: [ 'id' ] })",
-        "properties": {
-          "deleted": {
-            "type": "boolean"
-          },
-          "deletedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "deletedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the plan item"
-          },
-          "planItemType": {
-            "type": "string",
-            "description": "type of the plan item"
-          },
-          "value": {
-            "type": "object",
-            "description": "value of the plan item"
-          },
-          "planId": {
-            "type": "string",
-            "description": "plan id of the plan item"
-          }
-        },
-        "required": [
-          "name",
-          "planItemType",
-          "value"
-        ],
-        "additionalProperties": false,
-        "x-typescript-type": "Omit<PlanItem, 'id'>"
-      },
-      "PlanItemWithRelations": {
-        "title": "PlanItemWithRelations",
-        "type": "object",
-        "description": "(tsType: PlanItemWithRelations, schemaOptions: { includeRelations: true })",
-        "properties": {
-          "deleted": {
-            "type": "boolean"
-          },
-          "deletedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "deletedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the plan item"
-          },
-          "planItemType": {
-            "type": "string",
-            "description": "type of the plan item"
-          },
-          "value": {
-            "type": "object",
-            "description": "value of the plan item"
-          },
-          "planId": {
-            "type": "string",
-            "description": "plan id of the plan item"
-          },
-          "plan": {
-            "$ref": "#/components/schemas/PlanWithRelations"
-          },
-          "foreignKey": {}
-        },
-        "required": [
-          "name",
-          "planItemType",
-          "value"
-        ],
-        "additionalProperties": false,
-        "x-typescript-type": "PlanItemWithRelations"
-      },
-      "PlanItemPartial": {
-        "title": "PlanItemPartial",
-        "type": "object",
-        "description": "(tsType: Partial<PlanItem>, schemaOptions: { partial: true })",
-        "properties": {
-          "deleted": {
-            "type": "boolean"
-          },
-          "deletedOn": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
-          },
-          "deletedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "modifiedOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string"
-          },
-          "modifiedBy": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the plan item"
-          },
-          "planItemType": {
-            "type": "string",
-            "description": "type of the plan item"
-          },
-          "value": {
-            "type": "object",
-            "description": "value of the plan item"
-          },
-          "planId": {
-            "type": "string",
-            "description": "plan id of the plan item"
-          }
-        },
-        "additionalProperties": false,
-        "x-typescript-type": "Partial<PlanItem>"
-      },
       "Plan": {
         "title": "Plan",
         "type": "object",
@@ -3094,12 +4574,12 @@
             "description": "description of the plan"
           },
           "tier": {
-            "type": "number",
-            "description": "Tier of the plan, it can be - 0(Pooled) and  1(Silo)",
-            "enum": [
-              0,
-              1
-            ]
+            "type": "string",
+            "description": "Tier of the plan."
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the plan."
           },
           "price": {
             "type": "number"
@@ -3163,12 +4643,12 @@
             "description": "description of the plan"
           },
           "tier": {
-            "type": "number",
-            "description": "Tier of the plan, it can be - 0(Pooled) and  1(Silo)",
-            "enum": [
-              0,
-              1
-            ]
+            "type": "string",
+            "description": "Tier of the plan."
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the plan."
           },
           "price": {
             "type": "number"
@@ -3236,12 +4716,12 @@
             "description": "description of the plan"
           },
           "tier": {
-            "type": "number",
-            "description": "Tier of the plan, it can be - 0(Pooled) and  1(Silo)",
-            "enum": [
-              0,
-              1
-            ]
+            "type": "string",
+            "description": "Tier of the plan."
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the plan."
           },
           "price": {
             "type": "number"
@@ -3255,12 +4735,6 @@
           },
           "currencyId": {
             "type": "string"
-          },
-          "planItems": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlanItemWithRelations"
-            }
           },
           "billingCycle": {
             "$ref": "#/components/schemas/BillingCycleWithRelations"
@@ -3322,12 +4796,12 @@
             "description": "description of the plan"
           },
           "tier": {
-            "type": "number",
-            "description": "Tier of the plan, it can be - 0(Pooled) and  1(Silo)",
-            "enum": [
-              0,
-              1
-            ]
+            "type": "string",
+            "description": "Tier of the plan."
+          },
+          "size": {
+            "type": "string",
+            "description": "Size of the plan."
           },
           "price": {
             "type": "number"
@@ -3966,6 +5440,186 @@
         "additionalProperties": false,
         "x-typescript-type": "Partial<Subscription>"
       },
+      "PlanSizes": {
+        "title": "PlanSizes",
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "size"
+        ],
+        "additionalProperties": false
+      },
+      "NewPlanSizes": {
+        "title": "NewPlanSizes",
+        "type": "object",
+        "description": "(tsType: Omit<PlanSizes, 'id'>, schemaOptions: { title: 'NewPlanSizes', exclude: [ 'id' ] })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "size"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<PlanSizes, 'id'>"
+      },
+      "PlanSizesWithRelations": {
+        "title": "PlanSizesWithRelations",
+        "type": "object",
+        "description": "(tsType: PlanSizesWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "size"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "PlanSizesWithRelations"
+      },
+      "PlanSizesPartial": {
+        "title": "PlanSizesPartial",
+        "type": "object",
+        "description": "(tsType: Partial<PlanSizes>, schemaOptions: { partial: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "config": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<PlanSizes>"
+      },
       "loopback.Count": {
         "type": "object",
         "title": "loopback.Count",
@@ -4342,6 +5996,452 @@
         "additionalProperties": false,
         "x-typescript-type": "@loopback/repository#Filter<Currency>"
       },
+      "feature_values.Filter": {
+        "type": "object",
+        "title": "feature_values.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "featureKey": {
+                    "type": "boolean"
+                  },
+                  "strategyKey": {
+                    "type": "boolean"
+                  },
+                  "strategyEntityId": {
+                    "type": "boolean"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "featureKey",
+                    "strategyKey",
+                    "strategyEntityId",
+                    "status",
+                    "value"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "feature_values.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<FeatureValues>"
+      },
+      "feature_values.Filter1": {
+        "type": "object",
+        "title": "feature_values.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "feature_values.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "featureKey": {
+                    "type": "boolean"
+                  },
+                  "strategyKey": {
+                    "type": "boolean"
+                  },
+                  "strategyEntityId": {
+                    "type": "boolean"
+                  },
+                  "status": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "featureKey",
+                    "strategyKey",
+                    "strategyEntityId",
+                    "status",
+                    "value"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "feature_values.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<FeatureValues>"
+      },
+      "features.Filter": {
+        "type": "object",
+        "title": "features.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "key": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "defaultValue": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "boolean"
+                  },
+                  "metadata": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "name",
+                    "key",
+                    "description",
+                    "defaultValue",
+                    "type",
+                    "metadata"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "features.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Feature>"
+      },
+      "features.Filter1": {
+        "type": "object",
+        "title": "features.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "features.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "key": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "defaultValue": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "boolean"
+                  },
+                  "metadata": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "name",
+                    "key",
+                    "description",
+                    "defaultValue",
+                    "type",
+                    "metadata"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "features.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Feature>"
+      },
       "PingResponse": {
         "type": "object",
         "title": "PingResponse",
@@ -4366,85 +6466,9 @@
           }
         }
       },
-      "plan_items.ScopeFilter": {
+      "plan_sizes.Filter": {
         "type": "object",
-        "properties": {
-          "offset": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "limit": {
-            "type": "integer",
-            "minimum": 1,
-            "example": 100
-          },
-          "skip": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "order": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              }
-            ]
-          },
-          "where": {
-            "type": "object",
-            "additionalProperties": true
-          },
-          "fields": {
-            "oneOf": [
-              {
-                "type": "object",
-                "properties": {},
-                "additionalProperties": true
-              },
-              {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                },
-                "uniqueItems": true
-              }
-            ]
-          },
-          "include": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {},
-              "additionalProperties": true
-            }
-          }
-        },
-        "additionalProperties": false,
-        "title": "plan_items.ScopeFilter"
-      },
-      "plan_items.IncludeFilter.Items": {
-        "title": "plan_items.IncludeFilter.Items",
-        "type": "object",
-        "properties": {
-          "relation": {
-            "type": "string",
-            "enum": [
-              "plan"
-            ]
-          },
-          "scope": {
-            "$ref": "#/components/schemas/plan_items.ScopeFilter"
-          }
-        }
-      },
-      "plan_items.Filter": {
-        "type": "object",
-        "title": "plan_items.Filter",
+        "title": "plan_sizes.Filter",
         "properties": {
           "offset": {
             "type": "integer",
@@ -4501,16 +6525,10 @@
                   "id": {
                     "type": "boolean"
                   },
-                  "name": {
+                  "size": {
                     "type": "boolean"
                   },
-                  "planItemType": {
-                    "type": "boolean"
-                  },
-                  "value": {
-                    "type": "boolean"
-                  },
-                  "planId": {
+                  "config": {
                     "type": "boolean"
                   }
                 },
@@ -4529,39 +6547,23 @@
                     "createdBy",
                     "modifiedBy",
                     "id",
-                    "name",
-                    "planItemType",
-                    "value",
-                    "planId"
+                    "size",
+                    "config"
                   ],
                   "example": "deleted"
                 },
                 "uniqueItems": true
               }
             ],
-            "title": "plan_items.Fields"
-          },
-          "include": {
-            "title": "plan_items.IncludeFilter",
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/plan_items.IncludeFilter.Items"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            }
+            "title": "plan_sizes.Fields"
           }
         },
         "additionalProperties": false,
-        "x-typescript-type": "@loopback/repository#Filter<PlanItem>"
+        "x-typescript-type": "@loopback/repository#Filter<PlanSizes>"
       },
-      "plan_items.Filter1": {
+      "plan_sizes.Filter1": {
         "type": "object",
-        "title": "plan_items.Filter",
+        "title": "plan_sizes.Filter",
         "properties": {
           "offset": {
             "type": "integer",
@@ -4590,7 +6592,7 @@
             ]
           },
           "where": {
-            "title": "plan_items.WhereFilter",
+            "title": "plan_sizes.WhereFilter",
             "type": "object",
             "additionalProperties": true
           },
@@ -4623,16 +6625,10 @@
                   "id": {
                     "type": "boolean"
                   },
-                  "name": {
+                  "size": {
                     "type": "boolean"
                   },
-                  "planItemType": {
-                    "type": "boolean"
-                  },
-                  "value": {
-                    "type": "boolean"
-                  },
-                  "planId": {
+                  "config": {
                     "type": "boolean"
                   }
                 },
@@ -4651,35 +6647,19 @@
                     "createdBy",
                     "modifiedBy",
                     "id",
-                    "name",
-                    "planItemType",
-                    "value",
-                    "planId"
+                    "size",
+                    "config"
                   ],
                   "example": "deleted"
                 },
                 "uniqueItems": true
               }
             ],
-            "title": "plan_items.Fields"
-          },
-          "include": {
-            "title": "plan_items.IncludeFilter",
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/plan_items.IncludeFilter.Items"
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            }
+            "title": "plan_sizes.Fields"
           }
         },
         "additionalProperties": false,
-        "x-typescript-type": "@loopback/repository#Filter<PlanItem>"
+        "x-typescript-type": "@loopback/repository#Filter<PlanSizes>"
       },
       "plans.ScopeFilter": {
         "type": "object",
@@ -4749,7 +6729,6 @@
           "relation": {
             "type": "string",
             "enum": [
-              "planItems",
               "billingCycle",
               "currency"
             ]
@@ -4827,6 +6806,9 @@
                   "tier": {
                     "type": "boolean"
                   },
+                  "size": {
+                    "type": "boolean"
+                  },
                   "price": {
                     "type": "boolean"
                   },
@@ -4858,6 +6840,7 @@
                     "name",
                     "description",
                     "tier",
+                    "size",
                     "price",
                     "metaData",
                     "billingCycleId",
@@ -4961,6 +6944,9 @@
                   "tier": {
                     "type": "boolean"
                   },
+                  "size": {
+                    "type": "boolean"
+                  },
                   "price": {
                     "type": "boolean"
                   },
@@ -4992,6 +6978,7 @@
                     "name",
                     "description",
                     "tier",
+                    "size",
                     "price",
                     "metaData",
                     "billingCycleId",
@@ -5403,6 +7390,209 @@
         },
         "additionalProperties": false,
         "x-typescript-type": "@loopback/repository#Filter<Service>"
+      },
+      "strategies.Filter": {
+        "type": "object",
+        "title": "strategies.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "key": {
+                    "type": "boolean"
+                  },
+                  "priority": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "name",
+                    "key",
+                    "priority"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "strategies.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Strategy>"
+      },
+      "strategies.Filter1": {
+        "type": "object",
+        "title": "strategies.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "strategies.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "deleted": {
+                    "type": "boolean"
+                  },
+                  "deletedOn": {
+                    "type": "boolean"
+                  },
+                  "deletedBy": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modifiedOn": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "modifiedBy": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "key": {
+                    "type": "boolean"
+                  },
+                  "priority": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "deleted",
+                    "deletedOn",
+                    "deletedBy",
+                    "createdOn",
+                    "modifiedOn",
+                    "createdBy",
+                    "modifiedBy",
+                    "id",
+                    "name",
+                    "key",
+                    "priority"
+                  ],
+                  "example": "deleted"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "strategies.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Strategy>"
       },
       "subscriptions.ScopeFilter": {
         "type": "object",

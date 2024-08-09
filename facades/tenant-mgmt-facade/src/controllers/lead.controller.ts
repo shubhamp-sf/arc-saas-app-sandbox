@@ -124,6 +124,7 @@ export class LeadController {
     @param.path.string('id') id: string,
   ): Promise<Tenant> {
     const token = this.request.headers.authorization;
+    console.log('token:', token);
     if (!token) {
       throw HttpErrors.Unauthorized();
     }

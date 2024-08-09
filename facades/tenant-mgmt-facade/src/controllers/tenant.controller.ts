@@ -1,5 +1,9 @@
 import {authorize} from 'loopback4-authorization';
-import {AuthenticationBindings, STRATEGY, authenticate} from 'loopback4-authentication';
+import {
+  AuthenticationBindings,
+  STRATEGY,
+  authenticate,
+} from 'loopback4-authentication';
 import {get, getModelSchemaRef, post, requestBody} from '@loopback/openapi-v3';
 import {
   CONTENT_TYPE,
@@ -10,8 +14,8 @@ import {PermissionKey} from '../permissions';
 import {CreateTenantWithPlanDTO, Tenant} from '../models';
 import {inject, service} from '@loopback/core';
 import {TenantHelperService} from '../services';
-import { LeadUser } from 'tenant-management-service';
-import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
+import {LeadUser} from '@sourceloop/ctrl-plane-tenant-management-service';
+import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 
 export class TenantController {
   constructor(
@@ -53,9 +57,8 @@ export class TenantController {
     return this.tenantHelper.createTenant(dto);
   }
 
-
   @authorize({
-    permissions: [PermissionKey.ViewSubscription,PermissionKey.ViewTenant],
+    permissions: [PermissionKey.ViewSubscription, PermissionKey.ViewTenant],
   })
   @authenticate(STRATEGY.BEARER, {
     passReqToCallback: true,
@@ -71,7 +74,9 @@ export class TenantController {
           [CONTENT_TYPE.JSON]: {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(SubscriptionBillDTO, {includeRelations: true}),
+              items: getModelSchemaRef(SubscriptionBillDTO, {
+                includeRelations: true,
+              }),
             },
           },
         },
@@ -81,7 +86,7 @@ export class TenantController {
   async findBill(
     @inject(AuthenticationBindings.CURRENT_USER)
     currentUser: LeadUser,
-  ):Promise<SubscriptionBillDTO[]>{
+  ): Promise<SubscriptionBillDTO[]> {
     return this.tenantHelper.getTenantBills(currentUser.id);
   }
 }
