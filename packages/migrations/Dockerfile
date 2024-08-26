@@ -1,5 +1,5 @@
 # Check out https://hub.docker.com/_/node to select a new base image
-FROM public.ecr.aws/docker/library/node:18-alpine
+FROM node:18-alpine
 
 # Bundle app source code
 COPY . ./migrations

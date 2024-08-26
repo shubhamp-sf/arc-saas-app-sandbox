@@ -2,7 +2,8 @@
 ARG nodeVer=18-alpine
 
 # select a base image to build from
-FROM node:$nodeVer AS BASE
+FROM public.ecr.aws/docker/library/node:$nodeVer AS BASE
+
 
 # Take the build variables for image base
 ARG SERVICE_NAME
@@ -57,7 +58,7 @@ RUN npm prune --production
 RUN /usr/local/bin/node-prune
 
 # Start fresh for a smaller  image size
-FROM node:$nodeVer
+FROM public.ecr.aws/docker/library/node:$nodeVer
 
 # Take the build variables for image stage
 ARG SERVICE_NAME

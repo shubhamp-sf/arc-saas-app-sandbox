@@ -4,6 +4,7 @@ import {
   DefaultEventTypes,
   OrchestratorServiceBindings,
   OrchestratorServiceInterface,
+  TenantDeploymentHandler,
   TenantDeprovisioningHandler,
   TenantProvisioningFailureHandler,
   TenantProvisioningHandler,
@@ -34,6 +35,8 @@ export class OrchestratorService implements OrchestratorServiceInterface {
     private handleTenantProvisioningSuccess: TenantProvisioningSuccessHandler,
     @inject(OrchestratorServiceBindings.TENANT_PROVISIONING_FAILURE_HANDLER)
     private handleTenantProvisioningFailure: TenantProvisioningFailureHandler,
+    @inject(OrchestratorServiceBindings.TENANT_DEPLOYMENT_HANDLER)
+    private handleTenantDeployment: TenantDeploymentHandler,
   ) {}
 
   handleEvent(
@@ -47,8 +50,10 @@ export class OrchestratorService implements OrchestratorServiceInterface {
         return this.handleTenantDeprovisioning(eventBody.detail);
       case DefaultEventTypes.TENANT_PROVISIONING_SUCCESS:
         return this.handleTenantProvisioningSuccess(eventBody.detail);
-      case DefaultEventTypes.TENANT_PROVISIONING_FAILED:
+      case DefaultEventTypes.TENANT_PROVISIONING_FAILURE:
         return this.handleTenantProvisioningFailure(eventBody.detail);
+      case DefaultEventTypes.TENANT_DEPLOYMENT:
+        return this.handleTenantDeployment(eventBody.detail);
       default:
         throw new Error(`Unsupported event type: ${eventType}`);
     }

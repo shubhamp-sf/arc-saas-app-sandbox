@@ -49,9 +49,10 @@
     "!*/__tests__"
   ],
   "dependencies": {
-    "@arc-saas/orchestrator-service": "file:arc-saas-orchestrator-service-0.0.1.tgz",
+    "@arc-saas/orchestrator-service": "file:arc-saas-orchestrator-service-0.1.0.tgz",
     "@aws-sdk/client-codebuild": "^3.616.0",
     "@aws-sdk/client-dynamodb": "^3.616.0",
+    "@aws-sdk/client-eventbridge": "^3.626.0",
     "@aws-sdk/util-dynamodb": "^3.616.0",
     "@loopback/boot": "^7.0.4",
     "@loopback/core": "^6.1.1",

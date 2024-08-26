@@ -2,7 +2,7 @@
 ARG nodeVer=18-alpine
 
 # select a base image to build from
-FROM node:$nodeVer AS BASE
+FROM --platform=amd64 node:$nodeVer AS BASE
 
 # Take the build variables for image base
 ARG SERVICE_NAME
@@ -31,7 +31,7 @@ WORKDIR /home/node/app
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY --chown=node sourceloop-ctrl-plane-subscription-service-0.2.0.tgz ./
+COPY --chown=node *.tgz ./
 COPY --chown=node package*.json ./
 
 # The following two commands is used to copy the `packages`,`service` directory from the local file system to the Docker image.

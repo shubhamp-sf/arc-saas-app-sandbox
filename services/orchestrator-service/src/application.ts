@@ -14,6 +14,8 @@ import {
   OrchestratorServiceBindings,
   TenantProvisioningHandler,
   TenantProvisioningSuccessHandler,
+  TenantProvisioningFailureHandler,
+  TenantDeploymentHandler,
 } from '@arc-saas/orchestrator-service';
 import {
   AwsCodeBuildService,
@@ -22,6 +24,7 @@ import {
   TenantProvisioningHandlerProvider,
   TenantProvisioningSuccessHandlerProvider,
   TierDetailsProvider,
+  TenantDeploymentProvider,
 } from './services';
 
 export {ApplicationConfig};
@@ -36,9 +39,18 @@ export class OrchestratorServiceApplication extends BootMixin(
     this.bind<TenantProvisioningHandler<ProvisioningInputs>>(
       OrchestratorServiceBindings.TENANT_PROVISIONING_HANDLER,
     ).toProvider(TenantProvisioningHandlerProvider);
+
     this.bind<TenantProvisioningSuccessHandler>(
       OrchestratorServiceBindings.TENANT_PROVISIONING_SUCCESS_HANDLER,
     ).toProvider(TenantProvisioningSuccessHandlerProvider);
+
+    this.bind<TenantProvisioningFailureHandler>(
+      OrchestratorServiceBindings.TENANT_PROVISIONING_FAILURE_HANDLER,
+    ).toProvider(TenantProvisioningSuccessHandlerProvider);
+
+    this.bind<TenantDeploymentHandler>(
+      OrchestratorServiceBindings.TENANT_DEPLOYMENT_HANDLER,
+    ).toProvider(TenantDeploymentProvider);
 
     this.bind(OrchestratorServiceBindings.TIER_DETAILS_PROVIDER).toProvider(
       TierDetailsProvider,

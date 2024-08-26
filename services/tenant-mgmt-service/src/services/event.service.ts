@@ -60,7 +60,6 @@ export class EventConnector implements IEventConnector<EventBodyType> {
               config: {
                 environmentOverride: {
                   ...extraPlanConfig,
-                  plan: JSON.stringify(data.subscription.plan),
                   tenant: JSON.stringify(data.tenant),
                   secret: secret,
                   context: context,

@@ -1774,6 +1774,58 @@
         },
         "operationId": "PlanFeaturesController.setPlanFeatures"
       },
+      "patch": {
+        "x-controller-name": "PlanFeaturesController",
+        "x-operation-name": "updatePlanFeatures",
+        "tags": [
+          "PlanFeaturesController"
+        ],
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Plan Features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureValues"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "\n\n| Permissions |\n| ------- |\n| 7035   |\n",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FeatureValuesPartial"
+                }
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "PlanFeaturesController.updatePlanFeatures"
+      },
       "get": {
         "x-controller-name": "PlanFeaturesController",
         "x-operation-name": "getPlanFeatures",
