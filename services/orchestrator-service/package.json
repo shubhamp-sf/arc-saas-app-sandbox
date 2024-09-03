@@ -55,7 +55,7 @@
     "@aws-sdk/client-eventbridge": "^3.626.0",
     "@aws-sdk/util-dynamodb": "^3.616.0",
     "@loopback/boot": "^7.0.4",
-    "@loopback/core": "^6.1.1",
+    "@loopback/core": "^6.1.2",
     "@loopback/logging": "^0.12.4",
     "@loopback/repository": "^7.0.4",
     "@loopback/rest": "^14.0.4",

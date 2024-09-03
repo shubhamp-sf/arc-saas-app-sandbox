@@ -4,14 +4,24 @@ import {marshall, unmarshall} from '@aws-sdk/util-dynamodb';
 
 import {DynamoDBClient, QueryCommand} from '@aws-sdk/client-dynamodb';
 
+export interface TierDetails {
+  deprovisioningJobName: string;
+  jobName: string;
+  tier: string;
+}
+
 @injectable({scope: BindingScope.TRANSIENT})
-export class TierDetailsProvider implements Provider<TierDetailsFn> {
+export class TierDetailsProvider
+  implements Provider<TierDetailsFn<TierDetails>>
+{
   value() {
     return async (tier: string) => {
       return this.fetchTierDetails(tier);
     };
   }
-  private async fetchTierDetails(tier: string) {
+  private async fetchTierDetails(
+    tier: string,
+  ): Promise<TierDetails & {jobIdentifier: string}> {
     const client = new DynamoDBClient({region: process.env.DYNAMO_DB_REGION});
     const params = {
       TableName: process.env.TIER_DETAILS_TABLE,
@@ -37,7 +47,7 @@ export class TierDetailsProvider implements Provider<TierDetailsFn> {
       }
 
       // Extract tier details from the fetched items
-      const tierDetails = items[0];
+      const tierDetails = items[0] as TierDetails;
       return {...tierDetails, jobIdentifier: tierDetails.jobName};
     } catch (error) {
       console.error('Error fetching data:', error);
