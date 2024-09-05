@@ -25,6 +25,7 @@ import {NotificationService} from './notifications/notification.service';
 import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const FIVE_SECONDS=5000;
 const SECONDS_IN_ONE_HOUR = 60 * 60;
 @injectable({scope: BindingScope.TRANSIENT})
 export class TenantHelperService {
@@ -609,5 +610,68 @@ export class TenantHelperService {
       default:
         return 'days';
     }
+  }
+  async getAllTenants(userId:string) {
+    const token = this.cryptoHelperService.generateTempToken({
+      id: userId,
+      userTenantId: userId,
+      permissions: [
+        PermissionKey.CreateLead,
+        PermissionKey.UpdateLead,
+        PermissionKey.DeleteLead,
+        PermissionKey.ViewLead,
+        PermissionKey.CreateTenant,
+        PermissionKey.ProvisionTenant,
+        PermissionKey.UpdateTenant,
+        PermissionKey.DeleteTenant,
+        PermissionKey.ViewTenant,
+        PermissionKey.CreateContact,
+        PermissionKey.UpdateContact,
+        PermissionKey.DeleteContact,
+        PermissionKey.ViewContact,
+        PermissionKey.CreateInvoice,
+        PermissionKey.UpdateInvoice,
+        PermissionKey.DeleteInvoice,
+        PermissionKey.ViewInvoice,
+        PermissionKey.CreateNotification,
+        PermissionKey.CreateSubscription,
+        PermissionKey.UpdateSubscription,
+        PermissionKey.ViewSubscription,
+        PermissionKey.ViewPlan,
+        PermissionKey.ViewNotificationTemplate,
+        PermissionKey.CreateNotificationTemplate,
+        PermissionKey.UpdateNotificationTemplate,
+        PermissionKey.DeleteNotificationTemplate,
+      ],
+    },FIVE_SECONDS);
+
+  
+    let tenantDetails = [];
+
+    const subscriptions = await this.subscriptionProxyService.find(token, {
+      include: ['plan'],
+    });
+    
+    for (const subscription of subscriptions) {
+    
+     const tenants = await this.tenantMgmtProxyService.getTenants(
+        `Bearer ${token}`,
+        {
+          where: {id: subscription.subscriberId},
+          include: [ 'contacts','address'],
+        },
+      );
+
+      for (const tenant of tenants) {
+        const tenantWithSubscription = {
+          ...tenant,
+          subscription, 
+        };
+        tenantDetails.push(tenantWithSubscription);
+      }
+    }
+    
+    return tenantDetails;
+  
   }
 }

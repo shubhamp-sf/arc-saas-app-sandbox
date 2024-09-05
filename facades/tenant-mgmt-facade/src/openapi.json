@@ -325,6 +325,35 @@
           }
         },
         "operationId": "TenantController.onboard"
+      },
+      "get": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "findTenants",
+        "tags": [
+          "TenantController"
+        ],
+        "description": "Retrieve all tenants\n\n| Permissions |\n| ------- |\n| 10207   |\n",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Tenant instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TenantWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.findTenants"
       }
     },
     "/webhook": {
@@ -1324,6 +1353,81 @@
         },
         "additionalProperties": false
       },
+      "LeadWithRelations": {
+        "title": "LeadWithRelations",
+        "type": "object",
+        "description": "this model represents a lead that could eventually be a tenant in the system (tsType: LeadWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "deleted": {
+            "type": "boolean"
+          },
+          "deletedOn": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "deletedBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modifiedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "modifiedBy": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "first name of the lead"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "last name of the lead"
+          },
+          "companyName": {
+            "type": "string",
+            "description": "name of the lead's company"
+          },
+          "email": {
+            "type": "string",
+            "description": "email of the lead"
+          },
+          "isValidated": {
+            "type": "boolean",
+            "description": "whether the lead`s email has been validated or not"
+          },
+          "addressId": {
+            "type": "string",
+            "description": "id of the address of the lead"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/TenantWithRelations"
+          },
+          "address": {
+            "$ref": "#/components/schemas/AddressWithRelations"
+          },
+          "foreignKey": {}
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "companyName",
+          "email",
+          "isValidated"
+        ],
+        "additionalProperties": false
+      },
       "TenantWithRelations": {
         "title": "TenantWithRelations",
         "type": "object",
@@ -1426,10 +1530,93 @@
         ],
         "additionalProperties": false
       },
-      "LeadWithRelations": {
-        "title": "LeadWithRelations",
+      "CheckBillingSubscriptionsDTO": {
+        "title": "CheckBillingSubscriptionsDTO",
         "type": "object",
-        "description": "this model represents a lead that could eventually be a tenant in the system (tsType: LeadWithRelations, schemaOptions: { includeRelations: true })",
+        "description": "model describing payload used to check billing subscriptions for a tenant (tsType: CheckBillingSubscriptionsDTO, schemaOptions: { title: 'CheckBillingSubscriptionsDTO' })",
+        "properties": {
+          "options": {
+            "type": "string",
+            "format": "date-time",
+            "description": "This is the date on which we want to check the billing"
+          }
+        },
+        "additionalProperties": false
+      },
+      "VerifyLeadResponseDTO": {
+        "title": "VerifyLeadResponseDTO",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "token"
+        ],
+        "additionalProperties": false
+      },
+      "CreateTenantDTOforLead": {
+        "title": "CreateTenantDTOforLead",
+        "type": "object",
+        "description": "model describing payload used to create and onboard a tenant based on a plan (tsType: @loopback/repository-json-schema#Optional<Omit<CreateTenantWithPlanDTO, 'contact'>, 'name'>, schemaOptions: { title: 'CreateTenantDTOforLead', exclude: [ 'contact' ], optional: [ 'name' ] })",
+        "properties": {
+          "planId": {
+            "type": "string",
+            "description": "id of the plan to be used for onboarding"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "description": "address of the tenant owners"
+          },
+          "city": {
+            "type": "string",
+            "description": "city of the tenant owner"
+          },
+          "state": {
+            "type": "string",
+            "description": "state of the tenant owner"
+          },
+          "zip": {
+            "type": "string",
+            "description": "zip code of the tenant owner"
+          },
+          "country": {
+            "type": "string",
+            "description": "country of the tenant owner"
+          },
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+$",
+            "maxLength": 10
+          },
+          "domains": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "format": "hostname"
+            }
+          }
+        },
+        "required": [
+          "planId",
+          "key",
+          "domains"
+        ],
+        "additionalProperties": false
+      },
+      "CreateLead": {
+        "title": "CreateLead",
+        "type": "object",
+        "description": "model describing payload used to create a lead (tsType: Omit<CreateLeadDTO, 'id' | 'isValidated' | 'addressId'>, schemaOptions: { title: 'CreateLead', exclude: [ 'id', 'isValidated', 'addressId' ] })",
         "properties": {
           "deleted": {
             "type": "boolean"
@@ -1457,9 +1644,6 @@
           "modifiedBy": {
             "type": "string"
           },
-          "id": {
-            "type": "string"
-          },
           "firstName": {
             "type": "string",
             "description": "first name of the lead"
@@ -1476,28 +1660,66 @@
             "type": "string",
             "description": "email of the lead"
           },
-          "isValidated": {
-            "type": "boolean",
-            "description": "whether the lead`s email has been validated or not"
-          },
-          "addressId": {
-            "type": "string",
-            "description": "id of the address of the lead"
-          },
-          "tenant": {
-            "$ref": "#/components/schemas/TenantWithRelations"
-          },
           "address": {
-            "$ref": "#/components/schemas/AddressWithRelations"
-          },
-          "foreignKey": {}
+            "type": "object",
+            "description": "this model represents the address of a company (tsType: Omit<Address, 'id'>, schemaOptions: { exclude: [ 'id' ] })",
+            "title": "AddressExcluding_id_",
+            "properties": {
+              "deleted": {
+                "type": "boolean"
+              },
+              "deletedOn": {
+                "type": "string",
+                "format": "date-time",
+                "nullable": true
+              },
+              "deletedBy": {
+                "type": "string",
+                "nullable": true
+              },
+              "createdOn": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "modifiedOn": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "createdBy": {
+                "type": "string"
+              },
+              "modifiedBy": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string",
+                "description": "address of the company"
+              },
+              "city": {
+                "type": "string",
+                "description": "city of the company"
+              },
+              "state": {
+                "type": "string",
+                "description": "state of the company"
+              },
+              "zip": {
+                "type": "string",
+                "description": "zip code of the company"
+              },
+              "country": {
+                "type": "string",
+                "description": "country of the company"
+              }
+            },
+            "additionalProperties": false
+          }
         },
         "required": [
           "firstName",
           "lastName",
           "companyName",
-          "email",
-          "isValidated"
+          "email"
         ],
         "additionalProperties": false
       },
