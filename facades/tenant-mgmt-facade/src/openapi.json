@@ -158,6 +158,38 @@
         "operationId": "LeadController.create"
       }
     },
+    "/organizations": {
+      "post": {
+        "x-controller-name": "OIDCController",
+        "x-operation-name": "createOrganization",
+        "tags": [
+          "OIDCController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Organization creation success"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewOrganization"
+              }
+            }
+          }
+        },
+        "operationId": "OIDCController.createOrganization"
+      }
+    },
     "/ping": {
       "get": {
         "x-controller-name": "PingController",
@@ -727,6 +759,152 @@
             "description": "This is the date on which we want to check the billing"
           }
         },
+        "additionalProperties": false
+      },
+      "NewOrganization": {
+        "title": "NewOrganization",
+        "type": "object",
+        "description": "DTO for Organization Data (tsType: OrganizationDataDTO, schemaOptions: { title: 'NewOrganization' })",
+        "properties": {
+          "organizationname": {
+            "type": "string",
+            "description": "Name of the organization"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name of the organization"
+          },
+          "logo_url": {
+            "type": "string",
+            "description": "URL to the organization logo"
+          },
+          "primary_color": {
+            "type": "string",
+            "description": "Primary color of the organization theme"
+          },
+          "page_background": {
+            "type": "string",
+            "description": "Background color of the page"
+          },
+          "form_background": {
+            "type": "string",
+            "description": "Background color of the forms"
+          },
+          "link_color": {
+            "type": "string",
+            "description": "Color of the links in the organization theme"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user creating the organization"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the user creating the organization"
+          },
+          "connection": {
+            "type": "string",
+            "description": "The connection for the user (Auth0, etc.)"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the user creating the organization"
+          },
+          "verify_email": {
+            "type": "boolean",
+            "description": "Whether the user’s email needs verification"
+          },
+          "username": {
+            "type": "string",
+            "description": "Optional username for the user"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Optional phone number for the user"
+          }
+        },
+        "required": [
+          "organizationname",
+          "display_name",
+          "email",
+          "name",
+          "connection",
+          "password",
+          "verify_email"
+        ],
+        "additionalProperties": false
+      },
+      "OrganizationDataDTO": {
+        "title": "OrganizationDataDTO",
+        "type": "object",
+        "description": "DTO for Organization Data",
+        "properties": {
+          "organizationname": {
+            "type": "string",
+            "description": "Name of the organization"
+          },
+          "display_name": {
+            "type": "string",
+            "description": "Display name of the organization"
+          },
+          "logo_url": {
+            "type": "string",
+            "description": "URL to the organization logo"
+          },
+          "primary_color": {
+            "type": "string",
+            "description": "Primary color of the organization theme"
+          },
+          "page_background": {
+            "type": "string",
+            "description": "Background color of the page"
+          },
+          "form_background": {
+            "type": "string",
+            "description": "Background color of the forms"
+          },
+          "link_color": {
+            "type": "string",
+            "description": "Color of the links in the organization theme"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email of the user creating the organization"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the user creating the organization"
+          },
+          "connection": {
+            "type": "string",
+            "description": "The connection for the user (Auth0, etc.)"
+          },
+          "password": {
+            "type": "string",
+            "description": "Password for the user creating the organization"
+          },
+          "verify_email": {
+            "type": "boolean",
+            "description": "Whether the user’s email needs verification"
+          },
+          "username": {
+            "type": "string",
+            "description": "Optional username for the user"
+          },
+          "phone_number": {
+            "type": "string",
+            "description": "Optional phone number for the user"
+          }
+        },
+        "required": [
+          "organizationname",
+          "display_name",
+          "email",
+          "name",
+          "connection",
+          "password",
+          "verify_email"
+        ],
         "additionalProperties": false
       },
       "VerifyLeadResponseDTO": {

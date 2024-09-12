@@ -13,7 +13,7 @@ import {PermissionKey} from '../permissions';
 import {InvoiceStatus, NotificationType, SubscriptionStatus} from '../enum';
 // import { NotificationService } from './notification.service';
 import {CheckBillingSubscriptionsDTO} from '../models/dtos';
-import {ISubscription} from '../types';
+import {IOrganization, ISubscription, IUser} from '../types';
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {NotificationService} from './notifications/notification.service';
 
@@ -439,5 +439,132 @@ export class TenantHelperService {
       default:
         return 'days';
     }
+  }
+  async createOrganization(payload: IOrganization) {
+    const token = this.cryptoHelperService.generateTempToken(
+      {
+        permissions: [
+          PermissionKey.CreateLead,
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+        ],
+      },
+      5000,
+    );
+    if (!token) {
+      throw new HttpErrors.Unauthorized('Authorization header not present');
+    }
+
+    const organization = this.tenantMgmtProxyService.createOrganization(
+      token,
+      payload,
+    );
+    return organization;
+  }
+  async createUser(user: IUser) {
+    const token = this.cryptoHelperService.generateTempToken(
+      {
+        permissions: [
+          PermissionKey.CreateLead,
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+        ],
+      },
+      5000,
+    );
+    if (!token) {
+      throw new HttpErrors.Unauthorized('Authorization header not present');
+    }
+    const userData = this.tenantMgmtProxyService.createUser(token, user);
+    return userData;
+  }
+  async addMemberToOrganization(organizationId: string, userId: string) {
+    const token = this.cryptoHelperService.generateTempToken(
+      {
+        permissions: [
+          PermissionKey.CreateLead,
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+        ],
+      },
+      5000,
+    );
+    if (!token) {
+      throw new HttpErrors.Unauthorized('Authorization header not present');
+    }
+    await this.tenantMgmtProxyService.addMemberToOrganization(
+      token,
+      organizationId,
+      {userId: userId},
+    );
   }
 }

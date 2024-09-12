@@ -74,6 +74,7 @@
         "@opentelemetry/sdk-trace-node": "^1.15.0",
         "@sourceloop/core": "^13.1.0",
         "@sourceloop/ctrl-plane-tenant-management-service": "file:sourceloop-ctrl-plane-tenant-management-service-0.2.0.tgz",
+        "auth0": "^4.10.0",
         "dotenv": "^16.0.3",
         "dotenv-extended": "^2.9.0",
         "loopback-connector-postgresql": "^7.0.4",

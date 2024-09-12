@@ -9,8 +9,9 @@ import {
   TenantOnboardDTO,
   VerifyLeadResponseDTO,
 } from '../../models';
-import {DataObject, Filter} from '@loopback/repository';
+import {AnyObject, DataObject, Filter} from '@loopback/repository';
 import { ISubscription, ITenant } from './types';
+import { IOrganization, IUser } from '../../types';
 
 export interface TenantMgmtProxyService {
   createInvoice(token: string, payload: DataObject<Invoice>): Promise<Invoice>;
@@ -29,6 +30,9 @@ export interface TenantMgmtProxyService {
   verifyLead(token: string, id: string): Promise<VerifyLeadResponseDTO>;
   getLeads(token: string, filter: Filter<Lead>): Promise<Lead[]>;
   getTenants(token: string, filter: Filter<Tenant>): Promise<ITenant[]>;
+  createOrganization(token: string, payload: IOrganization): Promise<AnyObject>;
+  createUser(token: string, payload: IUser): Promise<AnyObject>;
+  addMemberToOrganization(token: string, id: string, userId: {userId:string}): Promise<void>;
 }
 
 export class TenantMgmtProxyServiceProvider

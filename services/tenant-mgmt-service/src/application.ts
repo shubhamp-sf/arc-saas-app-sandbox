@@ -30,6 +30,7 @@ import {
   TenantManagementServiceComponent,
 } from '@sourceloop/ctrl-plane-tenant-management-service';
 import {EventConnector} from './services/event.service';
+import { Auth0Service } from './services/oidc-service';
 
 export {ApplicationConfig};
 
@@ -81,7 +82,7 @@ export class TntMngmtApplication extends BootMixin(
     this.component(AuthenticationComponent);
     this.bind(EventConnectorBinding).toClass(EventConnector);
     this.component(TenantManagementServiceComponent);
-
+    this.bind('services.Auth0Service').toClass(Auth0Service);
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
       type: BearerVerifierType.service,

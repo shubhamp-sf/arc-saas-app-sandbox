@@ -125,6 +125,45 @@ const config = {
         getTenants: ['token', 'filter'],
       },
     },
+    {
+      template: {
+        method: 'POST',
+        url: '/organizations',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{body}',
+      },
+      functions: {
+        createOrganization: ['token', 'body'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/users',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{body}',
+      },
+      functions: {
+        createUser: ['token', 'body'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/organizations/{id}/members',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{body}',
+      },
+      functions: {
+        addMemberToOrganization: ['token', 'id', 'body'],
+      },
+    },
   ],
 };
 
