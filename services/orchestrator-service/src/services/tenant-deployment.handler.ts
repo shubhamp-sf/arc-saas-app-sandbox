@@ -95,6 +95,25 @@ export class TenantDeploymentProvider
         });
       } else if (detail.CODEBUILD_BUILD_POSTBUILD === '1') {
         // if (detail.CREATE_USER === '1') {
+
+        //Needs to be tested 
+
+        
+        await this.makeCall(
+          httpModule,
+          detail.USER_CALLBACK_ENDPOINT.replace('user-callback', 'organizations'),
+          tenantPayload,
+          'service-callback',
+          secret,
+          getTimestamp(),
+          context,
+        ).catch(err => {
+          console.log(
+            `Error in ${detail.USER_CALLBACK_ENDPOINT.replace('user-callback', 'bootstrap')} call`,
+            err,
+          );
+        });
+// Needs to be tested
         await this.makeCall(
           httpModule,
           detail.USER_CALLBACK_ENDPOINT.replace('user-callback', 'bootstrap'),
