@@ -1,4 +1,4 @@
-import {injectable, /* inject, */ BindingScope, inject} from '@loopback/core';
+import {injectable, BindingScope, inject} from '@loopback/core';
 import {AnyObject} from '@loopback/repository';
 import {
   DefaultEventTypes,
@@ -10,6 +10,7 @@ import {
   TenantProvisioningHandler,
   TenantProvisioningSuccessHandler,
 } from '@arc-saas/orchestrator-service';
+import {Bindings, TypicalEventHandler} from '../types';
 
 export interface AWSEventBridgeInterface {
   version: string;
@@ -24,6 +25,12 @@ export interface AWSEventBridgeInterface {
   detail: Record<string, string | AnyObject | number>;
 }
 
+enum ExtraEvents {
+  TENANT_REGISTRATION = 'TENANT_REGISTRATION',
+}
+
+type EventTypes = DefaultEventTypes | ExtraEvents;
+
 @injectable({scope: BindingScope.TRANSIENT})
 export class OrchestratorService implements OrchestratorServiceInterface {
   constructor(
@@ -37,10 +44,12 @@ export class OrchestratorService implements OrchestratorServiceInterface {
     private handleTenantProvisioningFailure: TenantProvisioningFailureHandler,
     @inject(OrchestratorServiceBindings.TENANT_DEPLOYMENT_HANDLER)
     private handleTenantDeployment: TenantDeploymentHandler,
+    @inject(Bindings.TENANT_REGISTRATION_HANDLER)
+    private handleTenantRegistration: TypicalEventHandler,
   ) {}
 
   handleEvent(
-    eventType: DefaultEventTypes,
+    eventType: EventTypes,
     eventBody: AWSEventBridgeInterface,
   ): Promise<void> {
     switch (eventType) {
@@ -54,6 +63,8 @@ export class OrchestratorService implements OrchestratorServiceInterface {
         return this.handleTenantProvisioningFailure(eventBody.detail);
       case DefaultEventTypes.TENANT_DEPLOYMENT:
         return this.handleTenantDeployment(eventBody.detail);
+      case ExtraEvents.TENANT_REGISTRATION:
+        return this.handleTenantRegistration(eventBody.detail);
       default:
         throw new Error(`Unsupported event type: ${eventType}`);
     }

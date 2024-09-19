@@ -35,16 +35,22 @@ export class TenantHelperService {
     @inject(RestBindings.Http.REQUEST)
     private readonly request: Request,
   ) {}
-  async createTenant(dto: CreateTenantWithPlanDTO) {
-    const token = this.request.headers.authorization;
+  async createTenant(dto: CreateTenantWithPlanDTO, token?: string) {
+    token = token ?? this.request.headers.authorization;
     if (!token) {
       throw new HttpErrors.Unauthorized('Authorization header not present');
     }
+    const createTenantPayload = new TenantOnboardDTO(dto);
+    console.log('createTenantPayload:', createTenantPayload);
+
     const tenant = await this.tenantMgmtProxyService.createTenant(
-      token,
-      new TenantOnboardDTO(dto),
+      `Bearer ${token}`,
+      createTenantPayload,
     );
+
+    console.log('Created tenant: ', tenant);
     const subscription = await this._createSubscription(dto.planId, tenant.id);
+    console.log('Created subscription', subscription);
     const sdto: ISubscription = {
       id: subscription.id,
       subscriberId: subscription.subscriberId,
@@ -54,7 +60,11 @@ export class TenantHelperService {
       planId: subscription.planId,
       plan: subscription.plan,
     };
-    await this.tenantMgmtProxyService.provisionTenant(token, tenant.id, sdto);
+    await this.tenantMgmtProxyService.provisionTenant(
+      `Bearer ${token}`,
+      tenant.id,
+      sdto,
+    );
     return tenant;
   }
   async createTenantFromLead(

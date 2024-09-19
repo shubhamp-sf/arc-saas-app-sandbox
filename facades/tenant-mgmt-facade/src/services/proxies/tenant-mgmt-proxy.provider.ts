@@ -4,17 +4,16 @@ import {TenantMgmtServiceDataSource} from '../../datasources';
 import {
   Invoice,
   Lead,
-  ProvisioningDTO,
   Tenant,
   TenantOnboardDTO,
   VerifyLeadResponseDTO,
 } from '../../models';
 import {DataObject, Filter} from '@loopback/repository';
-import { ISubscription, ITenant } from './types';
+import {ISubscription, ITenant} from './types';
 
 export interface TenantMgmtProxyService {
   createInvoice(token: string, payload: DataObject<Invoice>): Promise<Invoice>;
-  createLead(payload: DataObject<Lead>): Promise<{id:string,key:string}>;
+  createLead(payload: DataObject<Lead>): Promise<{id: string; key: string}>;
   createTenant(token: string, payload: TenantOnboardDTO): Promise<Tenant>;
   createTenantFromLead(
     token: string,

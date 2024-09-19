@@ -72,6 +72,7 @@
         "@opentelemetry/plugin-pg-pool": "^0.15.0",
         "@opentelemetry/sdk-trace-base": "^1.15.0",
         "@opentelemetry/sdk-trace-node": "^1.15.0",
+        "@sourceloop/authentication-service": "^19.1.4",
         "@sourceloop/core": "^13.1.0",
         "@sourceloop/ctrl-plane-tenant-management-service": "file:sourceloop-ctrl-plane-tenant-management-service-0.2.0.tgz",
         "@types/jsonwebtoken": "^9.0.5",

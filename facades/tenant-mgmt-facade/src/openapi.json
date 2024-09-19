@@ -10,6 +10,70 @@
     }
   },
   "paths": {
+    "/external/tenants": {
+      "post": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "externalOnboarding",
+        "tags": [
+          "TenantController"
+        ],
+        "description": "This api to be consumed by external marketplaces creates a tenant with a contact, so it also expects contact info in the payload. The start of subscription is the time of creation of tenant and end date of plan depends on the duration of plan.",
+        "responses": {
+          "200": {
+            "description": "Tenant model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "X-Signature",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantRegistrationExternalDTO"
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.externalOnboarding"
+      }
+    },
+    "/get-marketplace-user-token": {
+      "post": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "test",
+        "tags": [
+          "TenantController"
+        ],
+        "description": "Testing token creation",
+        "responses": {
+          "200": {
+            "description": "Tenant model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.test"
+      }
+    },
     "/leads/tenants": {
       "get": {
         "x-controller-name": "LeadController",
@@ -179,6 +243,51 @@
         },
         "description": "",
         "operationId": "PingController.ping"
+      }
+    },
+    "/sign-payload": {
+      "post": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "getSignature",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Signature object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "signature": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payload": {
+                    "$ref": "#/components/schemas/TenantRegistrationExternalDTO"
+                  }
+                },
+                "required": [
+                  "payload"
+                ]
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.getSignature"
       }
     },
     "/subscriptions/send-reminders": {
@@ -681,6 +790,82 @@
           "key",
           "domains"
         ],
+        "additionalProperties": false
+      },
+      "TenantRegistrationExternalDTO": {
+        "title": "TenantRegistrationExternalDTO",
+        "type": "object",
+        "description": "Model describing payload used to create and onboard a tenant from external marketplaces. (tsType: Omit<TenantRegistrationExternalDTO, >, schemaOptions: { title: 'TenantRegistrationExternalDTO', exclude: [] })",
+        "properties": {
+          "customer": {
+            "type": "object",
+            "description": "Customer details for the tenant registration",
+            "properties": {
+              "firstName": {
+                "type": "string"
+              },
+              "lastName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "zip": {
+                "type": "string"
+              },
+              "country": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "firstName",
+              "lastName",
+              "email",
+              "address",
+              "zip",
+              "country"
+            ]
+          },
+          "company": {
+            "type": "object",
+            "description": "Company details for the tenant registration",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name"
+            ]
+          },
+          "appConfig": {
+            "type": "object",
+            "description": "app configuration for the tenant registration",
+            "properties": {
+              "preferredSubdomain": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "preferredSubdomain"
+            ]
+          },
+          "plan": {
+            "type": "object",
+            "description": "plan details for the tenant registration",
+            "properties": {
+              "identifier": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "identifier"
+            ]
+          }
+        },
         "additionalProperties": false
       },
       "SubscriptionBillDTOWithRelations": {

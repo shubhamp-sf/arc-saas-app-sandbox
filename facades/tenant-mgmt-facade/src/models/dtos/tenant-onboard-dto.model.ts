@@ -1,5 +1,5 @@
 import {getJsonSchema} from '@loopback/openapi-v3';
-import {Model, model, property} from '@loopback/repository';
+import {DataObject, Model, model, property} from '@loopback/repository';
 import {Contact} from '../contact.model';
 
 @model({
@@ -14,7 +14,7 @@ export class TenantOnboardDTO extends Model {
       exclude: ['tenantId', 'id'],
     }),
   })
-  contact: Omit<Contact, 'id' | 'tenantId'>;
+  contact: Omit<DataObject<Contact>, 'id' | 'tenantId'>;
 
   @property({
     type: 'string',

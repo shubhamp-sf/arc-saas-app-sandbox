@@ -6,3 +6,4 @@ export * from './verify-lead-response-dto.model';
 export * from './tenant-list-dto.model';
 export * from './check-billing-subscriptions-dto.model';
 export * from './subscription-dto.model';
+export * from './tenant-registration-external.dto';
