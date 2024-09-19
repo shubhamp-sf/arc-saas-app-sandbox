@@ -26,6 +26,8 @@ import {
   TierDetailsProvider,
   TenantDeploymentProvider,
 } from './services';
+import {TenantRegistrationProvider} from './services/tenant-registration.handler';
+import {Bindings} from './types';
 
 export {ApplicationConfig};
 
@@ -63,6 +65,9 @@ export class OrchestratorServiceApplication extends BootMixin(
       AwsCodeBuildService,
     );
 
+    this.bind(Bindings.TENANT_REGISTRATION_HANDLER).toProvider(
+      TenantRegistrationProvider,
+    );
     this.component(OrchestratorServiceComponent);
 
     // Set up the custom sequence

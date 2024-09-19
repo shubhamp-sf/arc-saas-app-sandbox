@@ -1,5 +1,5 @@
 import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
+import {ApplicationConfig, Component, Constructor} from '@loopback/core';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -11,6 +11,7 @@ import {
   AuthorizationBindings,
   AuthorizationComponent,
 } from 'loopback4-authorization';
+import {AuthenticationServiceComponent} from '@sourceloop/authentication-service';
 import {HelmetSecurityBindings} from 'loopback4-helmet';
 import {RateLimitSecurityBindings} from 'loopback4-ratelimiter';
 import {
@@ -111,6 +112,10 @@ export class TenantMgmtFacadeApplication extends BootMixin(
     // Add authentication component
     this.component(AuthenticationComponent);
 
+    this.component(AuthenticationServiceComponent);
+
+    this.unbindControllers(AuthenticationServiceComponent);
+
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
       type: BearerVerifierType.facade,
@@ -162,5 +167,30 @@ export class TenantMgmtFacadeApplication extends BootMixin(
       },
       servers: [{url: '/'}],
     });
+  }
+  private unbindControllers(componentClass: Constructor<Component>) {
+    const boundControllers = this.find('controllers.*').map(
+      binding => binding.key,
+    );
+
+    const componentKey = `components.${componentClass.name}`;
+
+    const componentInstance = this.getSync<Component>(componentKey);
+
+    if (componentInstance.controllers) {
+      const componentControllerNames = componentInstance.controllers.map(
+        e => e.name,
+      );
+
+      boundControllers.forEach(bindingKey => {
+        if (componentControllerNames.includes(bindingKey.split('.')[1])) {
+          this.unbind(bindingKey);
+        }
+      });
+    } else {
+      console.log(
+        `No controllers found in the component '${componentClass.name}' to unbind`,
+      );
+    }
   }
 }

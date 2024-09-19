@@ -108,6 +108,21 @@ const config = {
     {
       template: {
         method: 'GET',
+        url: '/plans',
+        headers: {
+          Authorization: tokenKey,
+        },
+        query: {
+          filter: '{filter}',
+        },
+      },
+      functions: {
+        getPlans: ['token', 'filter'],
+      },
+    },
+    {
+      template: {
+        method: 'GET',
         url: '/plan-sizes',
         headers: {
           Authorization: `{token}`,

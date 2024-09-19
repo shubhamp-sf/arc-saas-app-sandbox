@@ -26,6 +26,7 @@ export interface SubscriptionProxyService {
     id: string,
     filter?: Filter<IPlan>,
   ): Promise<IPlan>;
+  getPlans(token: string, filter?: Filter<IPlan>): Promise<IPlan[]>;
   find(
     token: string,
     filter?: Filter<ISubscription> | string,
