@@ -1,33 +1,28 @@
 import {inject} from '@loopback/context';
-import {post, getModelSchemaRef, requestBody} from '@loopback/openapi-v3';
+import {service} from '@loopback/core';
+import {getModelSchemaRef, post, requestBody} from '@loopback/openapi-v3';
 import {
+  CONTENT_TYPE,
   OPERATION_SECURITY_SPEC,
   STATUS_CODE,
-  CONTENT_TYPE,
 } from '@sourceloop/core';
 import {
   authenticate,
-  STRATEGY,
   AuthenticationBindings,
+  STRATEGY,
 } from 'loopback4-authentication';
 import {authorize} from 'loopback4-authorization';
-import {Tenant, CheckBillingSubscriptionsDTO} from '../models';
-import {LeadUser} from '../types';
-import {service} from '@loopback/core';
+import {CheckBillingSubscriptionsDTO, Tenant} from '../models';
 import {TenantHelperService} from '../services';
-import { get } from 'http';
-import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
-import { RestBindings,Request } from '@loopback/rest';
-import { PermissionKey } from '../permissions';
+import {LeadUser} from '../types';
 
 const basePath = '/subscriptions';
 
 export class SubscriptionController {
   constructor(
     @service(TenantHelperService)
-    private readonly tenantHelper: TenantHelperService
+    private readonly tenantHelper: TenantHelperService,
   ) {}
-
 
   @authorize({
     permissions: ['*'],
@@ -66,8 +61,4 @@ export class SubscriptionController {
         console.error(err); //NOSONAR
       });
   }
-
-
- 
-
 }

@@ -1,7 +1,7 @@
 import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 import {CONTENT_TYPE} from '@sourceloop/core';
-
+const webookTokenKey = '{token}';
 const tokenKey = 'Bearer {token}';
 const config = {
   name: 'SubscriptionService',
@@ -158,6 +158,87 @@ const config = {
       },
       functions: {
         create: ['token', 'body'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/billing-customer',
+        headers: {
+          Authorization: tokenKey,
+          tenantId: '{tenantId}',
+        },
+        body: '{customerDto}',
+      },
+      functions: {
+        createCustomer: ['token', 'customerDto', 'tenantId'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/billing-invoice',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{invoiceDto}',
+      },
+      functions: {
+        createInvoice: ['token', 'invoiceDto'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/billing-payment-source',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{paymentSourceDto}',
+      },
+      functions: {
+        createPaymentSource: ['token', 'paymentSourceDto'],
+      },
+    },
+    {
+      template: {
+        method: 'GET',
+        url: '/billing-customer',
+        headers: {
+          Authorization: tokenKey,
+        },
+        query: {
+          filter: '{filter}',
+        },
+      },
+      functions: {
+        getCustomer: ['token', 'filter'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/billing-invoice/{invoiceId}/payments',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{transactionDto}',
+      },
+      functions: {
+        applyPaymentForInvoice: ['token', 'invoiceId', 'transactionDto'],
+      },
+    },
+    {
+      template: {
+        method: 'POST',
+        url: '/webhooks/billing-payment',
+        headers: {
+          Authorization: webookTokenKey,
+        },
+        body: '{content}',
+      },
+      functions: {
+        webhookBillingPayment: ['token', 'content'],
       },
     },
   ],

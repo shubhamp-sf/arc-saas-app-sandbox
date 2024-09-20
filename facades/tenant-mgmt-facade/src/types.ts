@@ -26,6 +26,7 @@ export interface ISubscription {
   startDate: string;
   endDate: string;
   status: number;
+  invoiceId: string;
   planId: string;
   plan?: IPlan;
 }

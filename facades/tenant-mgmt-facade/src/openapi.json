@@ -51,29 +51,6 @@
         "operationId": "TenantController.externalOnboarding"
       }
     },
-    "/get-marketplace-user-token": {
-      "post": {
-        "x-controller-name": "TenantController",
-        "x-operation-name": "test",
-        "tags": [
-          "TenantController"
-        ],
-        "description": "Testing token creation",
-        "responses": {
-          "200": {
-            "description": "Tenant model instance",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tenant"
-                }
-              }
-            }
-          }
-        },
-        "operationId": "TenantController.test"
-      }
-    },
     "/leads/tenants": {
       "get": {
         "x-controller-name": "LeadController",
@@ -245,51 +222,6 @@
         "operationId": "PingController.ping"
       }
     },
-    "/sign-payload": {
-      "post": {
-        "x-controller-name": "TenantController",
-        "x-operation-name": "getSignature",
-        "tags": [
-          "TenantController"
-        ],
-        "responses": {
-          "200": {
-            "description": "Signature object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "signature": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "payload": {
-                    "$ref": "#/components/schemas/TenantRegistrationExternalDTO"
-                  }
-                },
-                "required": [
-                  "payload"
-                ]
-              }
-            }
-          }
-        },
-        "operationId": "TenantController.getSignature"
-      }
-    },
     "/subscriptions/send-reminders": {
       "post": {
         "x-controller-name": "SubscriptionController",
@@ -423,6 +355,32 @@
           }
         },
         "operationId": "WebhookController.webhook"
+      }
+    },
+    "/webhooks/payments": {
+      "post": {
+        "x-controller-name": "WebhookPaymentController",
+        "x-operation-name": "handleWebhook",
+        "tags": [
+          "WebhookPaymentController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Return value of WebhookPaymentController.handleWebhook",
+            "content": {}
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "operationId": "WebhookPaymentController.handleWebhook"
       }
     },
     "/": {
@@ -668,13 +626,30 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "cheque",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
           }
         },
         "required": [
           "planId",
           "name",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod"
         ],
         "additionalProperties": false
       },
@@ -782,13 +757,30 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "cheque",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
           }
         },
         "required": [
           "planId",
           "name",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod"
         ],
         "additionalProperties": false
       },
@@ -931,10 +923,37 @@
         ],
         "additionalProperties": false
       },
+      "PaymentDetailsDTOOptional_name_": {
+        "title": "PaymentDetailsDTOOptional_name_",
+        "type": "object",
+        "description": "(tsType: @loopback/repository-json-schema#Optional<PaymentDetailsDTO, 'name'>, schemaOptions: { optional: [ 'name' ] })",
+        "properties": {
+          "cardNumber": {
+            "type": "string"
+          },
+          "expiryMonth": {
+            "type": "number"
+          },
+          "expiryYear": {
+            "type": "number"
+          },
+          "cvv": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cardNumber",
+          "expiryMonth",
+          "expiryYear",
+          "cvv"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository-json-schema#Optional<PaymentDetailsDTO, 'name'>"
+      },
       "CreateTenantDTOforLead": {
         "title": "CreateTenantDTOforLead",
         "type": "object",
-        "description": "model describing payload used to create and onboard a tenant based on a plan (tsType: @loopback/repository-json-schema#Optional<Omit<CreateTenantWithPlanDTO, 'contact'>, 'name'>, schemaOptions: { title: 'CreateTenantDTOforLead', exclude: [ 'contact' ], optional: [ 'name' ] })",
+        "description": "model describing payload used to create and onboard a tenant based on a plan (tsType: @loopback/repository-json-schema#Optional<Omit<CreateTenantWithPaymentDTO, 'contact'>, 'name'>, schemaOptions: { title: 'CreateTenantDTOforLead', exclude: [ 'contact' ], optional: [ 'name' ] })",
         "properties": {
           "planId": {
             "type": "string",
@@ -975,12 +994,33 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "cheque",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "paymentDetails": {
+            "$ref": "#/components/schemas/PaymentDetailsDTOOptional_name_"
           }
         },
         "required": [
           "planId",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod",
+          "paymentDetails"
         ],
         "additionalProperties": false
       },

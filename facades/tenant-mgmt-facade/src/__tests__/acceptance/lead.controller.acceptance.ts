@@ -79,7 +79,7 @@ describe('LeadController', () => {
 
   it('should create a lead for a a payload with a valid token', async () => {
     const lead = buildLead();
-    tenantMgmtProxyStub.createLead.resolves({id: lead.id,key:'dummy key'});
+    tenantMgmtProxyStub.createLead.resolves({id: lead.id, key: 'dummy key'});
     const token = getToken([PermissionKey.CreateLead]);
     const {body: createdLead} = await client
       .post(basePath)
@@ -91,7 +91,7 @@ describe('LeadController', () => {
 
   it('should throw 422 if a lead instance is invalid while creating a lead', async () => {
     const lead = buildLead();
-    tenantMgmtProxyStub.createLead.resolves({id: lead.id,key:'dummy key'});
+    tenantMgmtProxyStub.createLead.resolves({id: lead.id, key: 'dummy key'});
     const token = getToken([PermissionKey.CreateLead]);
     await client
       .post(basePath)

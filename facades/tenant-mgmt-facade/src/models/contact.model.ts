@@ -45,14 +45,13 @@ export class Contact extends UserModifiableEntity {
     required: true,
   })
   isPrimary: boolean;
-  
+
   @property({
-    name:'contact_type',
-    type:'string',
+    name: 'contact_type',
+    type: 'string',
     description: 'type of the contact',
   })
-  type?:string;
-
+  type?: string;
 
   @belongsTo(
     () => Tenant,

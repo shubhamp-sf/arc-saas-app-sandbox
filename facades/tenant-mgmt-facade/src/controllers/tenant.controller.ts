@@ -16,6 +16,7 @@ import {
   post,
   requestBody,
 } from '@loopback/openapi-v3';
+import {inject, service} from '@loopback/core';
 import {
   CONTENT_TYPE,
   OPERATION_SECURITY_SPEC,
@@ -27,13 +28,13 @@ import {
   Tenant,
   TenantRegistrationExternalDTO,
 } from '../models';
-import {inject, service} from '@loopback/core';
-import {CryptoHelperServiceSunnyt, TenantHelperService} from '../services';
-import {LeadUser} from '@sourceloop/ctrl-plane-tenant-management-service';
+import { TenantHelperService} from '../services';
+import {CryptoHelperService, LeadUser} from '@sourceloop/ctrl-plane-tenant-management-service';
+
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {verifySignature} from '../utils';
 import {HttpErrors} from '@loopback/rest';
-import {SubscriptionProxyService} from '../services/proxies';
+import {PaymentMethodEnum, SubscriptionProxyService} from '../services/proxies';
 import {repository} from '@loopback/repository';
 
 export class TenantController {
@@ -51,8 +52,8 @@ export class TenantController {
     @inject('services.SubscriptionProxyService')
     private readonly subscriptionProxyService: SubscriptionProxyService,
 
-    @service(CryptoHelperServiceSunnyt)
-    private readonly cryptoHelperService: CryptoHelperServiceSunnyt,
+    @service(CryptoHelperService)
+    private readonly cryptoHelperService: CryptoHelperService,
   ) {}
 
   @authorize({
@@ -160,6 +161,7 @@ export class TenantController {
         address: details.customer.address,
         zip: details.customer.zip,
         country: details.customer.country,
+        paymentMethod:PaymentMethodEnum.Other
       });
 
       await this.tenantHelper.createTenant(tenantWithPlan, token);

@@ -1,6 +1,7 @@
 import {getJsonSchema} from '@loopback/openapi-v3';
 import {DataObject, Model, model, property} from '@loopback/repository';
 import {Contact} from '../contact.model';
+import {PaymentMethodEnum} from '../../services/proxies';
 
 @model({
   description:
@@ -83,6 +84,25 @@ export class CreateTenantWithPlanDTO extends Model {
   })
   domains: string[];
 
+  // Adding the paymentMethod property with PaymentMethodEnum type
+  @property({
+    type: 'string',
+    description: 'payment method',
+    required: true,
+    jsonSchema: {
+      enum: Object.values(PaymentMethodEnum),
+    },
+  })
+  paymentMethod: PaymentMethodEnum;
+
+  @property({
+    type: 'string',
+    required: false,
+    jsonSchema: {
+      maxLength: 300,
+    },
+  })
+  comment?: string; // Optional, max 300 chars
   constructor(data?: Partial<CreateTenantWithPlanDTO>) {
     super(data);
   }
