@@ -96,7 +96,7 @@ export type ChargeDtoType = {
 
 export enum PaymentMethodEnum {
   Cash = 'cash',
-  Check = 'check',
+  Check = 'cheque',
   BankTranser = 'bank_transfer',
   Other = 'other',
   Custom = 'custom',

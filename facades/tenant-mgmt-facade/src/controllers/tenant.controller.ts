@@ -34,7 +34,7 @@ import {CryptoHelperService, LeadUser} from '@sourceloop/ctrl-plane-tenant-manag
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {verifySignature} from '../utils';
 import {HttpErrors} from '@loopback/rest';
-import {SubscriptionProxyService} from '../services/proxies';
+import {PaymentMethodEnum, SubscriptionProxyService} from '../services/proxies';
 import {repository} from '@loopback/repository';
 
 export class TenantController {
@@ -161,6 +161,7 @@ export class TenantController {
         address: details.customer.address,
         zip: details.customer.zip,
         country: details.customer.country,
+        paymentMethod:PaymentMethodEnum.Other
       });
 
       await this.tenantHelper.createTenant(tenantWithPlan, token);

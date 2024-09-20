@@ -8,5 +8,5 @@ export * from './check-billing-subscriptions-dto.model';
 export * from './subscription-dto.model';
 export * from './tenant-registration-external.dto';
 
-export * from './payment--details-dto.model';
+export * from './payment-details-dto.model';
 export * from './create-tenant-with-payment-dto.model';

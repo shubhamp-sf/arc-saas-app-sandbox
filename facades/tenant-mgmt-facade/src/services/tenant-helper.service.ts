@@ -51,14 +51,15 @@ export class TenantHelperService {
     }
 
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
-      token.split(' ')[1],
+      // token.split(' ')[1],
+      token.replace(/^Bearer\s+/i, ''),
       dto.planId,
     );
     if (!selectedPlan) {
       throw new Error('selected plan does not exist');
     }
     const tenant = await this.tenantMgmtProxyService.createTenant(
-      `Bearer ${token}`,
+      `Bearer ${ token.replace(/^Bearer\s+/i, '')}`,
       new TenantOnboardDTO(dto),
     );
 
