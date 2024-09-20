@@ -51,29 +51,6 @@
         "operationId": "TenantController.externalOnboarding"
       }
     },
-    "/get-marketplace-user-token": {
-      "post": {
-        "x-controller-name": "TenantController",
-        "x-operation-name": "test",
-        "tags": [
-          "TenantController"
-        ],
-        "description": "Testing token creation",
-        "responses": {
-          "200": {
-            "description": "Tenant model instance",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Tenant"
-                }
-              }
-            }
-          }
-        },
-        "operationId": "TenantController.test"
-      }
-    },
     "/leads/tenants": {
       "get": {
         "x-controller-name": "LeadController",
@@ -243,51 +220,6 @@
         },
         "description": "",
         "operationId": "PingController.ping"
-      }
-    },
-    "/sign-payload": {
-      "post": {
-        "x-controller-name": "TenantController",
-        "x-operation-name": "getSignature",
-        "tags": [
-          "TenantController"
-        ],
-        "responses": {
-          "200": {
-            "description": "Signature object",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "signature": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "description": "",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "payload": {
-                    "$ref": "#/components/schemas/TenantRegistrationExternalDTO"
-                  }
-                },
-                "required": [
-                  "payload"
-                ]
-              }
-            }
-          }
-        },
-        "operationId": "TenantController.getSignature"
       }
     },
     "/subscriptions/send-reminders": {
