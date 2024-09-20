@@ -3,8 +3,7 @@ import {Model, model, property} from '@loopback/repository';
 import {Contact} from '../contact.model';
 
 @model({
-  description:
-    'subscription bill',
+  description: 'subscription bill',
 })
 export class SubscriptionBillDTO extends Model {
   @property({
@@ -16,8 +15,8 @@ export class SubscriptionBillDTO extends Model {
 
   @property({
     type: 'string',
-    description:'plan name',
-    required:true
+    description: 'plan name',
+    required: true,
   })
   planName: string;
 
@@ -26,7 +25,6 @@ export class SubscriptionBillDTO extends Model {
 
   @property({type: 'string'})
   endDate: string;
-
 
   @property({type: 'number'})
   status: number;

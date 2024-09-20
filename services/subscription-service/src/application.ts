@@ -26,6 +26,11 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
 import {SubscriptionServiceComponent} from '@sourceloop/ctrl-plane-subscription-service';
+import {
+  ChargeBeeBindings,
+  BillingComponentBindings,
+  ChargeBeeServiceProvider,
+} from 'loopback4-billing';
 
 export {ApplicationConfig};
 
@@ -75,6 +80,14 @@ export class SubscriptionServiceApplication extends BootMixin(
 
     // Add authentication component
     this.component(AuthenticationComponent);
+    this.bind(ChargeBeeBindings.config).to({
+      site: process.env.SITE ?? '',
+      apiKey: process.env.API_KEY ?? '',
+    });
+    this.bind(BillingComponentBindings.SDKProvider).toProvider(
+      ChargeBeeServiceProvider,
+    );
+
     this.component(SubscriptionServiceComponent);
 
     // Add bearer verifier component

@@ -28,7 +28,6 @@ import {
   AuthServiceBindings,
   AuthenticationServiceComponent,
   OtpMethodType,
-  SignUpBindings,
 } from '@sourceloop/authentication-service';
 import {RepositoryMixin} from '@loopback/repository';
 import {RestApplication} from '@loopback/rest';

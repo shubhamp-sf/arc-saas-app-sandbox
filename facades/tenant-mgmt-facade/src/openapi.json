@@ -425,6 +425,32 @@
         "operationId": "WebhookController.webhook"
       }
     },
+    "/webhooks/payments": {
+      "post": {
+        "x-controller-name": "WebhookPaymentController",
+        "x-operation-name": "handleWebhook",
+        "tags": [
+          "WebhookPaymentController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Return value of WebhookPaymentController.handleWebhook",
+            "content": {}
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "operationId": "WebhookPaymentController.handleWebhook"
+      }
+    },
     "/": {
       "get": {
         "x-controller-name": "HomePageController",
@@ -668,13 +694,30 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "check",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
           }
         },
         "required": [
           "planId",
           "name",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod"
         ],
         "additionalProperties": false
       },
@@ -782,13 +825,30 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "check",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
           }
         },
         "required": [
           "planId",
           "name",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod"
         ],
         "additionalProperties": false
       },
@@ -931,10 +991,37 @@
         ],
         "additionalProperties": false
       },
+      "PaymentDetailsDTOOptional_name_": {
+        "title": "PaymentDetailsDTOOptional_name_",
+        "type": "object",
+        "description": "(tsType: @loopback/repository-json-schema#Optional<PaymentDetailsDTO, 'name'>, schemaOptions: { optional: [ 'name' ] })",
+        "properties": {
+          "cardNumber": {
+            "type": "string"
+          },
+          "expiryMonth": {
+            "type": "number"
+          },
+          "expiryYear": {
+            "type": "number"
+          },
+          "cvv": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cardNumber",
+          "expiryMonth",
+          "expiryYear",
+          "cvv"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository-json-schema#Optional<PaymentDetailsDTO, 'name'>"
+      },
       "CreateTenantDTOforLead": {
         "title": "CreateTenantDTOforLead",
         "type": "object",
-        "description": "model describing payload used to create and onboard a tenant based on a plan (tsType: @loopback/repository-json-schema#Optional<Omit<CreateTenantWithPlanDTO, 'contact'>, 'name'>, schemaOptions: { title: 'CreateTenantDTOforLead', exclude: [ 'contact' ], optional: [ 'name' ] })",
+        "description": "model describing payload used to create and onboard a tenant based on a plan (tsType: @loopback/repository-json-schema#Optional<Omit<CreateTenantWithPaymentDTO, 'contact'>, 'name'>, schemaOptions: { title: 'CreateTenantDTOforLead', exclude: [ 'contact' ], optional: [ 'name' ] })",
         "properties": {
           "planId": {
             "type": "string",
@@ -975,12 +1062,33 @@
               "type": "string",
               "format": "hostname"
             }
+          },
+          "paymentMethod": {
+            "type": "string",
+            "description": "payment method",
+            "enum": [
+              "cash",
+              "check",
+              "bank_transfer",
+              "other",
+              "custom",
+              "payment_source"
+            ]
+          },
+          "comment": {
+            "type": "string",
+            "maxLength": 300
+          },
+          "paymentDetails": {
+            "$ref": "#/components/schemas/PaymentDetailsDTOOptional_name_"
           }
         },
         "required": [
           "planId",
           "key",
-          "domains"
+          "domains",
+          "paymentMethod",
+          "paymentDetails"
         ],
         "additionalProperties": false
       },

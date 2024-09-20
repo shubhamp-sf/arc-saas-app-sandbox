@@ -1,13 +1,18 @@
-import {Provider, inject} from '@loopback/core';
+import {inject, Provider} from '@loopback/core';
+import {AnyObject, Filter} from '@loopback/repository';
+import {getService} from '@loopback/service-proxy';
+import {SubscriptionServiceDataSource} from '../../datasources';
+import {ISubscription} from '../../types';
 import {
+  BillingCustomerType,
+  CustomerDtoType,
+  InvoiceDtoType,
   IPlan,
-  ISubscription,
+  PaymentSourceDtoType,
   SubscriptionCreationType,
   SubscriptionUpdationType,
+  TransactionType,
 } from './types';
-import {getService} from '@loopback/service-proxy';
-import {AnyObject, Filter} from '@loopback/repository';
-import {SubscriptionServiceDataSource} from '../../datasources';
 
 export interface SubscriptionProxyService {
   findById(
@@ -50,6 +55,32 @@ export interface SubscriptionProxyService {
     token: string,
     planId: string,
   ): Promise<{features: AnyObject[]}>;
+  createCustomer(
+    token: string,
+    customerDto: Omit<CustomerDtoType, 'id'>,
+    tenantId: string,
+  ): Promise<CustomerDtoType>;
+  createInvoice(
+    token: string,
+    invoiceDto: Omit<InvoiceDtoType, 'id' | 'status'>,
+  ): Promise<InvoiceDtoType>;
+  getCustomer(
+    token: string,
+    filter?: Filter<BillingCustomerType>,
+  ): Promise<{
+    customerDetails: CustomerDtoType;
+    info: BillingCustomerType;
+  }>;
+  createPaymentSource(
+    token: string,
+    paymentSourceDto: PaymentSourceDtoType,
+  ): Promise<PaymentSourceDtoType>;
+  applyPaymentForInvoice(
+    token: string,
+    invoiceId: string,
+    transactionDto: TransactionType,
+  ): Promise<void>;
+  webhookBillingPayment(token: string, content: any): Promise<void>;
 }
 
 export class SubscriptionProxyServiceProvider

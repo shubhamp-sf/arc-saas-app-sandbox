@@ -1,14 +1,14 @@
-import {STRATEGY, authenticate} from 'loopback4-authentication';
-import {authorize} from 'loopback4-authorization';
+import {inject, service} from '@loopback/core';
+import {Filter} from '@loopback/repository';
 import {
+  HttpErrors,
+  Request,
   RestBindings,
+  get,
   getModelSchemaRef,
   param,
   post,
   requestBody,
-  Request,
-  HttpErrors,
-  get,
 } from '@loopback/rest';
 import {
   CONTENT_TYPE,
@@ -18,23 +18,24 @@ import {
   STATUS_CODE,
   rateLimitKeyGenPublic,
 } from '@sourceloop/core';
+import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
+import {STRATEGY, authenticate} from 'loopback4-authentication';
+import {authorize} from 'loopback4-authorization';
+import {ratelimit} from 'loopback4-ratelimiter';
+import {NotificationType} from '../enum';
+import {LEAD_TOKEN_VERIFIER} from '../keys';
 import {
   CreateLeadDTO,
-  CreateTenantWithPlanDTO,
+  CreateTenantWithPaymentDTO,
   Lead,
   Tenant,
   TenantListDTO,
   VerifyLeadResponseDTO,
 } from '../models';
-import {inject, service} from '@loopback/core';
-import {CryptoHelperServiceSunnyt, TenantHelperService} from '../services';
 import {PermissionKey} from '../permissions';
-import {TenantMgmtProxyService} from '../services/proxies';
-import {ratelimit} from 'loopback4-ratelimiter';
-import {LEAD_TOKEN_VERIFIER} from '../keys';
-import {Filter} from '@loopback/repository';
+import {TenantHelperService} from '../services';
 import {NotificationService} from '../services/notifications';
-import {NotificationType} from '../enum';
+import {TenantMgmtProxyService} from '../services/proxies';
 
 export class LeadController {
   constructor(
@@ -46,8 +47,8 @@ export class LeadController {
     private readonly request: Request,
     @service(NotificationService)
     private readonly notificationService: NotificationService,
-    @service(CryptoHelperServiceSunnyt)
-    private readonly cryptoHelperServiceSunnyt: CryptoHelperServiceSunnyt,
+    @service(CryptoHelperService)
+    private readonly CryptoHelperService: CryptoHelperService,
     @inject(LOGGER.LOGGER_INJECT)
     private logger: ILogger,
   ) {}
@@ -112,7 +113,7 @@ export class LeadController {
     @requestBody({
       content: {
         [CONTENT_TYPE.JSON]: {
-          schema: getModelSchemaRef(CreateTenantWithPlanDTO, {
+          schema: getModelSchemaRef(CreateTenantWithPaymentDTO, {
             title: 'CreateTenantDTOforLead',
             exclude: ['contact'],
             optional: ['name'],
@@ -120,7 +121,7 @@ export class LeadController {
         },
       },
     })
-    dto: Omit<CreateTenantWithPlanDTO, 'contact'>,
+    dto: Omit<CreateTenantWithPaymentDTO, 'contact'>,
     @param.path.string('id') id: string,
   ): Promise<Tenant> {
     const token = this.request.headers.authorization;
@@ -174,7 +175,7 @@ export class LeadController {
           appName: process.env.APP_NAME,
           link: `${process.env.APP_VALIDATE_URL}/${leadDTO.id}?code=${leadDTO.key}`,
         },
-        this.cryptoHelperServiceSunnyt.generateTempToken({
+        this.CryptoHelperService.generateTempToken({
           ...lead,
           permissions: [
             PermissionKey.CreateNotification,

@@ -1,6 +1,5 @@
 import {CreateLeadDTO, CreateTenantWithPlanDTO, Lead, Tenant} from '../models';
-import {ISubscription} from '../services/proxies';
-import {IPlan} from '../types';
+import {IPlan, ISubscription} from '../types';
 
 export const mockLeadId = 'lead-id';
 export const mockToken = 'token';

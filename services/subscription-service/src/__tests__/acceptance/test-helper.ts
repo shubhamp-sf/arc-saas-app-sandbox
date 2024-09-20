@@ -19,14 +19,11 @@ export async function setupApplication(): Promise<AppWithClient> {
     rest: restConfig,
   });
 
-        app.bind('datasources.config.db').to({
-      name: 'db',
-      connector: 'memory',
-    });
-      
+  app.bind('datasources.config.db').to({
+    name: 'db',
+    connector: 'memory',
+  });
 
-  
-  
   await app.boot();
   await app.start();
 
@@ -39,7 +36,7 @@ function setUpEnv() {
   process.env.NODE_ENV = 'test';
   process.env.ENABLE_TRACING = '0';
   process.env.ENABLE_OBF = '0';
-  }
+}
 
 export interface AppWithClient {
   app: SubscriptionServiceApplication;

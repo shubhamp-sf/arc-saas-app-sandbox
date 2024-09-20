@@ -1,9 +1,25 @@
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig, Component, Constructor} from '@loopback/core';
+import {RepositoryMixin} from '@loopback/repository';
+import {RestApplication} from '@loopback/rest';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
 } from '@loopback/rest-explorer';
+import {ServiceMixin} from '@loopback/service-proxy';
+import {
+  AuthCacheSourceName,
+  BearerVerifierBindings,
+  BearerVerifierComponent,
+  BearerVerifierConfig,
+  BearerVerifierType,
+  CoreComponent,
+  SECURITY_SCHEME_SPEC,
+  SFCoreBindings,
+  SecureSequence,
+  rateLimitKeyGen,
+} from '@sourceloop/core';
+import {WebhookTenantManagementServiceComponent} from '@sourceloop/ctrl-plane-tenant-management-service';
 import * as dotenv from 'dotenv';
 import * as dotenvExt from 'dotenv-extended';
 import {AuthenticationComponent} from 'loopback4-authentication';
@@ -14,26 +30,11 @@ import {
 import {AuthenticationServiceComponent} from '@sourceloop/authentication-service';
 import {HelmetSecurityBindings} from 'loopback4-helmet';
 import {RateLimitSecurityBindings} from 'loopback4-ratelimiter';
-import {
-  CoreComponent,
-  SecureSequence,
-  rateLimitKeyGen,
-  AuthCacheSourceName,
-  SFCoreBindings,
-  BearerVerifierBindings,
-  BearerVerifierComponent,
-  BearerVerifierConfig,
-  BearerVerifierType,
-  SECURITY_SCHEME_SPEC,
-} from '@sourceloop/core';
-import {RepositoryMixin} from '@loopback/repository';
-import {RestApplication} from '@loopback/rest';
-import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
+import {PaymentWebhookVerifierProvider} from './interceptors';
+import {LEAD_TOKEN_VERIFIER, PAYMENT_WEBHOOK_VERIFIER} from './keys';
 import * as openapi from './openapi.json';
-import {LEAD_TOKEN_VERIFIER} from './keys';
 import {LeadTokenVerifierProvider} from './services';
-import {WebhookTenantManagementServiceComponent} from '@sourceloop/ctrl-plane-tenant-management-service';
 import {NotificationService} from './services/notifications';
 
 export {ApplicationConfig};
@@ -78,7 +79,9 @@ export class TenantMgmtFacadeApplication extends BootMixin(
       swaggerUsername: process.env.SWAGGER_USER,
       swaggerPassword: process.env.SWAGGER_PASSWORD,
     });
-
+    this.bind(PAYMENT_WEBHOOK_VERIFIER).toProvider(
+      PaymentWebhookVerifierProvider,
+    );
     this.component(CoreComponent);
 
     this.component(WebhookTenantManagementServiceComponent);

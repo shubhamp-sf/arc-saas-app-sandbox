@@ -1,33 +1,42 @@
 import {BindingScope, inject, injectable, service} from '@loopback/core';
-import {CryptoHelperServiceSunnyt} from './crypto-helper-sunny.service';
-import moment, {unitOfTime} from 'moment';
-import {HttpErrors, RestBindings, Request} from '@loopback/rest';
+import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {ILogger, LOGGER} from '@sourceloop/core';
+import moment, {unitOfTime} from 'moment';
+import {NotificationType, SubscriptionStatus} from '../enum';
+import {CreateTenantWithPlanDTO, TenantOnboardDTO} from '../models';
+import {PermissionKey} from '../permissions';
 import {
+  CustomerDtoType,
   IBillingCycle,
+  PaymentSourceDtoType,
   SubscriptionProxyService,
   TenantMgmtProxyService,
 } from './proxies';
-import {CreateTenantWithPlanDTO, TenantOnboardDTO} from '../models';
-import {PermissionKey} from '../permissions';
-import {InvoiceStatus, NotificationType, SubscriptionStatus} from '../enum';
 // import { NotificationService } from './notification.service';
-import {CheckBillingSubscriptionsDTO} from '../models/dtos';
-import {ISubscription} from '../types';
+import {
+  CheckBillingSubscriptionsDTO,
+  CreateTenantWithPaymentDTO,
+} from '../models/dtos';
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
+import {ISubscription} from '../types';
+import {BillingHelperService} from './billing-helper.service';
 import {NotificationService} from './notifications/notification.service';
+
+import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
 @injectable({scope: BindingScope.TRANSIENT})
 export class TenantHelperService {
   constructor(
-    @service(CryptoHelperServiceSunnyt)
-    private readonly cryptoHelperService: CryptoHelperServiceSunnyt,
+    @service(CryptoHelperService)
+    private readonly cryptoHelperService: CryptoHelperService,
     @inject('services.SubscriptionProxyService')
     private readonly subscriptionProxyService: SubscriptionProxyService,
     @inject('services.TenantMgmtProxyService')
     private readonly tenantMgmtProxyService: TenantMgmtProxyService,
+    @inject('services.BillingHelperService')
+    private readonly billingHelperService: BillingHelperService,
     @service(NotificationService)
     private notificationService: NotificationService,
     @inject(LOGGER.LOGGER_INJECT)
@@ -40,17 +49,61 @@ export class TenantHelperService {
     if (!token) {
       throw new HttpErrors.Unauthorized('Authorization header not present');
     }
-    const createTenantPayload = new TenantOnboardDTO(dto);
-    console.log('createTenantPayload:', createTenantPayload);
 
+    const selectedPlan = await this.subscriptionProxyService.findPlanById(
+      token.split(' ')[1],
+      dto.planId,
+    );
+    if (!selectedPlan) {
+      throw new Error('selected plan does not exist');
+    }
     const tenant = await this.tenantMgmtProxyService.createTenant(
       `Bearer ${token}`,
-      createTenantPayload,
+      new TenantOnboardDTO(dto),
     );
 
-    console.log('Created tenant: ', tenant);
-    const subscription = await this._createSubscription(dto.planId, tenant.id);
-    console.log('Created subscription', subscription);
+    const customer: CustomerDtoType = {
+      firstName: tenant.contacts[0].firstName,
+      lastName: tenant.contacts[0].lastName,
+      email: tenant.contacts[0].email,
+      company: tenant.name,
+      phone: 'NA',
+      billingAddress: {
+        firstName: tenant.contacts[0].firstName,
+        lastName: tenant.contacts[0].lastName,
+        email: tenant.contacts[0].email,
+        company: tenant.name,
+        city: dto.city ?? '',
+        state: dto.state ?? '',
+        zip: dto.zip ?? '',
+        country: dto.country ?? '',
+      },
+    };
+    const res = await this.billingHelperService.createCustomer(
+      tenant.id,
+      customer,
+    );
+
+    const invoice = await this.billingHelperService.createInvoice({
+      customerId: res.id ?? '',
+      charges: [
+        {
+          amount: +selectedPlan.price,
+          description: selectedPlan.description,
+        },
+      ],
+      shippingAddress: customer.billingAddress,
+      options: {
+        discounts: [],
+        autoCollection: 'off',
+      },
+    });
+
+    const subscription = await this._createSubscription(
+      dto.planId,
+      tenant.id,
+      invoice.id,
+    );
     const sdto: ISubscription = {
       id: subscription.id,
       subscriberId: subscription.subscriberId,
@@ -59,26 +112,95 @@ export class TenantHelperService {
       status: subscription.status,
       planId: subscription.planId,
       plan: subscription.plan,
+      invoiceId: subscription.invoiceId,
     };
-    await this.tenantMgmtProxyService.provisionTenant(
-      `Bearer ${token}`,
-      tenant.id,
-      sdto,
-    );
+
+    if (!invoice.id) {
+      throw new Error(' invoice is not created ');
+    }
+    await this.billingHelperService.applyPaymentForInvoice(invoice.id, {
+      paymentMethod: dto.paymentMethod,
+      amount: invoice.charges.reduce(
+        (total, charge) => total + charge.amount,
+        0,
+      ),
+      date: Math.floor(new Date().getTime() / 1000),
+      comment: dto.comment,
+    });
     return tenant;
   }
   async createTenantFromLead(
     token: string,
     id: string,
-    dto: Omit<CreateTenantWithPlanDTO, 'contact'>,
+    dto: Omit<CreateTenantWithPaymentDTO, 'contact'>,
   ) {
+    const token1 = this.cryptoHelperService.generateTempToken({
+      id: id,
+      userTenantId: id,
+      permissions: [
+        PermissionKey.ViewSubscription,
+        PermissionKey.ViewPlan,
+        PermissionKey.CreateSubscription,
+        PermissionKey.CreateInvoice,
+        PermissionKey.CreateTenant,
+        '7029', // view plan sizes
+        '7033', // view plan features
+      ],
+    });
+    const selectedPlan = await this.subscriptionProxyService.findPlanById(
+      token1,
+      dto.planId,
+    );
+    if (!selectedPlan || !process.env.GATEWAY_ACCOUNT_ID) {
+      throw new Error('Something went wrong');
+    }
     const tenant = await this.tenantMgmtProxyService.createTenantFromLead(
       token,
       id,
       new TenantOnboardDTO(dto),
     );
 
-    const subscription = await this._createSubscription(dto.planId, tenant.id);
+    const customer: CustomerDtoType = {
+      firstName: tenant.contacts[0].firstName,
+      lastName: tenant.contacts[0].lastName,
+      email: tenant.contacts[0].email,
+      company: tenant.name,
+      phone: 'NA',
+      billingAddress: {
+        firstName: tenant.contacts[0].firstName,
+        lastName: tenant.contacts[0].lastName,
+        email: tenant.contacts[0].email,
+        company: tenant.name,
+        city: dto.city ?? '',
+        state: dto.state ?? '',
+        zip: dto.zip ?? '',
+        country: dto.country ?? '',
+      },
+    };
+    const res = await this.billingHelperService.createCustomer(
+      tenant.id,
+      customer,
+    );
+
+    const invoice = await this.billingHelperService.createInvoice({
+      customerId: res.id ?? '',
+      charges: [
+        {
+          amount: +selectedPlan.price,
+          description: selectedPlan.description,
+        },
+      ],
+      shippingAddress: customer.billingAddress,
+      options: {
+        discounts: [],
+        autoCollection: 'off',
+      },
+    });
+    const subscription = await this._createSubscription(
+      dto.planId,
+      tenant.id,
+      invoice.id,
+    );
     const sdto: ISubscription = {
       id: subscription.id,
       subscriberId: subscription.subscriberId,
@@ -87,8 +209,34 @@ export class TenantHelperService {
       status: subscription.status,
       planId: subscription.planId,
       plan: subscription.plan,
+      invoiceId: subscription.invoiceId,
     };
-    await this.tenantMgmtProxyService.provisionTenant(token, tenant.id, sdto);
+    if (!res.id) {
+      throw new Error('customer is not created');
+    }
+
+    const paymentDetails: PaymentSourceDtoType = {
+      customerId: res.id,
+      card: {
+        gatewayAccountId: process.env.GATEWAY_ACCOUNT_ID,
+        number: dto.paymentDetails.cardNumber,
+        expiryMonth: dto.paymentDetails.expiryMonth,
+        expiryYear: dto.paymentDetails.expiryYear,
+        cvv: dto.paymentDetails.cvv,
+      },
+    };
+    const paymentSource =
+      await this.billingHelperService.createPaymentSource(paymentDetails);
+    if (!paymentSource.id || !invoice.id) {
+      throw new Error(
+        "either invoice is not created or user don't have payment source asscoiated with it",
+      );
+    }
+
+    await this.billingHelperService.applyPaymentForInvoice(invoice.id, {
+      paymentMethod: dto.paymentMethod,
+      paymentSourceId: paymentSource.id,
+    });
     return tenant;
   }
 
@@ -154,7 +302,11 @@ export class TenantHelperService {
     return subscriptionBills;
   }
 
-  private async _createSubscription(planId: string, userId: string) {
+  private async _createSubscription(
+    planId: string,
+    userId: string,
+    invoiceId: string | undefined,
+  ) {
     const token = this.cryptoHelperService.generateTempToken({
       id: userId,
       userTenantId: userId,
@@ -186,30 +338,13 @@ export class TenantHelperService {
       throw new HttpErrors.BadRequest('Invalid Plan');
     }
 
-    const startDate = moment().format(DATE_FORMAT);
-    const endDate = moment()
-      .add(
-        plan.billingCycle.duration,
-        this._unitMap(plan.billingCycle.durationUnit),
-      )
-      .format(DATE_FORMAT);
-
-    await this.tenantMgmtProxyService.createInvoice(`Bearer ${token}`, {
-      tenantId: userId,
-      startDate,
-      endDate,
-      amount: Number(plan.price),
-      currencyCode: plan.currency.currencyCode,
-      status: InvoiceStatus.PENDING,
-      dueDate: endDate,
-    });
-
     const createdSubscription = await this.subscriptionProxyService.create(
       token,
       {
         planId,
         subscriberId: userId,
         status: SubscriptionStatus.ACTIVE,
+        invoiceId: invoiceId ?? '',
       },
     );
 

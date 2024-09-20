@@ -1,10 +1,10 @@
 import {Provider, ValueOrPromise} from '@loopback/core';
+import {repository} from '@loopback/repository';
+import {HttpErrors} from '@loopback/rest';
 import {verify} from 'jsonwebtoken';
 import {VerifyFunction} from 'loopback4-authentication';
-import {LeadUserWithToken} from '../types';
-import {repository} from '@loopback/repository';
 import {LeadTokenRepository} from '../repositories';
-import {HttpErrors} from '@loopback/rest';
+import {LeadUserWithToken} from '../types';
 export class LeadTokenVerifierProvider
   implements Provider<VerifyFunction.BearerFn<LeadUserWithToken>>
 {
