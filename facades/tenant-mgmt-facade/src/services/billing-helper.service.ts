@@ -24,10 +24,13 @@ export class BillingHelperService {
   async createCustomer(
     tenantId: string,
     customerDto: Omit<CustomerDtoType, 'id'>,
+    token?: string,
   ): Promise<CustomerDtoType> {
-    const token = this.request.headers.authorization?.split(' ')[1];
+    token = token ?? this.request.headers.authorization?.split(' ')[1];
     if (!token) {
-      throw new HttpErrors.Unauthorized('Authorization header not present');
+      throw new HttpErrors.Unauthorized(
+        'Authorization header not present. [Create Customer]',
+      );
     }
     return this.subscriptionProxyService.createCustomer(
       token,
@@ -38,10 +41,13 @@ export class BillingHelperService {
 
   async createInvoice(
     invoiceDto: Omit<InvoiceDtoType, 'id'>,
+    token?: string,
   ): Promise<InvoiceDtoType> {
-    const token = this.request.headers.authorization?.split(' ')[1];
+    token = token ?? this.request.headers.authorization?.split(' ')[1];
     if (!token) {
-      throw new HttpErrors.Unauthorized('Authorization header not present');
+      throw new HttpErrors.Unauthorized(
+        'Authorization header not present [Create Invoice]',
+      );
     }
     return this.subscriptionProxyService.createInvoice(token, invoiceDto);
   }

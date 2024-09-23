@@ -47,17 +47,20 @@ export class TenantHelperService {
   async createTenant(dto: CreateTenantWithPlanDTO, token?: string) {
     token = token ?? this.request.headers.authorization;
     if (!token) {
-      throw new HttpErrors.Unauthorized('Authorization header not present');
+      throw new HttpErrors.Unauthorized(
+        'Authorization header not present. [Create Tenant]',
+      );
     }
+    console.log('Dto for create tenant', dto);
 
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
-      // token.split(' ')[1],
       token.replace(/^Bearer\s+/i, ''),
       dto.planId,
     );
     if (!selectedPlan) {
       throw new Error('selected plan does not exist');
     }
+
     const tenant = await this.tenantMgmtProxyService.createTenant(
       `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       new TenantOnboardDTO(dto),
@@ -83,22 +86,28 @@ export class TenantHelperService {
     const res = await this.billingHelperService.createCustomer(
       tenant.id,
       customer,
+      token,
     );
 
-    const invoice = await this.billingHelperService.createInvoice({
-      customerId: res.id ?? '',
-      charges: [
-        {
-          amount: +selectedPlan.price,
-          description: selectedPlan.description,
+    console.log('Customer Response', res);
+
+    const invoice = await this.billingHelperService.createInvoice(
+      {
+        customerId: res.id ?? '',
+        charges: [
+          {
+            amount: +selectedPlan.price,
+            description: selectedPlan.description,
+          },
+        ],
+        shippingAddress: customer.billingAddress,
+        options: {
+          discounts: [],
+          autoCollection: 'off',
         },
-      ],
-      shippingAddress: customer.billingAddress,
-      options: {
-        discounts: [],
-        autoCollection: 'off',
       },
-    });
+      token,
+    );
 
     const subscription = await this._createSubscription(
       dto.planId,

@@ -28,8 +28,11 @@ import {
   Tenant,
   TenantRegistrationExternalDTO,
 } from '../models';
-import { TenantHelperService} from '../services';
-import {CryptoHelperService, LeadUser} from '@sourceloop/ctrl-plane-tenant-management-service';
+import {TenantHelperService} from '../services';
+import {
+  CryptoHelperService,
+  LeadUser,
+} from '@sourceloop/ctrl-plane-tenant-management-service';
 
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {verifySignature} from '../utils';
@@ -161,7 +164,7 @@ export class TenantController {
         address: details.customer.address,
         zip: details.customer.zip,
         country: details.customer.country,
-        paymentMethod:PaymentMethodEnum.Other
+        paymentMethod: PaymentMethodEnum.Other,
       });
 
       await this.tenantHelper.createTenant(tenantWithPlan, token);
