@@ -59,7 +59,7 @@ export class TenantHelperService {
       throw new Error('selected plan does not exist');
     }
     const tenant = await this.tenantMgmtProxyService.createTenant(
-      `Bearer ${ token.replace(/^Bearer\s+/i, '')}`,
+      `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       new TenantOnboardDTO(dto),
     );
 
@@ -289,10 +289,15 @@ export class TenantHelperService {
           include: ['lead', 'contacts'],
         },
       );
+      const companyName = tenant[0].lead?.companyName ?? tenant[0].name;
+      const firstName =
+        tenant[0].lead?.firstName ?? tenant[0]?.contacts[0]?.firstName;
+      const lastName =
+        tenant[0].lead?.lastName ?? tenant[0]?.contacts[0]?.lastName;
       subscriptionBills.push(
         new SubscriptionBillDTO({
-          companyName: tenant[0].lead?.companyName,
-          userName: tenant[0].lead?.firstName + ' ' + tenant[0].lead?.lastName,
+          companyName,
+          userName: firstName + ' ' + lastName,
           status: subscription.status,
           startDate: subscription.startDate,
           endDate: subscription.endDate,
