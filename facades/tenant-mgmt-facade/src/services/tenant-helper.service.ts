@@ -91,13 +91,17 @@ export class TenantHelperService {
 
     console.log('Customer Response', res);
 
+    let invoiceChargeDescription = selectedPlan.description;
+    if (!invoiceChargeDescription || invoiceChargeDescription === '') {
+      invoiceChargeDescription = selectedPlan.name;
+    }
     const invoice = await this.billingHelperService.createInvoice(
       {
         customerId: res.id ?? '',
         charges: [
           {
             amount: +selectedPlan.price,
-            description: selectedPlan.description,
+            description: invoiceChargeDescription,
           },
         ],
         shippingAddress: customer.billingAddress,
@@ -128,15 +132,19 @@ export class TenantHelperService {
     if (!invoice.id) {
       throw new Error(' invoice is not created ');
     }
-    await this.billingHelperService.applyPaymentForInvoice(invoice.id, {
-      paymentMethod: dto.paymentMethod,
-      amount: invoice.charges.reduce(
-        (total, charge) => total + charge.amount,
-        0,
-      ),
-      date: Math.floor(new Date().getTime() / 1000),
-      comment: dto.comment,
-    });
+    await this.billingHelperService.applyPaymentForInvoice(
+      invoice.id,
+      {
+        paymentMethod: dto.paymentMethod,
+        amount: invoice.charges.reduce(
+          (total, charge) => total + charge.amount,
+          0,
+        ),
+        date: Math.floor(new Date().getTime() / 1000),
+        comment: dto.comment,
+      },
+      token,
+    );
     return tenant;
   }
   async createTenantFromLead(

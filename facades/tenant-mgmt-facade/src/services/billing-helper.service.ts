@@ -57,7 +57,9 @@ export class BillingHelperService {
   }> {
     const token = this.request.headers.authorization?.split(' ')[1];
     if (!token) {
-      throw new HttpErrors.Unauthorized('Authorization header not present');
+      throw new HttpErrors.Unauthorized(
+        'Authorization header not present [Get Customer]',
+      );
     }
 
     return this.subscriptionProxyService.getCustomer(token, filter);
@@ -68,7 +70,9 @@ export class BillingHelperService {
   ): Promise<PaymentSourceDtoType> {
     const token = this.request.headers.authorization?.split(' ')[1];
     if (!token) {
-      throw new HttpErrors.Unauthorized('Authorization header not present');
+      throw new HttpErrors.Unauthorized(
+        'Authorization header not present [Create Payment Source]',
+      );
     }
     return this.subscriptionProxyService.createPaymentSource(
       token,
@@ -79,8 +83,9 @@ export class BillingHelperService {
   async applyPaymentForInvoice(
     invoiceId: string,
     transactionDto: TransactionType,
+    token?: string,
   ): Promise<void> {
-    const token = this.request.headers.authorization?.split(' ')[1];
+    token = token ?? this.request.headers.authorization?.split(' ')[1];
     if (!token) {
       throw new HttpErrors.Unauthorized('Authorization header not present');
     }
