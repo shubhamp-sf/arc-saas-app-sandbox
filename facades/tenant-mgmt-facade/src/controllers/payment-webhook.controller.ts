@@ -66,6 +66,7 @@ export class WebhookPaymentController {
         PermissionKey.CreateInvoice,
         '7029', // view plan sizes
         '7033', // view plan features
+        '10216'
       ],
     });
     const subscription = await this.subscriptionProxyService.find(token, {
@@ -85,11 +86,13 @@ export class WebhookPaymentController {
       plan: subscription[0].plan,
       invoiceId: subscription[0].invoiceId,
     };
-    console.log(' provision started');
+    console.log(' provision started token= ',`Bearer ${token.replace(/^Bearer\s+/i, '')}`, );
     await this.tenantMgmtProxyService.provisionTenant(
-      token,
+      `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       customer.info.tenantId,
       sdto,
     );
+    console.log('provisioning successfull');
+    
   }
 }

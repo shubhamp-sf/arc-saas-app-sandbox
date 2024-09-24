@@ -52,11 +52,13 @@ export class TenantHelperService {
       );
     }
     console.log('Dto for create tenant', dto);
+console.log('token',token.replace(/^Bearer\s+/i, ''));
 
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
       token.replace(/^Bearer\s+/i, ''),
       dto.planId,
     );
+    console.log('step 1');
     if (!selectedPlan) {
       throw new Error('selected plan does not exist');
     }
@@ -65,6 +67,8 @@ export class TenantHelperService {
       `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       new TenantOnboardDTO(dto),
     );
+
+    console.log('step 2');
 
     const customer: CustomerDtoType = {
       firstName: tenant.contacts[0].firstName,
@@ -113,11 +117,15 @@ export class TenantHelperService {
       token,
     );
 
+    console.log('step 3');
+
     const subscription = await this._createSubscription(
       dto.planId,
       tenant.id,
       invoice.id,
     );
+
+    console.log('step 4');
     const sdto: ISubscription = {
       id: subscription.id,
       subscriberId: subscription.subscriberId,
@@ -128,6 +136,8 @@ export class TenantHelperService {
       plan: subscription.plan,
       invoiceId: subscription.invoiceId,
     };
+
+    console.log('step 5');
 
     if (!invoice.id) {
       throw new Error(' invoice is not created ');
