@@ -53,7 +53,7 @@ RUN npm run build
 
 # Run node-prune
 RUN npm prune --production
-RUN /usr/local/bin/node-prune
+# RUN /usr/local/bin/node-prune
 
 # Start fresh for a smaller  image size
 FROM node:$nodeVer

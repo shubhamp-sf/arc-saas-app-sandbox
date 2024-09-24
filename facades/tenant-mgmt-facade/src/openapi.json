@@ -632,7 +632,7 @@
             "description": "payment method",
             "enum": [
               "cash",
-              "cheque",
+              "check",
               "bank_transfer",
               "other",
               "custom",
@@ -763,7 +763,7 @@
             "description": "payment method",
             "enum": [
               "cash",
-              "cheque",
+              "check",
               "bank_transfer",
               "other",
               "custom",
@@ -1000,7 +1000,7 @@
             "description": "payment method",
             "enum": [
               "cash",
-              "cheque",
+              "check",
               "bank_transfer",
               "other",
               "custom",
