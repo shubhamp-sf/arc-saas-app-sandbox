@@ -52,7 +52,7 @@ export class TenantHelperService {
       );
     }
     console.log('Dto for create tenant', dto);
-console.log('token',token.replace(/^Bearer\s+/i, ''));
+    console.log('token', token.replace(/^Bearer\s+/i, ''));
 
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
       token.replace(/^Bearer\s+/i, ''),
@@ -126,16 +126,8 @@ console.log('token',token.replace(/^Bearer\s+/i, ''));
     );
 
     console.log('step 4');
-    const sdto: ISubscription = {
-      id: subscription.id,
-      subscriberId: subscription.subscriberId,
-      startDate: subscription.startDate,
-      endDate: subscription.endDate,
-      status: subscription.status,
-      planId: subscription.planId,
-      plan: subscription.plan,
-      invoiceId: subscription.invoiceId,
-    };
+
+    await this._createSubscription(dto.planId, tenant.id, invoice.id);
 
     console.log('step 5');
 
