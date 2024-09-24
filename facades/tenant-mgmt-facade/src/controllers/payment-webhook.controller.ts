@@ -33,8 +33,7 @@ export class WebhookPaymentController {
     const content = payload.content;
 
     console.log(
-      'webhook handler for tenant management service for invoice ',
-      content.invoice.id,
+      'webhook inside controller, with payload,',payload
     );
     switch (event) {
       case 'payment_succeeded':
@@ -47,6 +46,7 @@ export class WebhookPaymentController {
   }
 
   private async handlePaymentSucceeded(content: any): Promise<void> {
+    console.log('handle suceeed payment started');
     const customer = await this.billingHelperService.getCustomer({
       where: {customerId: content.customer.id},
       include: [
@@ -55,6 +55,7 @@ export class WebhookPaymentController {
         },
       ],
     });
+    console.log('get customer succedd customer=',customer);
     const token = this.cryptoHelperService.generateTempToken({
       id: customer.info.tenantId,
       userTenantId: customer.info.tenantId,
@@ -65,12 +66,14 @@ export class WebhookPaymentController {
         PermissionKey.CreateInvoice,
         '7029', // view plan sizes
         '7033', // view plan features
+        '10216'
       ],
     });
     const subscription = await this.subscriptionProxyService.find(token, {
       where: {subscriberId: customer.info.tenantId},
       include: ['plan'],
     });
+    console.log('subscription service succeed, subscription=',subscription);
 
     if (subscription.length === 0) throw new Error('Suscription not  found');
     const sdto: ISubscription = {
@@ -83,10 +86,13 @@ export class WebhookPaymentController {
       plan: subscription[0].plan,
       invoiceId: subscription[0].invoiceId,
     };
+    console.log(' provision started token= ',`Bearer ${token.replace(/^Bearer\s+/i, '')}`, );
     await this.tenantMgmtProxyService.provisionTenant(
-      token,
+      `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       customer.info.tenantId,
       sdto,
     );
+    console.log('provisioning successfull');
+    
   }
 }

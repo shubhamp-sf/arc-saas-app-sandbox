@@ -60,6 +60,9 @@ export class PaymentWebhookVerifierProvider implements Provider<Interceptor> {
         authHeader,
         request.body,
       );
+
+      console.log('webhook , received after subs ervice logic succeed');
+      
       // Generate or retrieve a new token
       const newToken =
         'Bearer ' +
@@ -86,8 +89,12 @@ export class PaymentWebhookVerifierProvider implements Provider<Interceptor> {
           ],
         }); // Replace this with your token generation logic
 
+
+      
       // Assign the new token to the authorization header
       request.headers['authorization'] = newToken;
+      console.log(' new token set token =',newToken);
+      
 
       // Optionally log the new token for debugging
       this.logger.info('New token assigned:', newToken);
@@ -96,6 +103,7 @@ export class PaymentWebhookVerifierProvider implements Provider<Interceptor> {
       throw new HttpErrors.Unauthorized();
     }
 
+    console.log(' call passed to controller in facade');
     this.setCurrentUser(this.systemUser);
     return next();
   }
