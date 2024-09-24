@@ -38,7 +38,7 @@ import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {verifySignature} from '../utils';
 import {HttpErrors} from '@loopback/rest';
 import {PaymentMethodEnum, SubscriptionProxyService} from '../services/proxies';
-import {repository} from '@loopback/repository';
+import {Filter, repository} from '@loopback/repository';
 import { AnyObject } from '@loopback/repository';
 
 export class TenantController {
@@ -291,8 +291,11 @@ export class TenantController {
           },
         },
       })
-      async findTenants( @inject(AuthenticationBindings.CURRENT_USER)
-      currentUser: LeadUser,): Promise<AnyObject> {
-        return this.tenantHelper.getAllTenants(currentUser.id);
+      async findTenants(
+        @inject(AuthenticationBindings.CURRENT_USER)
+        currentUser: LeadUser,
+        @param.filter(Tenant) filter?: Filter<Tenant>,
+      ): Promise<AnyObject> {
+        return this.tenantHelper.getAllTenants(currentUser.id,filter);
       }
 }

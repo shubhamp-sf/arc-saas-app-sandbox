@@ -3,7 +3,7 @@ import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {ILogger, LOGGER} from '@sourceloop/core';
 import moment, {unitOfTime} from 'moment';
 import {NotificationType, SubscriptionStatus} from '../enum';
-import {CreateTenantWithPlanDTO, TenantOnboardDTO} from '../models';
+import {CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO} from '../models';
 import {PermissionKey} from '../permissions';
 import {
   CustomerDtoType,
@@ -23,6 +23,7 @@ import {BillingHelperService} from './billing-helper.service';
 import {NotificationService} from './notifications/notification.service';
 
 import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
+import { Filter } from '@loopback/repository';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const FIVE_SECONDS=5000;
@@ -611,7 +612,7 @@ export class TenantHelperService {
         return 'days';
     }
   }
-  async getAllTenants(userId:string) {
+  async getAllTenants(userId:string,filter?:Filter<Tenant>) {
     const token = this.cryptoHelperService.generateTempToken({
       id: userId,
       userTenantId: userId,
@@ -643,9 +644,9 @@ export class TenantHelperService {
         PermissionKey.UpdateNotificationTemplate,
         PermissionKey.DeleteNotificationTemplate,
       ],
-    },FIVE_SECONDS);
+    },5000);
 
-  
+    // const token = this.request.headers.authorization?? "";
     let tenantDetails = [];
 
     const subscriptions = await this.subscriptionProxyService.find(token, {
@@ -663,8 +664,22 @@ export class TenantHelperService {
       );
 
       for (const tenant of tenants) {
+        const contact = tenant.contacts[0];
+        const tenantDetail = {
+           ...tenant,
+            id: contact.id,
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            email: contact.email,
+            isPrimary: contact.isPrimary,
+            type: contact.type,
+            tenantId: contact.tenantId,
+            contacts: undefined 
+        };
+        
+        delete tenantDetail.contacts;
         const tenantWithSubscription = {
-          ...tenant,
+          ...tenantDetail,
           subscription, 
         };
         tenantDetails.push(tenantWithSubscription);
