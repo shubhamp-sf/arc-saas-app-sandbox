@@ -29,7 +29,7 @@ module.exports = {
     { name: "audit-service-service" },
     { name: "authentication-service-service" },
     { name: "notification-service-service" },
-    { name: "my-facade-facade" },
+    { name: "tenant-mgmt-facade" },
     { name: "subscription-service-service" },
     { name: "tnt-mngmt-service" },
     { name: "ci-cd" },

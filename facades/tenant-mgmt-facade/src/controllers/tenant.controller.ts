@@ -38,7 +38,8 @@ import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
 import {verifySignature} from '../utils';
 import {HttpErrors} from '@loopback/rest';
 import {PaymentMethodEnum, SubscriptionProxyService} from '../services/proxies';
-import {repository} from '@loopback/repository';
+import {Filter, repository} from '@loopback/repository';
+import { AnyObject } from '@loopback/repository';
 
 export class TenantController {
   constructor(
@@ -266,4 +267,35 @@ export class TenantController {
   ): Promise<SubscriptionBillDTO[]> {
     return this.tenantHelper.getTenantBills(currentUser.id);
   }
+      // Get All Tenants
+      @authorize({
+        permissions: [PermissionKey.ViewTenant],
+      })
+      @authenticate(STRATEGY.BEARER, {
+        passReqToCallback: true,
+      })
+      @get('/tenants', {
+        description: 'Retrieve all tenants',
+        security: OPERATION_SECURITY_SPEC,
+        responses: {
+          [STATUS_CODE.OK]: {
+            description: 'Array of Tenant instances',
+            content: {
+              [CONTENT_TYPE.JSON]: {
+                schema: {
+                  type: 'array',
+                  items: getModelSchemaRef(Tenant, {includeRelations: true}),
+                },
+              },
+            },
+          },
+        },
+      })
+      async findTenants(
+        @inject(AuthenticationBindings.CURRENT_USER)
+        currentUser: LeadUser,
+        @param.filter(Tenant) filter?: Filter<Tenant>,
+      ): Promise<AnyObject> {
+        return this.tenantHelper.getAllTenants(currentUser.id,filter);
+      }
 }
