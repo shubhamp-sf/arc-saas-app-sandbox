@@ -11,12 +11,15 @@ import {
 } from '../../models';
 import {ISubscription} from '../../types';
 import {ITenant} from './types';
+import { TenantConfig } from '../../models/dtos/tenant-config';
 
 export interface TenantMgmtProxyService {
   createInvoice(token: string, payload: DataObject<Invoice>): Promise<Invoice>;
   createLead(payload: DataObject<Lead>): Promise<{id: string; key: string}>;
   createLead(payload: DataObject<Lead>): Promise<{id: string; key: string}>;
   createTenant(token: string, payload: TenantOnboardDTO): Promise<Tenant>;
+  createTenantConfig(token:string,payload:TenantConfig):Promise<TenantConfig>;
+  getTenantConfig(token:string,filter?:Filter<TenantConfig>):Promise<TenantConfig[]>;
   createTenantFromLead(
     token: string,
     id: string,
