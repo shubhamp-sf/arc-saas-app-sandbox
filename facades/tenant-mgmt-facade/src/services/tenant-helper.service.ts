@@ -17,12 +17,12 @@ import {
   CreateTenantWithPaymentDTO,
 } from '../models/dtos';
 import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
-import { ISubscription} from '../types';
+import {ISubscription} from '../types';
 import {BillingHelperService} from './billing-helper.service';
 import {NotificationService} from './notifications/notification.service';
 import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
-import { Filter } from '@loopback/repository';
-import { TenantConfig } from '../models/dtos/tenant-config';
+import {Filter} from '@loopback/repository';
+import {TenantConfig} from '../models/dtos/tenant-config';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
 @injectable({scope: BindingScope.TRANSIENT})
 export class TenantHelperService {
@@ -42,86 +42,88 @@ export class TenantHelperService {
     @inject(RestBindings.Http.REQUEST)
     private readonly request: Request,
   ) {}
-  async createTenantConfig(dto:TenantConfig,token?:string){
-    const tokenValue= this.cryptoHelperService.generateTempToken(
+  async createTenantConfig(dto: TenantConfig, token?: string) {
+    const tokenValue = this.cryptoHelperService.generateTempToken(
       {
         userTenantId: dto.tenantId,
         permissions: [
           PermissionKey.CreateLead,
-        PermissionKey.UpdateLead,
-        PermissionKey.DeleteLead,
-        PermissionKey.ViewLead,
-        PermissionKey.CreateTenant,
-        PermissionKey.ProvisionTenant,
-        PermissionKey.UpdateTenant,
-        PermissionKey.DeleteTenant,
-        PermissionKey.ViewTenant,
-        PermissionKey.CreateContact,
-        PermissionKey.UpdateContact,
-        PermissionKey.DeleteContact,
-        PermissionKey.ViewContact,
-        PermissionKey.CreateInvoice,
-        PermissionKey.UpdateInvoice,
-        PermissionKey.DeleteInvoice,
-        PermissionKey.ViewInvoice,
-        PermissionKey.CreateNotification,
-        PermissionKey.CreateSubscription,
-        PermissionKey.UpdateSubscription,
-        PermissionKey.ViewSubscription,
-        PermissionKey.ViewPlan,
-        PermissionKey.ViewNotificationTemplate,
-        PermissionKey.CreateNotificationTemplate,
-        PermissionKey.UpdateNotificationTemplate,
-        PermissionKey.DeleteNotificationTemplate,
-        PermissionKey.CreateTenantConfig,
-        PermissionKey.ViewTenantConfig
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+          PermissionKey.CreateTenantConfig,
+          PermissionKey.ViewTenantConfig,
         ],
       },
       SECONDS_IN_ONE_HOUR,
     );
-    const tenantConfig= await this.tenantMgmtProxyService.createTenantConfig(
+    const tenantConfig = await this.tenantMgmtProxyService.createTenantConfig(
       `Bearer ${tokenValue}`,
-     new TenantConfig(dto),
+      new TenantConfig(dto),
     );
     return tenantConfig;
   }
-  async getTenantConfig(id:string,filter?:Filter<TenantConfig>){
-    const token = this.cryptoHelperService.generateTempToken({
-     
-      userTenantId: id,
-      permissions: [
-        PermissionKey.CreateLead,
-        PermissionKey.UpdateLead,
-        PermissionKey.DeleteLead,
-        PermissionKey.ViewLead,
-        PermissionKey.CreateTenant,
-        PermissionKey.ProvisionTenant,
-        PermissionKey.UpdateTenant,
-        PermissionKey.DeleteTenant,
-        PermissionKey.ViewTenant,
-        PermissionKey.CreateContact,
-        PermissionKey.UpdateContact,
-        PermissionKey.DeleteContact,
-        PermissionKey.ViewContact,
-        PermissionKey.CreateInvoice,
-        PermissionKey.UpdateInvoice,
-        PermissionKey.DeleteInvoice,
-        PermissionKey.ViewInvoice,
-        PermissionKey.CreateNotification,
-        PermissionKey.CreateSubscription,
-        PermissionKey.UpdateSubscription,
-        PermissionKey.ViewSubscription,
-        PermissionKey.ViewPlan,
-        PermissionKey.ViewNotificationTemplate,
-        PermissionKey.CreateNotificationTemplate,
-        PermissionKey.UpdateNotificationTemplate,
-        PermissionKey.DeleteNotificationTemplate,
-        PermissionKey.CreateTenantConfig,
-        PermissionKey.ViewTenantConfig
-      ],
-    },SECONDS_IN_ONE_HOUR);
+  async getTenantConfig(id: string, filter?: Filter<TenantConfig>) {
+    const token = this.cryptoHelperService.generateTempToken(
+      {
+        userTenantId: id,
+        permissions: [
+          PermissionKey.CreateLead,
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+          PermissionKey.CreateTenantConfig,
+          PermissionKey.ViewTenantConfig,
+        ],
+      },
+      SECONDS_IN_ONE_HOUR,
+    );
     const tenantConfig = await this.tenantMgmtProxyService.getTenantConfig(
-      `Bearer ${token}`
+      `Bearer ${token}`,
     );
     return tenantConfig;
   }
@@ -154,6 +156,21 @@ export class TenantHelperService {
       new TenantOnboardDTO(dto),
     );
 
+    const config = new TenantConfig({
+      configKey: 'auth0',
+      configValue: {
+        password: 'test123@123',
+        connection: 'Username-Password-Authentication',
+        display_name: 'corporatidonw',
+        verify_email: true,
+      },
+      tenantId: tenant.id,
+    });
+
+    const tenantConfig = await this.tenantMgmtProxyService.createTenantConfig(
+      token,
+      config,
+    );
     console.log('step 2');
 
     const customer: CustomerDtoType = {
@@ -271,7 +288,21 @@ export class TenantHelperService {
       id,
       new TenantOnboardDTO(dto),
     );
+    const config = new TenantConfig({
+      configKey: 'auth0',
+      configValue: {
+        password: 'test123@123',
+        connection: 'Username-Password-Authentication',
+        display_name: 'corporatidonw',
+        verify_email: true,
+      },
+      tenantId: tenant.id,
+    });
 
+    const tenantConfig = await this.tenantMgmtProxyService.createTenantConfig(
+      token,
+      config,
+    );
     const customer: CustomerDtoType = {
       firstName: tenant.contacts[0].firstName,
       lastName: tenant.contacts[0].lastName,
@@ -703,39 +734,42 @@ export class TenantHelperService {
         return 'days';
     }
   }
-  async getAllTenants(userId:string,filter?:Filter<Tenant>) {
-    const token = this.cryptoHelperService.generateTempToken({
-      id: userId,
-      userTenantId: userId,
-      permissions: [
-        PermissionKey.CreateLead,
-        PermissionKey.UpdateLead,
-        PermissionKey.DeleteLead,
-        PermissionKey.ViewLead,
-        PermissionKey.CreateTenant,
-        PermissionKey.ProvisionTenant,
-        PermissionKey.UpdateTenant,
-        PermissionKey.DeleteTenant,
-        PermissionKey.ViewTenant,
-        PermissionKey.CreateContact,
-        PermissionKey.UpdateContact,
-        PermissionKey.DeleteContact,
-        PermissionKey.ViewContact,
-        PermissionKey.CreateInvoice,
-        PermissionKey.UpdateInvoice,
-        PermissionKey.DeleteInvoice,
-        PermissionKey.ViewInvoice,
-        PermissionKey.CreateNotification,
-        PermissionKey.CreateSubscription,
-        PermissionKey.UpdateSubscription,
-        PermissionKey.ViewSubscription,
-        PermissionKey.ViewPlan,
-        PermissionKey.ViewNotificationTemplate,
-        PermissionKey.CreateNotificationTemplate,
-        PermissionKey.UpdateNotificationTemplate,
-        PermissionKey.DeleteNotificationTemplate,
-      ],
-    },5000);
+  async getAllTenants(userId: string, filter?: Filter<Tenant>) {
+    const token = this.cryptoHelperService.generateTempToken(
+      {
+        id: userId,
+        userTenantId: userId,
+        permissions: [
+          PermissionKey.CreateLead,
+          PermissionKey.UpdateLead,
+          PermissionKey.DeleteLead,
+          PermissionKey.ViewLead,
+          PermissionKey.CreateTenant,
+          PermissionKey.ProvisionTenant,
+          PermissionKey.UpdateTenant,
+          PermissionKey.DeleteTenant,
+          PermissionKey.ViewTenant,
+          PermissionKey.CreateContact,
+          PermissionKey.UpdateContact,
+          PermissionKey.DeleteContact,
+          PermissionKey.ViewContact,
+          PermissionKey.CreateInvoice,
+          PermissionKey.UpdateInvoice,
+          PermissionKey.DeleteInvoice,
+          PermissionKey.ViewInvoice,
+          PermissionKey.CreateNotification,
+          PermissionKey.CreateSubscription,
+          PermissionKey.UpdateSubscription,
+          PermissionKey.ViewSubscription,
+          PermissionKey.ViewPlan,
+          PermissionKey.ViewNotificationTemplate,
+          PermissionKey.CreateNotificationTemplate,
+          PermissionKey.UpdateNotificationTemplate,
+          PermissionKey.DeleteNotificationTemplate,
+        ],
+      },
+      5000,
+    );
 
     // const token = this.request.headers.authorization?? "";
     const tenantDetails = [];
@@ -743,41 +777,39 @@ export class TenantHelperService {
     const subscriptions = await this.subscriptionProxyService.find(token, {
       include: ['plan'],
     });
-    
+
     for (const subscription of subscriptions) {
-    
-     const tenants = await this.tenantMgmtProxyService.getTenants(
+      const tenants = await this.tenantMgmtProxyService.getTenants(
         `Bearer ${token}`,
         {
           where: {id: subscription.subscriberId},
-          include: [ 'contacts','address'],
+          include: ['contacts', 'address'],
         },
       );
 
       for (const tenant of tenants) {
         const contact = tenant.contacts[0];
         const tenantDetail = {
-           ...tenant,
-            id: contact.id,
-            firstName: contact.firstName,
-            lastName: contact.lastName,
-            email: contact.email,
-            isPrimary: contact.isPrimary,
-            type: contact.type,
-            tenantId: contact.tenantId,
-            contacts: undefined 
+          ...tenant,
+          id: contact.id,
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+          email: contact.email,
+          isPrimary: contact.isPrimary,
+          type: contact.type,
+          tenantId: contact.tenantId,
+          contacts: undefined,
         };
-        
+
         delete tenantDetail.contacts;
         const tenantWithSubscription = {
           ...tenantDetail,
-          subscription, 
+          subscription,
         };
         tenantDetails.push(tenantWithSubscription);
       }
     }
-    
+
     return tenantDetails;
-  
   }
 }
