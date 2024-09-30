@@ -73,13 +73,6 @@ export class TenantDeploymentProvider
       );
     }
 
-    const tenantPayload = this.createTenantPayload(
-      detail,
-      tenantData,
-      contact,
-      secret,
-    );
-
     try {
       if (detail.CODEBUILD_BUILD_SUCCEEDING === '0') {
         await this.makeCall(
@@ -94,6 +87,26 @@ export class TenantDeploymentProvider
           console.log('Error in API_ENDPOINT call', err);
         });
       } else if (detail.CODEBUILD_BUILD_POSTBUILD === '1') {
+        const addUserInIdP = await this.makeCall(
+          httpModule,
+          detail.TENANT_MGMT_ENDPOINT,
+          tenantContextPayload,
+          'service-callback',
+          secret,
+          getTimestamp(),
+          context,
+        ).catch(err => {
+          console.log(`Error in CONTROL_PLANE_TENANT_MANAGEMENT call`, err);
+          return {authId: ''};
+        });
+
+        const tenantPayload = this.createTenantPayload(
+          detail,
+          tenantData,
+          contact,
+          secret,
+          addUserInIdP,
+        );
         // if (detail.CREATE_USER === '1') {
         await this.makeCall(
           httpModule,
@@ -175,6 +188,7 @@ export class TenantDeploymentProvider
     tenantData: AnyObject,
     contact: AnyObject,
     secret: string,
+    addUserToIdP?: AnyObject,
   ) {
     return JSON.stringify({
       tenant: tenantData,
@@ -186,7 +200,7 @@ export class TenantDeploymentProvider
       firstName: contact?.firstName,
       lastName: contact?.lastName,
       middleName: contact?.middleName,
-      cognitoAuthId: detail.COGNITO_AUTH_ID,
+      authId: addUserToIdP?.authId,
       authClient: {
         clientId: detail.CLIENT_ID,
         clientSecret: detail.CLIENT_SECRET,
@@ -215,7 +229,7 @@ export class TenantDeploymentProvider
     secret: string,
     timestamp: number,
     context: string,
-  ) {
+  ): Promise<AnyObject> {
     console.log('Make call', endpoint, payload, secret, timestamp, context);
     return new Promise((resolve, reject) => {
       const str =
@@ -244,15 +258,28 @@ export class TenantDeploymentProvider
         options,
         (res: IncomingMessage) => {
           console.log('statusCode:', res.statusCode);
+          let data = '';
           res.on('data', chunk => {
+            data += chunk;
             console.log(`BODY: ${endpoint}` + chunk);
           });
 
-          if (res.statusCode !== 204) {
-            reject(`Call failed for ${name}`);
-            return;
-          }
-          resolve(`Call succeeded for ${name}`);
+          res.on('end', () => {
+            if (res.statusCode !== 204) {
+              reject(
+                new Error(
+                  `Call failed for ${name} with status code ${res.statusCode}`,
+                ),
+              );
+              return;
+            }
+            try {
+              const parsedData: AnyObject = JSON.parse(data);
+              resolve(parsedData);
+            } catch (error) {
+              reject(new Error(`Failed to parse response: ${error}`));
+            }
+          });
         },
       );
 
