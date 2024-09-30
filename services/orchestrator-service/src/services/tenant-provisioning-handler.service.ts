@@ -19,6 +19,7 @@ export interface ProvisioningInputs {
   builderConfig: AnyObject;
   tenant: {
     id: string;
+    identityProvider: string;
     name: string;
     status: number;
     key: string;
@@ -67,6 +68,13 @@ export class TenantProvisioningHandlerProvider
       const builder = body.builderConfig;
       const tier = planConfig.tier;
       const tenant = body.tenant;
+      let identityProvider;
+      for (const feature of planConfig.features) {
+        if (feature.key === 'IdP') {
+          identityProvider = feature.value?.value ?? feature.defaultValue; //check featuresValue if overriden otherwise use default value
+        }
+      }
+      body.tenant.identityProvider = identityProvider;
 
       await this.dataStoreService.storeDataInDynamoDB({
         tenantId: tenant.id,

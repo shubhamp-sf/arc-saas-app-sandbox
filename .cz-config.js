@@ -25,13 +25,15 @@ module.exports = {
   ],
 
   scopes: [
-    { name: "user-tenant-service-service" },
-    { name: "audit-service-service" },
-    { name: "authentication-service-service" },
-    { name: "notification-service-service" },
-    { name: "tenant-mgmt-facade" },
-    { name: "subscription-service-service" },
+    { name: "user-tenant-service" },
+    { name: "audit-service" },
+    { name: "authentication-service" },
+    { name: "notification-service" },
+    { name: "my-facade-facade" },
+    { name: "subscription-service" },
+
     { name: "tnt-mngmt-service" },
+    { name: "orchestrator-service" },
     { name: "ci-cd" },
     { name: "deps" },
     { name: "migrations" },
