@@ -89,7 +89,7 @@ export class TenantDeploymentProvider
       } else if (detail.CODEBUILD_BUILD_POSTBUILD === '1') {
         const addUserInIdP = await this.makeCall(
           httpModule,
-          detail.TENANT_MGMT_ENDPOINT,
+          detail.TENANT_MGMT_ENDPOINT.concat('/manage/users'),
           tenantContextPayload,
           'service-callback',
           secret,
