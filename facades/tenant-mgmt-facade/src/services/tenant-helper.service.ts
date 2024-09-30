@@ -3,7 +3,7 @@ import {HttpErrors, Request, RestBindings} from '@loopback/rest';
 import {ILogger, LOGGER} from '@sourceloop/core';
 import moment, {unitOfTime} from 'moment';
 import {NotificationType, SubscriptionStatus} from '../enum';
-import {CreateTenantWithPlanDTO, TenantOnboardDTO} from '../models';
+import {CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO} from '../models';
 import {PermissionKey} from '../permissions';
 import {
   CustomerDtoType,
@@ -23,8 +23,10 @@ import {BillingHelperService} from './billing-helper.service';
 import {NotificationService} from './notifications/notification.service';
 
 import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
+import { Filter } from '@loopback/repository';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const FIVE_SECONDS=5000;
 const SECONDS_IN_ONE_HOUR = 60 * 60;
 @injectable({scope: BindingScope.TRANSIENT})
 export class TenantHelperService {
@@ -609,5 +611,82 @@ export class TenantHelperService {
       default:
         return 'days';
     }
+  }
+  async getAllTenants(userId:string,filter?:Filter<Tenant>) {
+    const token = this.cryptoHelperService.generateTempToken({
+      id: userId,
+      userTenantId: userId,
+      permissions: [
+        PermissionKey.CreateLead,
+        PermissionKey.UpdateLead,
+        PermissionKey.DeleteLead,
+        PermissionKey.ViewLead,
+        PermissionKey.CreateTenant,
+        PermissionKey.ProvisionTenant,
+        PermissionKey.UpdateTenant,
+        PermissionKey.DeleteTenant,
+        PermissionKey.ViewTenant,
+        PermissionKey.CreateContact,
+        PermissionKey.UpdateContact,
+        PermissionKey.DeleteContact,
+        PermissionKey.ViewContact,
+        PermissionKey.CreateInvoice,
+        PermissionKey.UpdateInvoice,
+        PermissionKey.DeleteInvoice,
+        PermissionKey.ViewInvoice,
+        PermissionKey.CreateNotification,
+        PermissionKey.CreateSubscription,
+        PermissionKey.UpdateSubscription,
+        PermissionKey.ViewSubscription,
+        PermissionKey.ViewPlan,
+        PermissionKey.ViewNotificationTemplate,
+        PermissionKey.CreateNotificationTemplate,
+        PermissionKey.UpdateNotificationTemplate,
+        PermissionKey.DeleteNotificationTemplate,
+      ],
+    },5000);
+
+    // const token = this.request.headers.authorization?? "";
+    let tenantDetails = [];
+
+    const subscriptions = await this.subscriptionProxyService.find(token, {
+      include: ['plan'],
+    });
+    
+    for (const subscription of subscriptions) {
+    
+     const tenants = await this.tenantMgmtProxyService.getTenants(
+        `Bearer ${token}`,
+        {
+          where: {id: subscription.subscriberId},
+          include: [ 'contacts','address'],
+        },
+      );
+
+      for (const tenant of tenants) {
+        const contact = tenant.contacts[0];
+        const tenantDetail = {
+           ...tenant,
+            id: contact.id,
+            firstName: contact.firstName,
+            lastName: contact.lastName,
+            email: contact.email,
+            isPrimary: contact.isPrimary,
+            type: contact.type,
+            tenantId: contact.tenantId,
+            contacts: undefined 
+        };
+        
+        delete tenantDetail.contacts;
+        const tenantWithSubscription = {
+          ...tenantDetail,
+          subscription, 
+        };
+        tenantDetails.push(tenantWithSubscription);
+      }
+    }
+    
+    return tenantDetails;
+  
   }
 }

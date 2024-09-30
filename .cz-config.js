@@ -31,6 +31,7 @@ module.exports = {
     { name: "notification-service" },
     { name: "my-facade-facade" },
     { name: "subscription-service" },
+
     { name: "tnt-mngmt-service" },
     { name: "orchestrator-service" },
     { name: "ci-cd" },
