@@ -36,7 +36,10 @@ export class TenantRegistrationProvider
 
       console.log('Tenant registration request successful:', response.data);
     } catch (error) {
-      console.error('Tenant registration request failed:', error);
+      console.error(
+        'Tenant registration request failed:',
+        error?.response?.data ?? error,
+      );
     } finally {
       console.log('Tenant registration request completed');
     }

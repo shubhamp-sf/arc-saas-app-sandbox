@@ -223,14 +223,6 @@ export class TenantHelperService {
 
     console.log('step 3');
 
-    const subscription = await this._createSubscription(
-      dto.planId,
-      tenant.id,
-      invoice.id,
-    );
-
-    console.log('step 4');
-
     await this._createSubscription(dto.planId, tenant.id, invoice.id);
 
     console.log('step 5');
