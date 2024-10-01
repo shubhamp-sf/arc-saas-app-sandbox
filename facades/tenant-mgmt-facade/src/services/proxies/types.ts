@@ -88,6 +88,7 @@ export type InvoiceDtoType = {
   shippingAddress: AddressDtoType;
   charges: ChargeDtoType[];
   status?: string;
+  currencyCode:string;
 };
 export type ChargeDtoType = {
   amount: number;

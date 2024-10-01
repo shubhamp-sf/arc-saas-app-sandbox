@@ -1,10 +1,10 @@
-import {BindingScope, inject, injectable, service} from '@loopback/core';
-import {HttpErrors, Request, RestBindings} from '@loopback/rest';
-import {ILogger, LOGGER} from '@sourceloop/core';
-import moment, {unitOfTime} from 'moment';
-import {NotificationType, SubscriptionStatus} from '../enum';
-import {CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO} from '../models';
-import {PermissionKey} from '../permissions';
+import { BindingScope, inject, injectable, service } from '@loopback/core';
+import { HttpErrors, Request, RestBindings } from '@loopback/rest';
+import { ILogger, LOGGER } from '@sourceloop/core';
+import moment, { unitOfTime } from 'moment';
+import { NotificationType, SubscriptionStatus } from '../enum';
+import { CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO } from '../models';
+import { PermissionKey } from '../permissions';
 import {
   CustomerDtoType,
   IBillingCycle,
@@ -17,13 +17,13 @@ import {
   CheckBillingSubscriptionsDTO,
   CreateTenantWithPaymentDTO,
 } from '../models/dtos';
-import {SubscriptionBillDTO} from '../models/dtos/subscription-bill-dto.model';
-import {ISubscription} from '../types';
-import {BillingHelperService} from './billing-helper.service';
-import {NotificationService} from './notifications/notification.service';
+import { SubscriptionBillDTO } from '../models/dtos/subscription-bill-dto.model';
+import { ISubscription } from '../types';
+import { BillingHelperService } from './billing-helper.service';
+import { NotificationService } from './notifications/notification.service';
 
-import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
 import { Filter } from '@loopback/repository';
+import { CryptoHelperService } from '@sourceloop/ctrl-plane-tenant-management-service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const FIVE_SECONDS=5000;
@@ -59,6 +59,11 @@ export class TenantHelperService {
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
       token.replace(/^Bearer\s+/i, ''),
       dto.planId,
+      {
+        include:[{
+          relation:"currency"
+        }]
+      }
     );
     console.log('step 1');
     if (!selectedPlan) {
@@ -106,7 +111,7 @@ export class TenantHelperService {
         customerId: res.id ?? '',
         charges: [
           {
-            amount: +selectedPlan.price,
+            amount: (+selectedPlan.price)*100,      // converting amount in cents
             description: invoiceChargeDescription,
           },
         ],
@@ -115,6 +120,7 @@ export class TenantHelperService {
           discounts: [],
           autoCollection: 'off',
         },
+        currencyCode:selectedPlan.currency?.currencyCode??"USD"
       },
       token,
     );
@@ -172,6 +178,11 @@ export class TenantHelperService {
     const selectedPlan = await this.subscriptionProxyService.findPlanById(
       token1,
       dto.planId,
+      {
+        include:[{
+          relation:"currency"
+        }]
+      }
     );
     if (!selectedPlan || !process.env.GATEWAY_ACCOUNT_ID) {
       throw new Error('Something went wrong');
@@ -208,7 +219,7 @@ export class TenantHelperService {
       customerId: res.id ?? '',
       charges: [
         {
-          amount: +selectedPlan.price,
+          amount: (+selectedPlan.price)*100,    // amount in cents
           description: selectedPlan.description,
         },
       ],
@@ -217,6 +228,7 @@ export class TenantHelperService {
         discounts: [],
         autoCollection: 'off',
       },
+        currencyCode:selectedPlan.currency?.currencyCode??"USD"
     });
     const subscription = await this._createSubscription(
       dto.planId,
