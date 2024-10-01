@@ -125,6 +125,30 @@ const config = {
         getTenants: ['token', 'filter'],
       },
     },
+   
+    {
+      template: {
+        method: 'POST',
+        url: '/tenant-configs',
+        headers: {
+          Authorization: tokenKey,
+        },
+        body: '{body}',
+      },
+      functions: {
+        createTenantConfig: ['token', 'body'],
+      },
+    },
+  
+    {
+      template: {
+        method: 'GET',
+        url: '/tenant-configs',
+        headers: {Authorization: tokenKey},
+        query: {filter: '{filter}'},
+      },
+      functions: {getTenantConfig: ['token', 'filter']},
+    },
   ],
 };
 
