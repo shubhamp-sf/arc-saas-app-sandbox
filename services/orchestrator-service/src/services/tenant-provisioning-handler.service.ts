@@ -70,12 +70,24 @@ export class TenantProvisioningHandlerProvider
       const tenant = body.tenant;
       let identityProvider;
       for (const feature of planConfig.features) {
+        console.log('Feature:', feature.key);
         if (feature.key === 'IdP') {
+          console.log('inside if IDP');
+          console.log(
+            'FeatureIDP:',
+            feature.key,
+            feature.value?.value,
+            feature.defaultValue,
+          );
           identityProvider = feature.value?.value ?? feature.defaultValue; //check featuresValue if overriden otherwise use default value
         }
       }
       body.tenant.identityProvider = identityProvider;
+      builder.config.environmentOverride.tenant = JSON.stringify(body.tenant);
 
+      console.log('Tenant:', body.tenant);
+      console.log('---------------');
+      console.log('BuilderConfig:', builder);
       await this.dataStoreService.storeDataInDynamoDB({
         tenantId: tenant.id,
         ...body,

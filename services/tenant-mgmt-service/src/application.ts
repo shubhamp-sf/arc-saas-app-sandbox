@@ -26,7 +26,10 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import * as openapi from './openapi.json';
 import {
+  Auth0IdpProvider,
   EventConnectorBinding,
+  KeycloakIdpProvider,
+  TenantManagementServiceBindings,
   TenantManagementServiceComponent,
 } from '@sourceloop/ctrl-plane-tenant-management-service';
 import {EventConnector} from './services/event.service';
@@ -81,6 +84,12 @@ export class TntMngmtApplication extends BootMixin(
     this.component(AuthenticationComponent);
     this.bind(EventConnectorBinding).toClass(EventConnector);
     this.component(TenantManagementServiceComponent);
+    // this.bind(TenantManagementServiceBindings.IDP_KEYCLOAK).toProvider(
+    //   KeycloakIdpProvider,
+    // );
+    // this.bind(TenantManagementServiceBindings.IDP_AUTH0).toProvider(
+    //   Auth0IdpProvider,
+    // );
 
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
