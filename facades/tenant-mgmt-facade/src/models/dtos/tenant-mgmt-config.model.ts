@@ -1,14 +1,12 @@
 import {model, property, belongsTo} from '@loopback/repository';
 import {UserModifiableEntity} from '@sourceloop/core';
-import { Tenant } from '../tenant.model';
-
-
+import {Tenant} from '../tenant.model';
 
 @model({
-  name: 'tenant_configs',
+  name: 'tenant_mgmt_configs',
   description: 'tenant_configs to save any tenant specific data related to idP',
 })
-export class TenantConfig extends UserModifiableEntity {
+export class TenantMgmtConfig extends UserModifiableEntity {
   @property({
     type: 'string',
     id: true,
@@ -42,7 +40,7 @@ export class TenantConfig extends UserModifiableEntity {
   )
   tenantId: string;
 
-  constructor(data?: Partial<TenantConfig>) {
+  constructor(data?: Partial<TenantMgmtConfig>) {
     super(data);
   }
 }
