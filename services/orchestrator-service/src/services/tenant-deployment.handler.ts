@@ -275,7 +275,7 @@ export class TenantDeploymentProvider
           });
 
           res.on('end', () => {
-            if (res.statusCode < 200 || res.statusCode >= 300) {
+            if (!res.statusCode?.toString().startsWith('2')) {
               reject(
                 new Error(
                   `Call failed for ${name} with status code ${res.statusCode}`,
