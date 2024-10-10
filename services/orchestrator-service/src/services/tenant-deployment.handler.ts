@@ -100,6 +100,8 @@ export class TenantDeploymentProvider
           return {authId: ''};
         });
 
+        console.log('-----------addUserInIdP-------------', addUserInIdP);
+
         const tenantPayload = this.createTenantPayload(
           detail,
           tenantData,
@@ -107,6 +109,11 @@ export class TenantDeploymentProvider
           secret,
           addUserInIdP,
         );
+        console.log(
+          '----------before userservice bootstrap make call---------',
+        );
+
+        console.log('------tenantPayload------', tenantPayload);
         // if (detail.CREATE_USER === '1') {
         await this.makeCall(
           httpModule,
@@ -118,7 +125,10 @@ export class TenantDeploymentProvider
           context,
         ).catch(err => {
           console.log(
-            `Error in ${detail.USER_CALLBACK_ENDPOINT.replace('user-callback', 'bootstrap')} call`,
+            `Error in ${detail.USER_CALLBACK_ENDPOINT.replace(
+              'user-callback',
+              'bootstrap',
+            )} call`,
             err,
           );
         });
@@ -265,7 +275,7 @@ export class TenantDeploymentProvider
           });
 
           res.on('end', () => {
-            if (res.statusCode !== 204) {
+            if (res.statusCode < 200 || res.statusCode >= 300) {
               reject(
                 new Error(
                   `Call failed for ${name} with status code ${res.statusCode}`,
