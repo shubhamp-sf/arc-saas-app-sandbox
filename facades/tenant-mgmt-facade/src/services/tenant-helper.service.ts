@@ -1,10 +1,10 @@
-import { BindingScope, inject, injectable, service } from '@loopback/core';
-import { HttpErrors, Request, RestBindings } from '@loopback/rest';
-import { ILogger, LOGGER } from '@sourceloop/core';
-import moment, { unitOfTime } from 'moment';
-import { NotificationType, SubscriptionStatus } from '../enum';
-import { CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO } from '../models';
-import { PermissionKey } from '../permissions';
+import {BindingScope, inject, injectable, service} from '@loopback/core';
+import {HttpErrors, Request, RestBindings} from '@loopback/rest';
+import {ILogger, LOGGER} from '@sourceloop/core';
+import moment, {unitOfTime} from 'moment';
+import {NotificationType, SubscriptionStatus} from '../enum';
+import {CreateTenantWithPlanDTO, Tenant, TenantOnboardDTO} from '../models';
+import {PermissionKey} from '../permissions';
 import {
   CustomerDtoType,
   IBillingCycle,
@@ -22,7 +22,7 @@ import {BillingHelperService} from './billing-helper.service';
 import {NotificationService} from './notifications/notification.service';
 import {CryptoHelperService} from '@sourceloop/ctrl-plane-tenant-management-service';
 import {Filter} from '@loopback/repository';
-import {TenantConfig} from '../models/dtos/tenant-config';
+import {TenantMgmtConfig} from '../models/dtos/tenant-mgmt-config.model';
 const SECONDS_IN_ONE_HOUR = 60 * 60;
 @injectable({scope: BindingScope.TRANSIENT})
 export class TenantHelperService {
@@ -42,7 +42,7 @@ export class TenantHelperService {
     @inject(RestBindings.Http.REQUEST)
     private readonly request: Request,
   ) {}
-  async createTenantConfig(dto: TenantConfig, token?: string) {
+  async createTenantConfig(dto: TenantMgmtConfig, token?: string) {
     const tokenValue = this.cryptoHelperService.generateTempToken(
       {
         userTenantId: dto.tenantId,
@@ -81,11 +81,11 @@ export class TenantHelperService {
     );
     const tenantConfig = await this.tenantMgmtProxyService.createTenantConfig(
       `Bearer ${tokenValue}`,
-      new TenantConfig(dto),
+      new TenantMgmtConfig(dto),
     );
     return tenantConfig;
   }
-  async getTenantConfig(id: string, filter?: Filter<TenantConfig>) {
+  async getTenantConfig(id: string, filter?: Filter<TenantMgmtConfig>) {
     const token = this.cryptoHelperService.generateTempToken(
       {
         userTenantId: id,
@@ -141,10 +141,12 @@ export class TenantHelperService {
       token.replace(/^Bearer\s+/i, ''),
       dto.planId,
       {
-        include:[{
-          relation:"currency"
-        }]
-      }
+        include: [
+          {
+            relation: 'currency',
+          },
+        ],
+      },
     );
     console.log('step 1');
     if (!selectedPlan) {
@@ -156,21 +158,20 @@ export class TenantHelperService {
       new TenantOnboardDTO(dto),
     );
 
-    const config = new TenantConfig({
+    const config = new TenantMgmtConfig({
       configKey: 'auth0',
       configValue: {
         password: 'test123@123',
         connection: 'Username-Password-Authentication',
         display_name: 'corporatidonw',
         verify_email: true,
+        page_background: '#000000',
+        primary_color: '#0059d6',
       },
       tenantId: tenant.id,
     });
 
-    const tenantConfig = await this.tenantMgmtProxyService.createTenantConfig(
-      token,
-      config,
-    );
+    await this.tenantMgmtProxyService.createTenantConfig(token, config);
     console.log('step 2');
 
     const customer: CustomerDtoType = {
@@ -207,7 +208,7 @@ export class TenantHelperService {
         customerId: res.id ?? '',
         charges: [
           {
-            amount: (+selectedPlan.price)*100,      // converting amount in cents
+            amount: +selectedPlan.price * 100, // converting amount in cents
             description: invoiceChargeDescription,
           },
         ],
@@ -216,7 +217,7 @@ export class TenantHelperService {
           discounts: [],
           autoCollection: 'off',
         },
-        currencyCode:selectedPlan.currency?.currencyCode??"USD"
+        currencyCode: selectedPlan.currency?.currencyCode ?? 'USD',
       },
       token,
     );
@@ -267,10 +268,12 @@ export class TenantHelperService {
       token1,
       dto.planId,
       {
-        include:[{
-          relation:"currency"
-        }]
-      }
+        include: [
+          {
+            relation: 'currency',
+          },
+        ],
+      },
     );
     if (!selectedPlan || !process.env.GATEWAY_ACCOUNT_ID) {
       throw new Error('Something went wrong');
@@ -280,13 +283,15 @@ export class TenantHelperService {
       id,
       new TenantOnboardDTO(dto),
     );
-    const config = new TenantConfig({
+    const config = new TenantMgmtConfig({
       configKey: 'auth0',
       configValue: {
         password: 'test123@123',
         connection: 'Username-Password-Authentication',
         display_name: 'corporatidonw',
         verify_email: true,
+        page_background: '#000000',
+        primary_color: '#0059d6',
       },
       tenantId: tenant.id,
     });
@@ -321,7 +326,7 @@ export class TenantHelperService {
       customerId: res.id ?? '',
       charges: [
         {
-          amount: (+selectedPlan.price)*100,    // amount in cents
+          amount: +selectedPlan.price * 100, // amount in cents
           description: selectedPlan.description,
         },
       ],
@@ -330,7 +335,7 @@ export class TenantHelperService {
         discounts: [],
         autoCollection: 'off',
       },
-        currencyCode:selectedPlan.currency?.currencyCode??"USD"
+      currencyCode: selectedPlan.currency?.currencyCode ?? 'USD',
     });
     const subscription = await this._createSubscription(
       dto.planId,
