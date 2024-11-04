@@ -281,6 +281,7 @@ export class TenantHelperService {
     if (!selectedPlan || !process.env.GATEWAY_ACCOUNT_ID) {
       throw new Error('Something went wrong');
     }
+
     const tenant = await this.tenantMgmtProxyService.createTenantFromLead(
       token,
       id,
@@ -314,10 +315,10 @@ export class TenantHelperService {
         lastName: tenant.contacts[0].lastName,
         email: tenant.contacts[0].email,
         company: tenant.name,
-        city: dto.city ?? '',
-        state: dto.state ?? '',
-        zip: dto.zip ?? '',
-        country: dto.country ?? '',
+        city: tenant.address?.city ?? '',
+        state: tenant.address?.state ?? '',
+        zip: tenant.address?.zip ?? '',
+        country: tenant.address?.country ?? '',
       },
     };
     const res = await this.billingHelperService.createCustomer(
@@ -361,12 +362,8 @@ export class TenantHelperService {
 
     const paymentDetails: PaymentSourceDtoType = {
       customerId: res.id,
-      card: {
-        gatewayAccountId: process.env.GATEWAY_ACCOUNT_ID,
-        number: dto.paymentDetails.cardNumber,
-        expiryMonth: dto.paymentDetails.expiryMonth,
-        expiryYear: dto.paymentDetails.expiryYear,
-        cvv: dto.paymentDetails.cvv,
+      options: {
+        token: dto.paymentToken,
       },
     };
     const paymentSource =
