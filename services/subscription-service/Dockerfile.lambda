@@ -1,0 +1,19 @@
+# Check out https://hub.docker.com/_/node to select a new base image
+FROM public.ecr.aws/lambda/nodejs:20-x86_64 AS BUILD_IMAGE
+
+RUN mkdir -p ${LAMBDA_TASK_ROOT}
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+
+COPY package*.json ./
+COPY *.tgz ./
+
+# Install app dependencies
+
+RUN npm install
+# Bundle app source code
+COPY . .
+
+RUN npm run build && cp -r ./dist/* ./
+
+CMD [ "lambda.handler" ]
