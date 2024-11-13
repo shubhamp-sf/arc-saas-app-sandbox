@@ -127,7 +127,7 @@ export class TenantHelperService {
     );
     return tenantConfig;
   }
-  async createTenant(dto: CreateTenantWithPlanDTO, token?: string) {
+  async createTenant(dto: CreateTenantWithPlanDTO,sourceOfOrigin:string, token?: string) {
     token = token ?? this.request.headers.authorization;
     if (!token) {
       throw new HttpErrors.Unauthorized(
@@ -157,25 +157,32 @@ export class TenantHelperService {
       `Bearer ${token.replace(/^Bearer\s+/i, '')}`,
       new TenantOnboardDTO(dto),
     );
-    /**for market place we assume IdP will always be cognito
-     * if we call the tenant config creation api make sure to add its permission
-     * in the token
-     */
-    // const config = new TenantMgmtConfig({
-    //   configKey: 'auth0',
-    //   configValue: {
-    //     password: 'test123@123',
-    //     connection: 'Username-Password-Authentication',
-    //     display_name: 'corporatidonw',
-    //     verify_email: true,
-    //     page_background: '#000000',
-    //     primary_color: '#0059d6',
-    //   },
-    //   tenantId: tenant.id,
-    // });
 
-    // await this.tenantMgmtProxyService.createTenantConfig(token, config);
-    // console.log('step 2');
+    if(sourceOfOrigin!=='market_place'){
+
+          /**for market place we assume IdP will always be cognito
+           * if we call the tenant config creation api make sure to add its permission
+           * in the token
+           */
+          const config = new TenantMgmtConfig({
+            configKey: 'auth0',
+            configValue: {
+              password: 'test123@123',
+              connection: 'Username-Password-Authentication',
+              display_name: 'corporatidonw',
+              verify_email: true,
+              page_background: '#000000',
+              primary_color: '#0059d6',
+            },
+            tenantId: tenant.id,
+          });
+
+          await this.tenantMgmtProxyService.createTenantConfig(token, config);
+          console.log('step 2');
+    }else{
+      // DO NOTHING
+    }
+
 
     const customer: CustomerDtoType = {
       firstName: tenant.contacts[0].firstName,

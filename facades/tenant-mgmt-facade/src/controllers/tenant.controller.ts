@@ -92,7 +92,7 @@ export class TenantController {
     })
     dto: CreateTenantWithPlanDTO,
   ): Promise<Tenant> {
-    return this.tenantHelper.createTenant(dto);
+    return this.tenantHelper.createTenant(dto,'control-plane-admin');
   }
 
   @authorize({
@@ -168,7 +168,7 @@ export class TenantController {
         paymentMethod: PaymentMethodEnum.Other,
       });
 
-      await this.tenantHelper.createTenant(tenantWithPlan, token);
+      await this.tenantHelper.createTenant(tenantWithPlan, 'market_place',token);
       console.log('Provisioning started');
       return {
         message: 'Tenant created successfully',
