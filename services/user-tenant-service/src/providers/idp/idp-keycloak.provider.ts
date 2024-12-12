@@ -74,6 +74,7 @@ export class KeycloakIdpProvider
 
       return {
         authId: user.id,
+        authSecret:adminPassword
       };
     } catch (error) {
       throw new Error(

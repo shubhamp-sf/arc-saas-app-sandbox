@@ -16,6 +16,7 @@ export interface IdpDetails {
 }
 export interface IdpResp {
   authId: string;
+  authSecret:string;
 }
 export enum IdPKey {
   AUTH0 = 'auth0',
