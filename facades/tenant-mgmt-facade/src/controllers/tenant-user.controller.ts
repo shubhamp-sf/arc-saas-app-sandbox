@@ -122,25 +122,7 @@ export class TenantUserController {
     userData: IdpDetailsDTO,
   ): Promise<AnyObject> {
     return this.tenantHelper.createTenantUser(id,userData,this.currentUserToken);
-    const authId=this.utService.configureIdpDetails(userData,this.currentUserToken)
-    // const userDataPayload = {
-    //   firstName: userData.firstName,
-    //   middleName: userData.middleName,
-    //   lastname: userData.last_name,
-    //   username: userData.username,
-    //   email: userData.email,
-    //   designation: userData.designation,
-    //   phone: userData.phone,
-    //   authClientIds: userData.authClientIds,
-    //   photoUrl: userData.photoUrl,
-    //   gender: userData.gender,
-    //   dob: userData.dob,
-    //   roleId: userData.roleId ,
-    //   locale: userData.locale,
-    // } as Partial<UserDto>;
-
-    //   this.utService.createTenantUser(id, userDataPayload, this.currentUserToken);
-    //  return {};
+   
   }
 
   @authenticate(STRATEGY.BEARER, {
