@@ -16,7 +16,7 @@ import {authenticate, STRATEGY} from 'loopback4-authentication';
 import {UserCredentialsRepository} from '@sourceloop/user-tenant-service';
 import {repository} from '@loopback/repository';
 
-const basePath = '/idp/users';
+const basePath = '/create-user';
 export class IdpController {
   constructor(
     @inject(UserTenantServiceBindings.IDP_KEYCLOAK)
@@ -31,6 +31,7 @@ export class IdpController {
     permissions: ['*'],
   })
   @post(`${basePath}`, {
+    description:'Configures a user for a specified identity provider (Keycloak or Cognito) and returns authentication details (authId and authSecret).',
     security: OPERATION_SECURITY_SPEC,
     responses: {
       [STATUS_CODE.NO_CONTENT]: {
@@ -56,18 +57,24 @@ export class IdpController {
     };
     switch (payload.tenant.identityProvider) {
       case IdPKey.COGNITO:
-        break;
-      case IdPKey.KEYCLOAK:
-        res = await this.idpKeycloakProvider(payload);
+        return {
+          authId: '',
+          authSecret: '',
+        };
+      case IdPKey.KEYCLOAK: {
+        const res = await this.idpKeycloakProvider(payload);
         await this.userCredentialsRepository.create({
           authProvider: 'keycloak',
-          password:res.authSecret,
+          password: res.authSecret,
           userId: res.authId,
         });
-        break;
+        return res;
+      }
       default:
-        break;
+        return {
+          authId: '',
+          authSecret: '',
+        };
     }
-    return res;
   }
 }

@@ -825,24 +825,5 @@ export class TenantHelperService {
 
     return tenantDetails;
   }
-  async createTenantUser(id: string, userData: IdpDetailsDTO, token?: string) {
-    const authId = this.utService.configureIdpDetails(userData, token);
-    const userDataPayload = {
-      firstName: userData.firstName,
-      middleName: userData.middleName,
-      lastname: userData.last_name,
-      username: userData.username,
-      email: userData.email,
-      designation: userData.designation,
-      phone: userData.phone,
-      authClientIds: userData.authClientIds,
-      photoUrl: userData.photoUrl,
-      gender: userData.gender,
-      dob: userData.dob,
-      roleId: userData.roleId,
-      locale: userData.locale,
-    } as Partial<UserDto>;
-    this.utService.createTenantUser(id, userDataPayload, token);
-    return {id: authId};
-  }
+
 }

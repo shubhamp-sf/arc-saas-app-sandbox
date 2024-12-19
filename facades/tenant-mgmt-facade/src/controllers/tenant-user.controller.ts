@@ -36,6 +36,7 @@ import {User} from '../models/user.model';
 import {IdpDetailsDTO} from '../models/idp-details-dto.model';
 import {TenantHelperService} from '../services';
 import {service} from '@loopback/core';
+import { TenantUserService } from '../services/tenant-user.service';
 
 const basePath = '/tenants/{id}/users';
 export class TenantUserController {
@@ -47,8 +48,8 @@ export class TenantUserController {
     private readonly tenantMgmtProxyService: TenantMgmtProxyService,
     @inject('services.UserTenantServiceProxy')
     private readonly utService: UserTenantServiceProxy,
-    @service(TenantHelperService)
-    private readonly tenantHelper: TenantHelperService,
+    @service(TenantUserService)
+    private readonly tenantUser: TenantUserService,
   ) {
     this.currentUserToken = this.request.headers.authorization;
   }
@@ -121,8 +122,7 @@ export class TenantUserController {
     })
     userData: IdpDetailsDTO,
   ): Promise<AnyObject> {
-    return this.tenantHelper.createTenantUser(id,userData,this.currentUserToken);
-   
+    return this.tenantUser.createTenantUser(id,userData,this.currentUserToken);
   }
 
   @authenticate(STRATEGY.BEARER, {
