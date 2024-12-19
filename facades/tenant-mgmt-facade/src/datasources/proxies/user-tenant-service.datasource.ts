@@ -19,7 +19,7 @@ const config = {
     {
       template: {
         method: 'POST',
-        url: '/idp/users',
+        url: '/create-user',
         headers: {
           Authorization: '{token}',
         },

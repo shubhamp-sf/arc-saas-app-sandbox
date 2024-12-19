@@ -10,6 +10,36 @@
     }
   },
   "paths": {
+    "/create-user": {
+      "post": {
+        "x-controller-name": "IdpController",
+        "x-operation-name": "idpConfigure",
+        "tags": [
+          "IdpController"
+        ],
+        "description": "Configures a user for a specified identity provider (Keycloak or Cognito) and returns authentication details (authId and authSecret).",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Creating User"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdpDetailsDTO"
+              }
+            }
+          }
+        },
+        "operationId": "IdpController.idpConfigure"
+      }
+    },
     "/groups/{id}/user/bulk": {
       "post": {
         "x-controller-name": "GroupUserController",
@@ -214,36 +244,6 @@
           }
         ],
         "operationId": "GroupUserController.find"
-      }
-    },
-    "/idp/users": {
-      "post": {
-        "x-controller-name": "IdpController",
-        "x-operation-name": "idpConfigure",
-        "tags": [
-          "IdpController"
-        ],
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Creating User"
-          }
-        },
-        "description": "",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/IdpDetailsDTO"
-              }
-            }
-          }
-        },
-        "operationId": "IdpController.idpConfigure"
       }
     },
     "/ping": {

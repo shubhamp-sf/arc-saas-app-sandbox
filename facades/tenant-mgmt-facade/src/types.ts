@@ -135,9 +135,15 @@ export interface IValue {
   value: number | string | boolean;
 }
 export type ConfigureIdpFunc<T> = (payload: IdpDetails) => Promise<T>;
+export interface Tenant {
+  identityProvider: string; 
+  id: string; 
+  name: string; 
+  key: string; 
+}
 
 export interface IdpDetails {
-  tenant: AnyObject;
+  tenant: Tenant;
 }
 export interface IdpResp {
   authId: string;

@@ -2,9 +2,16 @@ import { AnyObject } from "@loopback/repository";
 import { UserDto } from "../models/user-dto.model";
 
 export type ConfigureIdpFunc<T> = (payload: IdpDetails) => Promise<T>;
+export interface Tenant {
+  identityProvider: string; 
+  id: string;
+  name: string; 
+  key: string;
+}
+
 
 export interface IdpDetails {
-  tenant: AnyObject;
+  tenant: Tenant;
   firstName: string;
   lastName: string;
   roleId: string;
