@@ -935,7 +935,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "configKey": {
@@ -1037,7 +1036,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "name": {
@@ -1150,7 +1148,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "configKey": {
@@ -1207,7 +1204,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "configKey": {
@@ -1255,7 +1251,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "name": {
@@ -1342,7 +1337,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "address": {
@@ -1419,6 +1413,10 @@
               "email": {
                 "type": "string",
                 "description": "email id of the contact"
+              },
+              "communicationEmail": {
+                "type": "string",
+                "description": "communication email id of the contact"
               },
               "isPrimary": {
                 "type": "boolean",
@@ -1550,6 +1548,10 @@
               "email": {
                 "type": "string",
                 "description": "email id of the contact"
+              },
+              "communicationEmail": {
+                "type": "string",
+                "description": "communication email id of the contact"
               },
               "isPrimary": {
                 "type": "boolean",
@@ -1771,7 +1773,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "firstName": {
@@ -1785,6 +1786,10 @@
           "email": {
             "type": "string",
             "description": "email id of the contact"
+          },
+          "communicationEmail": {
+            "type": "string",
+            "description": "communication email id of the contact"
           },
           "isPrimary": {
             "type": "boolean",
@@ -1843,7 +1848,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "externalIdentifier": {
@@ -1906,7 +1910,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "address": {
@@ -1964,7 +1967,6 @@
             "type": "string"
           },
           "id": {
-            "readOnly": true,
             "type": "string"
           },
           "firstName": {
@@ -1982,6 +1984,10 @@
           "email": {
             "type": "string",
             "description": "email of the lead"
+          },
+          "communicationEmail": {
+            "type": "string",
+            "description": "communication email id of the contact"
           },
           "isValidated": {
             "type": "boolean",
@@ -2197,6 +2203,10 @@
           "email": {
             "type": "string",
             "description": "email of the lead"
+          },
+          "communicationEmail": {
+            "type": "string",
+            "description": "communication email id of the contact"
           },
           "address": {
             "type": "object",

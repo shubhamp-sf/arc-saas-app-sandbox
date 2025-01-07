@@ -48,6 +48,13 @@ export class Lead extends UserModifiableEntity {
   email: string;
 
   @property({
+    type: 'string',
+    description: 'communication email id of the contact',
+    name: 'communication_email',
+  })
+  communicationEmail?: string;
+
+  @property({
     name: 'is_validated',
     type: 'boolean',
     description: 'whether the lead`s email has been validated or not',
