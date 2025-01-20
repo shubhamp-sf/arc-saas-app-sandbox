@@ -15,7 +15,7 @@ export enum Builder {
 
 type EventBodyType = {
   type: EventTypes;
-  tenant: TenantWithRelations;
+  tenant: Partial<TenantWithRelations>;
   subscription: SubscriptionDTO;
   secret: string;
   context: string;
@@ -44,6 +44,16 @@ export class EventConnector implements IEventConnector<EventBodyType> {
         extraPlanConfig[key] = data.subscription.plan?.sizeConfig[key];
       }
     }
+    const fieldsToRemove = [
+      'deleted',
+      'deletedOn',
+      'modifiedOn',
+      'deletedBy',
+      'createdBy',
+      'createdOn',
+      'modifiedBy',
+    ];
+    data.tenant = this.removeFields(data.tenant, fieldsToRemove);
 
     // Define the event payload
     const eventPayload = {
@@ -86,5 +96,20 @@ export class EventConnector implements IEventConnector<EventBodyType> {
     if (response) {
       console.log('Event sent successfully:', response);
     }
+  }
+
+  private removeFields(obj: AnyObject, fieldsToRemove: string[]): AnyObject {
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.removeFields(item, fieldsToRemove));
+    } else if (typeof obj === 'object' && obj !== null) {
+      const newObj: AnyObject = {};
+      for (const key in obj) {
+        if (!fieldsToRemove.includes(key)) {
+          newObj[key] = this.removeFields(obj[key], fieldsToRemove);
+        }
+      }
+      return newObj;
+    }
+    return obj;
   }
 }
