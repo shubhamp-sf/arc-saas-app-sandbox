@@ -84,12 +84,6 @@ export class TntMngmtApplication extends BootMixin(
     this.component(AuthenticationComponent);
     this.bind(EventConnectorBinding).toClass(EventConnector);
     this.component(TenantManagementServiceComponent);
-    // this.bind(TenantManagementServiceBindings.IDP_KEYCLOAK).toProvider(
-    //   KeycloakIdpProvider,
-    // );
-    // this.bind(TenantManagementServiceBindings.IDP_AUTH0).toProvider(
-    //   Auth0IdpProvider,
-    // );
 
     // Add bearer verifier component
     this.bind(BearerVerifierBindings.Config).to({
